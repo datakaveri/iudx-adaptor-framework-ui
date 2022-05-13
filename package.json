@@ -3,25 +3,34 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@mui/material": "^5.7.0",
+    "@mui/styled-engine-sc": "^5.7.0",
+    "@reduxjs/toolkit": "^1.8.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^0.27.2",
+    "rc-notification": "^4.6.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
+    "react-promise-tracker": "^2.1.0",
+    "react-redux": "^8.0.1",
+    "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
+    "redux-actions": "^2.6.5",
+    "redux-form": "^8.3.8",
+    "redux-freeze": "^0.1.7",
+    "redux-thunk": "^2.4.1",
+    "styled-components": "^5.3.5",
+    "uuid": "^8.3.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "craco eject",
+    "lint": "eslint ."
   },
   "browserslist": {
     "production": [
@@ -34,5 +43,33 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,json,md}": [
+      "prettier --write"
+    ],
+    "*.{js,jsx}": [
+      "eslint --fix"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.10",
+    "@babel/eslint-parser": "^7.17.0",
+    "@babel/preset-react": "^7.16.7",
+    "@craco/craco": "^6.4.3",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^8.15.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-react-hooks": "^4.5.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^12.4.1",
+    "prettier": "^2.6.2",
+    "redux-devtools-extension": "^2.13.9"
   }
 }
