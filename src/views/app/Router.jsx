@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import { usePromiseTracker } from 'react-promise-tracker';
 import Loading from '../shared/components/Loading';
 import Home from '../pages/Home';
+import InputSpec from '../pages/Home/fragments/InputSpec';
+import DuplicationSpec from '../pages/Home/fragments/DuplicationSpec';
 
 // TODO change this later accordingly
 const Pages = () => (
@@ -25,6 +27,8 @@ const Router = ({ dispatch }) => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Pages />} />
+          <Route path="/inputspec" element={<InputSpec />}/>
+          <Route path="/duplicationspec" element={<DuplicationSpec />}/>
         </Routes>
       )}
     </main>

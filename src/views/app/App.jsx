@@ -7,6 +7,7 @@ import configStore from '../../stores/configStore';
 import Loading from '../shared/components/Loading';
 import Toasts from '../toasts';
 import Router from './Router';
+import './app.css';
 
 const Wrapper = styled.section`
   margin: 0;
