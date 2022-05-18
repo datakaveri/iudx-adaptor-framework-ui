@@ -3,6 +3,8 @@ import { Route, Routes } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { usePromiseTracker } from 'react-promise-tracker';
+import PublishSpec from '../pages/Home/publish_spec';
+import FailureRecoverySpec from '../pages/Home/failure_recovery_spec';
 import Loading from '../shared/components/Loading';
 import Home from '../pages/Home';
 
@@ -25,6 +27,8 @@ const Router = ({ dispatch }) => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Pages />} />
+          <Route path="/publishspec" element={<PublishSpec />}/>
+          <Route path="/failurerecoveryspec" element={<FailureRecoverySpec />}/>
         </Routes>
       )}
     </main>
