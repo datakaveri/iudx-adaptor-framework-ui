@@ -7,13 +7,10 @@ import configStore from '../../stores/configStore';
 import Loading from '../shared/components/Loading';
 import Toasts from '../toasts';
 import Router from './Router';
-import './app.css';
 
 const Wrapper = styled.section`
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
+  margin: 0px 200px;
+  padding: 20px;
 `;
 
 const App = () => {
@@ -23,7 +20,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <Wrapper>
-      <Toasts />
+        <Toasts />
         <Suspense fallback={<Loading />}>
           <BrowserRouter>
             <Router />

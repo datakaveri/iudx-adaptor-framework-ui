@@ -1,6 +1,12 @@
 import React from 'react';
 import { Switch } from '@mui/material';
 import InputBox from '../../../shared/components/InputBox';
+import {
+  InputSpecScheduleJobDiv,
+  Title,
+  Line,
+  ColoredButton,
+} from '../../../shared/components/SpecComponents';
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
@@ -9,8 +15,8 @@ export default function InputSpec() {
 
   return (
     <div className="app">
-      <h1 className="Title">Input Specs</h1>
-      <hr />
+      <Title>Input Specs</Title>
+      <Line />
       <form>
         <label htmlFor="TypeDropDown">
           Type
@@ -33,21 +39,21 @@ export default function InputSpec() {
           </select>
         </label>
         <br />
-        <div className="InputSpec_ScheduleJob">
+        <InputSpecScheduleJobDiv>
           <p>Schedule Job</p>
           <Switch
             {...label}
             checked={scheduleJob}
             onChange={(ev, val) => setScheduleJob(val)}
           />
-        </div>
+        </InputSpecScheduleJobDiv>
 
         {!scheduleJob ? (
           <InputBox name="Polling Interval" id="PollingId" />
         ) : (
           <>
-            <h1 className="Title">Minio Config</h1>
-            <hr />
+            <Title className="Title">Minio Config</Title>
+            <Line />
             <InputBox name="URL" id="URLId2" />
             <InputBox name="Bucket" id="BucketId" />
             <InputBox name="State Name" id="StateNameId" />
@@ -56,13 +62,16 @@ export default function InputSpec() {
           </>
         )}
 
-        <button className="ColoredButton" onClick={null} type="button">
+        <ColoredButton
+          solid
+          onClick={() => console.log('CLICKED')}
+          type="button">
           Run
-        </button>
+        </ColoredButton>
 
-        <button className="BoderedButton" onClick={null} type="button">
+        <ColoredButton onClick={null} type="button">
           Stop Execution
-        </button>
+        </ColoredButton>
       </form>
     </div>
   );

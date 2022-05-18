@@ -27,8 +27,8 @@ const Router = ({ dispatch }) => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Pages />} />
-          <Route path="/inputspec" element={<InputSpec />}/>
-          <Route path="/duplicationspec" element={<DuplicationSpec />}/>
+          <Route path="/inputspec" element={<InputSpec />} />
+          <Route path="/duplicationspec" element={<DuplicationSpec />} />
         </Routes>
       )}
     </main>
