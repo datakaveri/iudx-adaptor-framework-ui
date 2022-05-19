@@ -7,8 +7,12 @@ import PublishSpec from '../pages/Home/publish_spec';
 import FailureRecoverySpec from '../pages/Home/failure_recovery_spec';
 import Loading from '../shared/components/Loading';
 import Home from '../pages/Home';
+
+import InputSpec from '../pages/Home/fragments/InputSpec';
+import DuplicationSpec from '../pages/Home/fragments/DuplicationSpec';
 import ParseSpec from '../pages/Home/parse_spec';
 import TransformSpec from '../pages/Home/transform_spec';
+
 
 // TODO change this later accordingly
 const Pages = () => (
@@ -29,6 +33,8 @@ const Router = ({ dispatch }) => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Pages />} />
+          <Route path="/inputspec" element={<InputSpec />} />
+          <Route path="/duplicationspec" element={<DuplicationSpec />} />
           <Route path="/publishspec" element={<PublishSpec />}/>
           <Route path="/failurerecoveryspec" element={<FailureRecoverySpec />}/>
           <Route path='/parsespec' element={<ParseSpec/>}/>
