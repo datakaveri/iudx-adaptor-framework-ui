@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { usePromiseTracker } from 'react-promise-tracker';
+import { act } from 'react-dom/test-utils';
 
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -105,8 +106,8 @@ export default function StepperPage(){
       };
     
       return (
-        <div style={{marginBottom:"20px",marginTop:"20px",width:"95%",height:"100%"}}>
-          <Stepper activeStep={activeStep} orientation="vertical">
+        <div style={{marginBottom:"20px",marginTop:"20px",width:"100%",height:"100%"}}>
+          <Stepper activeStep={activeStep} >
             {steps.map((label, index) => {
               const stepProps = {};
               const labelProps = {};
@@ -123,15 +124,18 @@ export default function StepperPage(){
 
                 <Step key={label} {...stepProps}>
                   <StepLabel {...labelProps}>{label}</StepLabel>
-                  <StepContent>
-                  <Typography>{getStepContent(index)}</Typography>
-                  </StepContent>
                
                 </Step>
                 
               );
             })}
           </Stepper>
+          
+          <Typography>
+          {getStepContent(activeStep)}
+          </Typography>
+
+          
           {activeStep === steps.length ? (
             <React.Fragment>
               <Typography sx={{ mt: 2, mb: 1 }}>
