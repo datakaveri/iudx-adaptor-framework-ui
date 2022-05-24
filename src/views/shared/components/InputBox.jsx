@@ -5,9 +5,15 @@ import { Type } from './SpecComponents';
 
 export default function InputBox({ name, id }) {
   return (
-    <div className="inputBox">
+    <div style={{ width: '320px' }} className="textbox">
       <Type>{name}</Type>
-      <TextField id={id} variant="outlined" size="small" fullWidth />
+      <TextField
+        style={{ marginLeft: '80px' }}
+        id={id}
+        variant="outlined"
+        size="small"
+        fullWidth
+      />
     </div>
   );
 }
