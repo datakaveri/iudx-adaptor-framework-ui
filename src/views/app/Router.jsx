@@ -6,6 +6,7 @@ import { usePromiseTracker } from 'react-promise-tracker';
 import PublishSpec from '../pages/Home/publish_spec';
 import FailureRecoverySpec from '../pages/Home/failure_recovery_spec';
 import Loading from '../shared/components/Loading';
+import StepperPage from './StepperPage'
 import Home from '../pages/Home';
 
 // TODO change this later accordingly
@@ -14,6 +15,7 @@ const Pages = () => (
     <Route path="" element={<Home />} />
   </Routes>
 );
+
 
 const Router = ({ dispatch }) => {
   const { promiseInProgress } = usePromiseTracker();
@@ -27,6 +29,7 @@ const Router = ({ dispatch }) => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Pages />} />
+          <Route path="/stepper" element={<StepperPage />} />
           <Route path="/publishspec" element={<PublishSpec />}/>
           <Route path="/failurerecoveryspec" element={<FailureRecoverySpec />}/>
         </Routes>
