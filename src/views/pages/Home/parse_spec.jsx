@@ -109,12 +109,11 @@ export default function ParseSpec(){
         style={{
           fontFamily: '"Fira code", "Fira Mono", monospace',
           fontSize: 12,
-          overflow: 'auto',
           marginLeft:"80px",
-          flex: display,
           width: "100%",
-          backgroundColor:"#dedede"
-          
+          overflow: 'auto',
+          border: "1px solid #b7b0b0",
+          borderRadius:"3px",
         }}/>
       
         <Type>TimeStamp path</Type>
@@ -127,7 +126,8 @@ export default function ParseSpec(){
           marginLeft:"80px",
           flex: display,
           width: "100%",
-          backgroundColor:"#dedede"
+          border: "1px solid #b7b0b0",
+          borderRadius:"3px"
         }}/>
         <Type>KeyPath</Type>
         <Editor value={keypath} highlight={(value)=>highlight(value, languages.jsx)} padding={10}
@@ -139,7 +139,8 @@ export default function ParseSpec(){
           marginLeft:"80px",
           flex: display,
           width: "100%",
-          backgroundColor:"#dedede"  
+          border: "1px solid #b7b0b0",
+          borderRadius:"3px"
         }}/>
         <Type>Trickle</Type>
         <Editor value={trickle} highlight={(value)=>highlight(value, languages.jsx)} padding={10}
@@ -151,7 +152,8 @@ export default function ParseSpec(){
           marginLeft:"80px",
           flex: display,
           width: "100%",
-          backgroundColor:"#dedede"  
+          border: "1px solid #b7b0b0",
+          borderRadius:"3px"
         }}/>
         </div>
 
