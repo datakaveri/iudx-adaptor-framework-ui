@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { TextField } from '@mui/material';
+import { Type } from './SpecComponents';
 
 export default function InputBox({ name, id }) {
   return (
     <div className="inputBox">
-      <label htmlFor={id}>{name}</label>
-      <br />
-      <input type="text" id={id} name={name} />
-      <br />
+      <Type>{name}</Type>
+      <TextField id={id} variant="outlined" size="small" fullWidth />
     </div>
   );
 }

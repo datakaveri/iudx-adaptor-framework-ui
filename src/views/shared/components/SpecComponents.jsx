@@ -15,16 +15,6 @@ export const ColoredButton = styled.button`
   }
 `;
 
-export const InputSpecScheduleJobDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  align-content: center;
-  &:p {
-    margin-right: 200px;
-  }
-`;
-
 export const Line = styled.hr`
   height: 3px;
   color: rgb(29, 29, 29);
@@ -35,4 +25,10 @@ export const Title = styled.h1`
   color: rgb(29, 29, 29);
   padding: 0px;
   margin: 0px;
+`;
+
+export const Type = styled.h3`
+  font-family: 'Inter';
+  font-size: 14px;
+  padding-top: 8px;
 `;
