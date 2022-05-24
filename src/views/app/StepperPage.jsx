@@ -14,6 +14,10 @@ import Typography from '@mui/material/Typography';
 
 import PublishSpec from '../pages/Home/publish_spec';
 import FailureRecoverySpec from '../pages/Home/failure_recovery_spec';
+import InputSpec from '../pages/Home/fragments/InputSpec';
+import DuplicationSpec from '../pages/Home/fragments/DuplicationSpec';
+import ParseSpec from '../pages/Home/parse_spec';
+import TransformSpec from '../pages/Home/transform_spec';
 import Loading from '../shared/components/Loading';
 
 const steps= ['Meta Spec','Input Spec','Parse Spec','Deduplication Spec','Transform Spec','Failure Recovery Spec', 'Publish Spec']
@@ -60,6 +64,27 @@ export default function StepperPage(){
       
       function getStepContent(step) {
         switch (step) {
+          
+          case 1:
+            return (
+              <InputSpec/>
+              
+            );
+          case 2:
+            return (
+              <ParseSpec/>
+              
+            );
+          case 3:
+            return (
+              <DuplicationSpec/>
+              
+            );
+          case 4:
+            return (
+              <TransformSpec/>
+              
+            );
           case 5:
             return (
               <FailureRecoverySpec/>
@@ -80,7 +105,7 @@ export default function StepperPage(){
       };
     
       return (
-        <div style={{marginBottom:"20px",marginTop:"20px",marginLeft:"50px",width:"95%",height:"100%"}}>
+        <div style={{marginBottom:"20px",marginTop:"20px",width:"95%",height:"100%"}}>
           <Stepper activeStep={activeStep} orientation="vertical">
             {steps.map((label, index) => {
               const stepProps = {};
