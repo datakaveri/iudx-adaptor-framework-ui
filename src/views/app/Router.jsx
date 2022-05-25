@@ -6,6 +6,7 @@ import { usePromiseTracker } from 'react-promise-tracker';
 import PublishSpec from '../pages/Home/publish_spec';
 import FailureRecoverySpec from '../pages/Home/failure_recovery_spec';
 import Loading from '../shared/components/Loading';
+import StepperPage from './StepperPage'
 import Home from '../pages/Home';
 
 import InputSpec from '../pages/Home/fragments/InputSpec';
@@ -21,6 +22,7 @@ const Pages = () => (
   </Routes>
 );
 
+
 const Router = ({ dispatch }) => {
   const { promiseInProgress } = usePromiseTracker();
   const [loading, setLoading] = React.useState(false);
@@ -33,6 +35,7 @@ const Router = ({ dispatch }) => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Pages />} />
+          <Route path="/stepper" element={<StepperPage />} />
           <Route path="/inputspec" element={<InputSpec />} />
           <Route path="/duplicationspec" element={<DuplicationSpec />} />
           <Route path="/publishspec" element={<PublishSpec />}/>
