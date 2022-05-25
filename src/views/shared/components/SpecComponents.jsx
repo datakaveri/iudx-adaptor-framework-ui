@@ -1,29 +1,46 @@
+import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
-export const ColoredButton = styled.button`
-  background-color: ${props => (props.solid ? 'rgb(31,31,31)' : 'white')};
-  color: ${props => (props.solid ? 'white' : 'rgb(31,31,31)')};
-  border-radius: 5px;
-  border: 2px solid rgb(31, 31, 31);
-  margin-right: 20px;
-  height: 30px;
-  padding: 0px 30px;
-  margin-top: 20px;
-  &:hover {
-    background-color: rgb(96, 96, 96);
-    color: ${props => (props.solid ? 'rgb(31,31,31)' : 'white')};
-  }
-`;
+export default function BTN({ Solid, Text }) {
+  const ColoredButton = styled.button`
+    background-color: ${props =>
+      props.solid === 'Solid' ? 'rgb(31,31,31)' : 'white'};
+    color: ${props => (props.solid === 'Solid' ? 'white' : 'rgb(31,31,31)')};
+    border-radius: 5px;
+    font-family: 'Inter';
+    border-color: rgb(31, 31, 31);
+    margin-right: 20px;
+    height: 48px;
+    padding: 0px 30px;
+    margin-top: 20px;
+    &:hover {
+      background-color: rgb(96, 96, 96);
+      color: ${props => (props.solid === 'Solid' ? 'rgb(31,31,31)' : 'white')};
+    }
+  `;
 
-export const InputSpecScheduleJobDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  align-content: center;
-  &:p {
-    margin-right: 200px;
-  }
-`;
+  return (
+    <ColoredButton
+      solid={Solid}
+      onClick={() => console.log('CLICKED')}
+      type="button">
+      {Text}
+    </ColoredButton>
+  );
+}
+
+BTN.propTypes = {
+  Solid: PropTypes.string,
+  Text: PropTypes.string,
+  solid: PropTypes.string,
+};
+
+BTN.defaultProps = {
+  Solid: PropTypes.string,
+  Text: PropTypes.string,
+  solid: PropTypes.string,
+};
 
 export const Line = styled.hr`
   height: 3px;
@@ -32,7 +49,15 @@ export const Line = styled.hr`
 `;
 
 export const Title = styled.h1`
-  color: rgb(29, 29, 29);
-  padding: 0px;
-  margin: 0px;
+  font-family: 'Inter';
+  font-size: 32px;
+  padding-left: 80px;
+  color: black;
+`;
+
+export const Type = styled.h3`
+  font-family: 'Inter';
+  font-size: 14px;
+  padding-left: 80px;
+  padding-top: 8px;
 `;

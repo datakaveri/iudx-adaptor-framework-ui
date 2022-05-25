@@ -1,13 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { TextField } from '@mui/material';
+import { Type } from './SpecComponents';
 
 export default function InputBox({ name, id }) {
   return (
-    <div className="inputBox">
-      <label htmlFor={id}>{name}</label>
-      <br />
-      <input type="text" id={id} name={name} />
-      <br />
+    <div style={{ width: '320px' }} className="textbox">
+      <Type>{name}</Type>
+      <TextField
+        style={{ marginLeft: '80px' }}
+        id={id}
+        variant="outlined"
+        size="small"
+        fullWidth
+      />
     </div>
   );
 }
