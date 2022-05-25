@@ -1,10 +1,19 @@
 import React from 'react';
 import {TextField } from '@mui/material';
 import styled from 'styled-components';
+import Editor from 'react-simple-code-editor';
 import Select from '@mui/material/Select';
+import { highlight, languages } from 'prismjs/components/prism-core';
+import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-javascript';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import 'prismjs/components/prism-markup';
+import "prismjs/themes/prism.css";
+import { display } from '@mui/system';
+
+require('prismjs/components/prism-jsx');
 
 const Title = styled.h1`
 font-family: 'Inter';
@@ -42,16 +51,22 @@ height: 48px;
 
 padding: 0px 30px;
 margin-top: 20px;
-`
+` 
+
 export default function ParseSpec(){
     const [format, setFormat] = React.useState('');
     const [message, setMessage]=React.useState(' ');
+    const [code, setCode]=React.useState(' ');
+    const [timestamp, setTimeStamp]=React.useState(' ');
+    const [keypath, setkeyPath]=React.useState(' ');
+    const [trickle, setTrickle]=React.useState(' ');
+    const [jsonData,setData]=React.useState(' ');
     return (
         <div className='app'>
         <Title>Parse Spec</Title>
         <hr/>
+        <div style={{display:'flex', flexDirection:"row"}}>
         <div style={{width:"320px"}} className="textbox">
-        
         <Type>Serialization Format Type</Type>
         <FormControl sx={{ m: 1, minWidth: "320px",marginLeft:"80px" }}>
         <InputLabel id="formattype">Select</InputLabel>
@@ -88,15 +103,76 @@ export default function ParseSpec(){
         <Type>Output Datatime Format</Type>
         <TextField style={{marginLeft:"80px"}} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
         <Type>Container Path</Type>
-        <TextField multiline rows={4} style={{marginLeft:"80px" }} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
-        <Type>TimeStamp path</Type>
-        <TextField multiline rows={4} style={{marginLeft:"80px" }} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
-        <Type>KeyPath</Type>
-        <TextField multiline rows={4} style={{marginLeft:"80px" }} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
-        <Type>Trickle</Type>
-        <TextField multiline rows={4} style={{marginLeft:"80px" }} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
-        </div>
+  
 
+      <Editor value={code} highlight={(value)=>highlight(value, languages.jsx)} padding={25}
+        onValueChange={(value)=>setCode(value)}
+        style={{
+          fontFamily: '"Fira code", "Fira Mono", monospace',
+          fontSize: 12,
+          marginLeft:"80px",
+          width: "100%",
+          overflow: 'auto',
+          border: "1px solid #b7b0b0",
+          borderRadius:"3px",
+        }}/>
+      
+        <Type>TimeStamp path</Type>
+        <Editor value={timestamp} highlight={(value)=>highlight(value, languages.jsx)} padding={25}
+        onValueChange={(value)=>setTimeStamp(value)}
+        style={{
+          fontFamily: '"Fira code", "Fira Mono", monospace',
+          fontSize: 12,
+          overflow: 'auto',
+          marginLeft:"80px",
+          flex: display,
+          width: "100%",
+          border: "1px solid #b7b0b0",
+          borderRadius:"3px"
+        }}/>
+        <Type>KeyPath</Type>
+        <Editor value={keypath} highlight={(value)=>highlight(value, languages.jsx)} padding={25}
+        onValueChange={(value)=>setkeyPath(value)}
+        style={{
+          fontFamily: '"Fira code", "Fira Mono", monospace',
+          fontSize: 12,
+          overflow: 'auto',
+          marginLeft:"80px",
+          flex: display,
+          width: "100%",
+          border: "1px solid #b7b0b0",
+          borderRadius:"3px"
+        }}/>
+        <Type>Trickle</Type>
+        <Editor value={trickle} highlight={(value)=>highlight(value, languages.jsx)} padding={25}
+        onValueChange={(value)=>setTrickle(value)}
+        style={{
+          fontFamily: '"Fira code", "Fira Mono", monospace',
+          fontSize: 12,
+          overflow: 'auto',
+          marginLeft:"80px",
+          flex: display,
+          width: "100%",
+          border: "1px solid #b7b0b0",
+          borderRadius:"3px"
+        }}/>
+        </div>
+        <div style={{width:"500px",marginLeft:"250px"}} className="textbox">
+        <Type>Json Data</Type>
+        <Editor value={jsonData} highlight={(value)=>highlight(value, languages.jsx)} padding={50}
+        onValueChange={(value)=>setData(value)}
+        style={{
+          fontFamily: '"Fira code", "Fira Mono", monospace',
+          fontSize: 12,
+          overflow: 'auto',
+          marginLeft:"80px",
+          flex: display,
+          width: "100%",
+          border: "1px solid #b7b0b0",
+          borderRadius:"3px"
+        }}/>
+        </div>
+        </div>
         <div style={{marginTop:"20px"}}>
         <ColoredButton>Run</ColoredButton>
         <BorderedButton>Stop Execution</BorderedButton>
