@@ -10,7 +10,7 @@ export default function DuplicationSpec() {
 
   return (
     <div className="app">
-      <Title>Duplicate Specs</Title>
+      <Title>Deduplication Spec</Title>
       <hr />
       <FormControl sx={{ m: 1, minWidth: '320px', marginLeft: '80px' }}>
         <InputLabel id="dup" style={{ padding: '8px 0px 0px 0px' }}>

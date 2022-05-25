@@ -26,7 +26,7 @@ export default function InputSpec() {
 
   return (
     <div className="app">
-      <Title>Input Specs</Title>
+      <Title>Input Spec</Title>
       <hr />
       <form>
         <div style={{ width: '320px' }} className="textbox">
