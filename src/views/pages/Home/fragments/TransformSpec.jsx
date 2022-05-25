@@ -4,44 +4,9 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import BTN, { Title, Type } from '../../../shared/components/SpecComponents';
 
-const Title = styled.h1`
-font-family: 'Inter';
-  font-size: 32px;
-  padding-left:80px;
-  color: black;
-`;
 
-const Type=styled.h3`
-font-family: 'Inter';
-font-size:14px;
-padding-left:80px;
-padding-top:8px;`
-
-const ColoredButton=styled.button`
-font-family: 'Inter';
-background-color: rgb(31, 31, 31);
-    color: white;
-    border-radius: 5px;
-    border-color: rgb(31, 31, 31);
-    margin-right: 20px;
-    height: 48px;
-    margin-left: 80px;
-    padding: 0px 30px;
-    margin-top: 20px;
-`
-const BorderedButton=styled.button`
-font-family: 'Inter';
-background-color: white;
-color: rgb(31, 31, 31);
-border-radius: 6px;
-border-color: rgb(31, 31, 31);
-margin-right: 20px;
-height: 48px;
-
-padding: 0px 30px;
-margin-top: 20px;
-`
 export default function TransformSpec(){
     const [format, setFormat] = React.useState('');
     return (
@@ -67,9 +32,9 @@ export default function TransformSpec(){
       </FormControl>
         </div>
 
-        <div style={{marginTop:"20px"}}>
-        <ColoredButton>Run</ColoredButton>
-        <BorderedButton>Stop Execution</BorderedButton>
+        <div style={{marginTop:"20px",marginLeft:"80px"}}>
+        <BTN Solid="Solid" Text="Run" />
+        <BTN Solid="_" Text="Stop Execution" />
         </div>
         </div>
   );

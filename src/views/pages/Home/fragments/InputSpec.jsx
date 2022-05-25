@@ -30,7 +30,7 @@ export default function InputSpec() {
       <hr />
       <form>
         <div style={{ width: '320px' }} className="textbox">
-          <FormControl sx={{ m: 1, minWidth: '320px', marginLeft: '80px' }}>
+          <FormControl sx={{ m: 1, minWidth: '320px', marginLeft: '80px',marginTop:"8px"}}>
             <InputLabel id="Type" style={{ padding: '8px 0px 0px 0px' }}>
               Type
             </InputLabel>

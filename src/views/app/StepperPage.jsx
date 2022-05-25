@@ -19,6 +19,7 @@ import InputSpec from '../pages/Home/fragments/InputSpec';
 import DuplicationSpec from '../pages/Home/fragments/DuplicationSpec';
 import ParseSpec from '../pages/Home/fragments/ParseSpec';
 import TransformSpec from '../pages/Home/fragments/TransformSpec';
+import MetaSpec from '../pages/Home/fragments/MetaSpec';
 import Loading from '../shared/components/Loading';
 
 const steps = [
@@ -69,6 +70,8 @@ export default function StepperPage() {
 
   function getStepContent(step) {
     switch (step) {
+      case 0:
+        return <MetaSpec />;
       case 1:
         return <InputSpec />;
       case 2:
