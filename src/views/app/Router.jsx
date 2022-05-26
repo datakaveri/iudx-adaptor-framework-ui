@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { usePromiseTracker } from 'react-promise-tracker';
 
 import Loading from '../shared/components/Loading';
-import StepperPage from './StepperPage';
+import OnboardingPage from '../pages/Onboarding';
 import Home from '../pages/Home';
 
 const Router = ({ dispatch }) => {
@@ -19,7 +19,7 @@ const Router = ({ dispatch }) => {
       {!loading && (
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/stepper" element={<StepperPage />} />
+          <Route path="/onboarding" element={<OnboardingPage />} />
         </Routes>
       )}
     </main>
