@@ -123,7 +123,7 @@ export default function ParseSpec(){
         </div>
         <div style={{width:"500px",marginLeft:"250px"}} className="textbox">
         <Type>Json Data</Type>
-        <Editor value={jsonData} highlight={(value)=>highlight(value, languages.jsx)} padding={50}
+        <Editor disabled value={jsonData} highlight={(value)=>highlight(value, languages.jsx)} padding={50}
         onValueChange={(value)=>setData(value)}
         style={{
           fontFamily: '"Fira code", "Fira Mono", monospace',
