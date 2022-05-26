@@ -5,8 +5,17 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import styled from 'styled-components';
+import Editor from 'react-simple-code-editor';
+import { highlight, languages } from 'prismjs/components/prism-core';
+import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-javascript';
+import 'prismjs/components/prism-markup';
+import "prismjs/themes/prism.css";
+import { display } from '@mui/system';
 import InputBox from '../../../shared/components/InputBox';
 import BTN, { Title, Type } from '../../../shared/components/SpecComponents';
+
+require('prismjs/components/prism-jsx');
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 const InputSpecScheduleJobDiv = styled.div`
@@ -23,11 +32,14 @@ export default function InputSpec() {
   const [scheduleJob, setScheduleJob] = React.useState(false);
   const [type, setType] = React.useState(' ');
   const [api, setAPI] = React.useState(' ');
+  const [jsonData,setData]=React.useState(' ');
 
   return (
     <div className="app">
       <Title>Input Spec</Title>
       <hr />
+      <div style={{display:'flex', flexDirection:"row"}}>
+      <div>
       <form>
         <div style={{ width: '320px' }} className="textbox">
           <FormControl sx={{ m: 1, minWidth: '320px', marginLeft: '80px',marginTop:"8px"}}>
@@ -90,11 +102,30 @@ export default function InputSpec() {
             </div>
           </>
         )}
-        <div style={{ marginLeft: '80px' }}>
+        <div style={{ marginLeft: '80px',display:'flex',flexDirection:'row' }}>
           <BTN Solid="Solid" Text="Run" />
           <BTN Solid="_" Text="Stop Execution" />
         </div>
       </form>
+      </div>
+      <div>
+      <div style={{width:"450px",marginLeft:"200px"}} className="textbox">
+        <Type>Json Data</Type>
+        <Editor disabled value={jsonData} highlight={(value)=>highlight(value, languages.jsx)} padding={50}
+        onValueChange={(value)=>setData(value)}
+        style={{
+          fontFamily: '"Fira code", "Fira Mono", monospace',
+          fontSize: 12,
+          overflow: 'auto',
+          marginLeft:"80px",
+          flex: display,
+          width: "100%",
+          border: "1px solid #b7b0b0",
+          borderRadius:"3px"
+        }}/>
+        </div>
+      </div>
+      </div>
     </div>
   );
 }
