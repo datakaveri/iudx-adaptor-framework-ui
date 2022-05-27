@@ -183,8 +183,8 @@ export default function InputSpec() {
                 pointerEvents: bypassExecution ? 'none' : 'inherit',
                 color: bypassExecution ? 'grey' : 'black',
               }}>
-              <BTN Solid="Solid" Text="Run" />
-              <BTN Solid="_" Text="Stop Execution" />
+              <BTN Solid="Solid" Text="Run" Enabled={bypassExecution} />
+              <BTN Solid="_" Text="Stop Execution" Enabled={bypassExecution} />
             </div>
           </form>
         </div>
