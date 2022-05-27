@@ -49,7 +49,10 @@ export default function InputSpec() {
                 justifyContent: 'space-between',
               }}>
               <div
-                style={{ pointerEvents: bypassExecution ? 'none' : 'inherit' }}>
+                style={{
+                  pointerEvents: bypassExecution ? 'none' : 'inherit',
+                  color: bypassExecution ? 'grey' : 'black',
+                }}>
                 <div style={{ width: '320px' }} className="textbox">
                   <FormControl
                     sx={{
@@ -124,6 +127,7 @@ export default function InputSpec() {
                   />
                 </InputSpecScheduleJobDiv>
                 <Editor
+                  disabled={!bypassExecution}
                   value={jsonData}
                   highlight={value => highlight(value, languages.jsx)}
                   padding={50}
@@ -135,7 +139,8 @@ export default function InputSpec() {
                     marginLeft: '80px',
                     flex: display,
                     width: '100%',
-                    border: '1px solid #b7b0b0',
+                    border: '1px solid',
+                    borderColor: bypassExecution ? 'black' : '#b7b0b0',
                     borderRadius: '3px',
                   }}
                 />
@@ -146,6 +151,7 @@ export default function InputSpec() {
                 style={{
                   width: '320px',
                   pointerEvents: bypassExecution ? 'none' : 'inherit',
+                  color: bypassExecution ? 'grey' : 'black',
                 }}
                 className="textbox">
                 <InputBox name="Polling Interval" id="PollingId" />
@@ -158,6 +164,7 @@ export default function InputSpec() {
                   style={{
                     width: '320px',
                     pointerEvents: bypassExecution ? 'none' : 'inherit',
+                    color: bypassExecution ? 'grey' : 'black',
                   }}
                   className="textbox">
                   <InputBox name="URL" id="URLId2" />
@@ -173,35 +180,13 @@ export default function InputSpec() {
                 marginLeft: '80px',
                 display: 'flex',
                 flexDirection: 'row',
+                pointerEvents: bypassExecution ? 'none' : 'inherit',
+                color: bypassExecution ? 'grey' : 'black',
               }}>
               <BTN Solid="Solid" Text="Run" />
               <BTN Solid="_" Text="Stop Execution" />
             </div>
           </form>
-        </div>
-        <div>
-          <div
-            style={{ width: '450px', marginLeft: '200px' }}
-            className="textbox">
-            <Type>Json Data</Type>
-            <Editor
-              disabled
-              value={jsonData}
-              highlight={value => highlight(value, languages.jsx)}
-              padding={50}
-              onValueChange={value => setData(value)}
-              style={{
-                fontFamily: '"Fira code", "Fira Mono", monospace',
-                fontSize: 12,
-                overflow: 'auto',
-                marginLeft: '80px',
-                flex: display,
-                width: '100%',
-                border: '1px solid #b7b0b0',
-                borderRadius: '3px',
-              }}
-            />
-          </div>
         </div>
       </div>
     </div>
