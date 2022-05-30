@@ -1,5 +1,5 @@
-import React from 'react';
-import { Switch } from '@mui/material';
+import React,{useEffect} from 'react';
+import { Switch, TextField } from '@mui/material';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
@@ -14,6 +14,11 @@ import "prismjs/themes/prism.css";
 import { display } from '@mui/system';
 import InputBox from '../../../shared/components/InputBox';
 import BTN, { Title, Type } from '../../../shared/components/SpecComponents';
+// import getData from '../../../../stores/RunInputSpecAPI/runinputspec'
+
+const axios = require('axios').default;
+
+const baseURL= 'http://0.0.0.0:4010'
 
 require('prismjs/components/prism-jsx');
 
@@ -28,11 +33,58 @@ const InputSpecScheduleJobDiv = styled.div`
   }
 `;
 
+
+
 export default function InputSpec() {
   const [scheduleJob, setScheduleJob] = React.useState(false);
   const [type, setType] = React.useState(' ');
   const [api, setAPI] = React.useState(' ');
-  const [jsonData,setData]=React.useState(' ');
+  const [jsonData,setData]=React.useState('');
+  
+  const getData=async ()=>{
+    await axios({
+        method: 'post',
+        url: `${baseURL}/onboard/run-input-spec`,
+        headers: {}, 
+        data: {
+            
+                "inputSpec": {
+                  "type": "http",
+                  "url": "https://rs.iudx.org.in/ngsi-ld/v1/entity/abc",
+                  "requestType": "GET",
+                  "pollingInterval": -1,
+                  "headers": {
+                    "content-type": "application/json"
+                  },
+                  "boundedJob": true,
+                  "minioConfig": {
+                    "url": "http://minio1:9000",
+                    "bucket": "custom-state",
+                    "stateName": "test-state-job",
+                    "accessKey": "minio",
+                    "secretKey": "minio123"
+                  }
+                }
+              
+        }
+      }).then(
+        (response)=>{
+            const responseJson=response
+            console.log(response.data.result.data[0])
+            // return responseJson.data.result
+            setData(JSON.stringify(response.data,null,4))
+        }
+    ).catch(
+        (error)=>{
+            console.log(error)
+        }
+    );
+    }
+
+  useEffect(() => {
+      getData()
+  },[]);
+
 
   return (
     <div className="app">
@@ -109,11 +161,15 @@ export default function InputSpec() {
       </form>
       </div>
       <div>
+        
+        {/* <TextField value={jsonData}/> */}
       <div style={{width:"450px",marginLeft:"200px"}} className="textbox">
         <Type>Json Data</Type>
-        <Editor disabled value={jsonData} highlight={(value)=>highlight(value, languages.jsx)} padding={50}
-        onValueChange={(value)=>setData(value)}
+        <Editor disabled value={jsonData}
+         highlight={(value)=>highlight(value, languages.js)} padding={10}
+        
         style={{
+          height:(jsonData)?"400px":"150px",
           fontFamily: '"Fira code", "Fira Mono", monospace',
           fontSize: 12,
           overflow: 'auto',

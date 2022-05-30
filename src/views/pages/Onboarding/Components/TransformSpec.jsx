@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import styled from 'styled-components';
 import Select from '@mui/material/Select';
 import Editor from 'react-simple-code-editor';
@@ -15,9 +15,76 @@ import BTN, { Title, Type } from '../../../shared/components/SpecComponents';
 
 require('prismjs/components/prism-jsx');
 
+const axios = require('axios').default;
+
+const baseURL= 'http://0.0.0.0:4010'
+
+
 export default function TransformSpec(){
     const [format, setFormat] = React.useState('');
     const [jsonData,setData]=React.useState(' ');
+
+    const getData=async ()=>{
+      await axios({
+          method: 'post',
+          url: `${baseURL}/onboard/run-transformation-spec`,
+          headers: {}, 
+          data: {
+            "inputData": [
+              {
+                "id": "123",
+                "k": 1.5,
+                "time": "2021-04-01T12:00:01+05:30"
+              },
+              {
+                "id": "4356",
+                "k": 2.5,
+                "time": "2021-04-01T12:00:01+05:30"
+              }
+            ],
+            "transformSpec": {
+              "type": "jsPath",
+              "template": "{ 'observationDateTime': '2021', 'co2': { 'avgOverTime': 100}, 'id': 'abc'}",
+              "jsonPathSpec": [
+                {
+                  "outputKeyPath": "$.observationDateTime",
+                  "inputValuePath": "$.time"
+                },
+                {
+                  "outputKeyPath": "$.co2.avgOverTime",
+                  "inputValuePath": "$.k1"
+                },
+                {
+                  "outputKeyPath": "$.name",
+                  "inputValuePath": "$.k2",
+                  "regexFilter": "^(?!.*reject).*"
+                },
+                {
+                  "outputKeyPath": "$.id",
+                  "inputValuePath": "$.deviceId",
+                  "valueModifierScript": "value.split('-')[0]"
+                }
+              ]
+            }
+          }
+        }).then(
+          (response)=>{
+              const responseJson=response
+              console.log(response.data.result)
+              // return responseJson.data.result
+              setData(JSON.stringify(response.data,null,4))
+          }
+      ).catch(
+          (error)=>{
+              console.log(error)
+          }
+      );
+      }
+  
+    useEffect(() => {
+        getData()
+    },[]);
+
     return (
         <div className='app'>
         <Title>Transform Spec</Title>
@@ -43,9 +110,11 @@ export default function TransformSpec(){
         </div>
         <div style={{width:"500px",marginLeft:"250px"}} className="textbox">
         <Type>Json Data</Type>
-        <Editor disabled value={jsonData} highlight={(value)=>highlight(value, languages.jsx)} padding={50}
-        onValueChange={(value)=>setData(value)}
+        <Editor disabled value={jsonData}
+         highlight={(value)=>highlight(value, languages.js)} padding={10}
+        
         style={{
+          height:(jsonData)?"400px":"150px",
           fontFamily: '"Fira code", "Fira Mono", monospace',
           fontSize: 12,
           overflow: 'auto',

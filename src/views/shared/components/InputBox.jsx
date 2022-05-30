@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { TextField } from '@mui/material';
 import { Type } from './SpecComponents';
 
-export default function InputBox({ name, id }) {
+export default function InputBox({ name, id}) {
   return (
     <div style={{ width: '320px' }} className="textbox">
       <Type>{name}</Type>
@@ -13,6 +13,7 @@ export default function InputBox({ name, id }) {
         variant="outlined"
         size="small"
         fullWidth
+       
       />
     </div>
   );

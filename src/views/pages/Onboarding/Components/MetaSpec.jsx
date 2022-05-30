@@ -14,7 +14,7 @@ export default function MetaSpec() {
         <div style={{ width: '320px' }} className="textbox">
           
           <InputBox name="Name" />
-        <InputBox name="Schedule Pattern" id="PollingId" />
+        <InputBox name="Schedule Pattern" id="SchedulePattern" />
         </div>
 
        

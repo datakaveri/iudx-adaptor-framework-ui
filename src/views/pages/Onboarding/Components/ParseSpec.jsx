@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import {TextField } from '@mui/material';
 import styled from 'styled-components';
 import Editor from 'react-simple-code-editor';
@@ -16,6 +16,9 @@ import BTN, { Title, Type } from '../../../shared/components/SpecComponents';
 
 require('prismjs/components/prism-jsx');
 
+const axios = require('axios').default;
+
+const baseURL= 'http://0.0.0.0:4010'
 
 export default function ParseSpec(){
     const [format, setFormat] = React.useState('');
@@ -25,6 +28,67 @@ export default function ParseSpec(){
     const [keypath, setkeyPath]=React.useState(' ');
     const [trickle, setTrickle]=React.useState(' ');
     const [jsonData,setData]=React.useState(' ');
+
+    const getData=async ()=>{
+      await axios({
+          method: 'post',
+          url: `${baseURL}/onboard/run-parse-spec`,
+          headers: {}, 
+          data: {
+            "inputData": {
+              "outerkey": "outerkeyval",
+              "data": [
+                {
+                  "time": "2022-05-20T09:09:56Z",
+                  "k1": 185,
+                  "deviceId": "abc-123"
+                },
+                {
+                  "time": "2022-05-20T09:09:56Z",
+                  "k1": 185,
+                  "deviceId": "abc-123"
+                }
+              ]
+            },
+            "parseSpec": {
+              "type": "json",
+              "messageContainer": "array",
+              "containerPath": "$.messages",
+              "timestampPath": "$.time",
+              "inputTimeFormat": "yyyy-MM-dd HH:mm:ss",
+              "outputTimeFormat": "yyyy-MM-dd'T'HH:mm:ssXXX",
+              "keyPath": "$.deviceId",
+              "trickle": [
+                {
+                  "keyPath": "$.someParentKey",
+                  "keyName": "someNewKeyName"
+                },
+                {
+                  "keyPath": "$.time",
+                  "keyName": "time"
+                }
+              ]
+            }
+          }
+        }).then(
+          (response)=>{
+              const responseJson=response
+              console.log(response.data)
+              // return responseJson.data.result
+              setData(JSON.stringify(response.data,null,4))
+          }
+      ).catch(
+          (error)=>{
+              console.log(error)
+          }
+      );
+      }
+  
+    useEffect(() => {
+        getData()
+    },[]);
+  
+
     return (
         <div className='app'>
         <Title>Parse Spec</Title>
@@ -123,9 +187,11 @@ export default function ParseSpec(){
         </div>
         <div style={{width:"500px",marginLeft:"250px"}} className="textbox">
         <Type>Json Data</Type>
-        <Editor disabled value={jsonData} highlight={(value)=>highlight(value, languages.jsx)} padding={50}
-        onValueChange={(value)=>setData(value)}
+        <Editor disabled value={jsonData}
+         highlight={(value)=>highlight(value, languages.js)} padding={10}
+        
         style={{
+          height:(jsonData)?"400px":"150px",
           fontFamily: '"Fira code", "Fira Mono", monospace',
           fontSize: 12,
           overflow: 'auto',
