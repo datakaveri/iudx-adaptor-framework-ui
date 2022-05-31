@@ -12,6 +12,7 @@ import FormControl from '@mui/material/FormControl';
 import 'prismjs/components/prism-markup';
 import "prismjs/themes/prism.css";
 import { display } from '@mui/system';
+import { Form, Field } from 'react-final-form';
 import BTN, { Title, Type } from '../../../shared/components/SpecComponents';
 
 require('prismjs/components/prism-jsx');
@@ -30,6 +31,7 @@ export default function ParseSpec(){
     const [jsonData,setData]=React.useState(' ');
 
     const getData=async ()=>{
+      console.log(JSON.parse(trickle))
       await axios({
           method: 'post',
           url: `${baseURL}/onboard/run-parse-spec`,
@@ -51,23 +53,14 @@ export default function ParseSpec(){
               ]
             },
             "parseSpec": {
-              "type": "json",
-              "messageContainer": "array",
-              "containerPath": "$.messages",
-              "timestampPath": "$.time",
+              "type": format,
+              "messageContainer": message,
+              "containerPath": code,
+              "timestampPath": timestamp,
               "inputTimeFormat": "yyyy-MM-dd HH:mm:ss",
               "outputTimeFormat": "yyyy-MM-dd'T'HH:mm:ssXXX",
-              "keyPath": "$.deviceId",
-              "trickle": [
-                {
-                  "keyPath": "$.someParentKey",
-                  "keyName": "someNewKeyName"
-                },
-                {
-                  "keyPath": "$.time",
-                  "keyName": "time"
-                }
-              ]
+              "keyPath": keypath,
+              "trickle": JSON.parse(trickle)
             }
           }
         }).then(
@@ -84,15 +77,19 @@ export default function ParseSpec(){
       );
       }
   
-    useEffect(() => {
-        getData()
-    },[]);
+    //   useEffect(() => {
+    //     setData('')
+    // },[]);
   
 
     return (
         <div className='app'>
         <Title>Parse Spec</Title>
         <hr/>
+        <Form
+         onSubmit={getData}
+         render={({ handleSubmit, form }) => (
+          <form onSubmit={handleSubmit}>
         <div style={{display:'flex', flexDirection:"row"}}>
         <div style={{width:"320px"}} className="textbox">
         <Type>Serialization Format Type</Type>
@@ -101,14 +98,14 @@ export default function ParseSpec(){
         <Select
           labelId="format"
           id="format"
-          value={format}
+          value={format.toString()}
           label="Select"
           onChange={e=>setFormat(e.target.value)}
         >  
         <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          <MenuItem value='JSON'>JSON</MenuItem>
+          <MenuItem value='json'>JSON</MenuItem>
           <MenuItem value="XML(Currently Not Supported">XML(Currently Not Supported)</MenuItem>
         </Select>
       </FormControl>
@@ -118,11 +115,11 @@ export default function ParseSpec(){
         <Select
           labelId="message"
           id="message"
-          value={message}
+          value={message.toString}
           label="Select"
           onChange={e=>setMessage(e.target.value)}
         >  
-          <MenuItem value='Array'>Array</MenuItem>
+          <MenuItem value='array'>Array</MenuItem>
           <MenuItem value="String">String</MenuItem>
         </Select>
       </FormControl>
@@ -204,11 +201,12 @@ export default function ParseSpec(){
         </div>
         </div>
         <div style={{marginTop:"20px",marginLeft:"80px"}}>
-        <BTN Solid="Solid" Text="Run" />
+        <BTN type="submit" Solid="Solid" Text="Run" />
         <BTN Solid="_" Text="Stop Execution" />
         </div>
+        </form>
+        )}
+        />
         </div>
   );
 }
-
-

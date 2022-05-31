@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { type } from '@testing-library/user-event/dist/type';
 
-export default function BTN({ Solid, Text }) {
+export default function BTN({ Solid, Text ,onClick}) {
   const ColoredButton = styled.button`
     background-color: ${props =>
       props.solid === 'Solid' ? 'rgb(31,31,31)' : 'white'};
@@ -23,8 +24,8 @@ export default function BTN({ Solid, Text }) {
   return (
     <ColoredButton
       solid={Solid}
-      onClick={() => console.log('CLICKED')}
-      type="button">
+      onClick={onClick}
+      type="submit">
       {Text}
     </ColoredButton>
   );
@@ -34,12 +35,14 @@ BTN.propTypes = {
   Solid: PropTypes.string,
   Text: PropTypes.string,
   solid: PropTypes.string,
+  onClick:PropTypes.func
 };
 
 BTN.defaultProps = {
   Solid: PropTypes.string,
   Text: PropTypes.string,
   solid: PropTypes.string,
+  onClick:PropTypes.func
 };
 
 export const Line = styled.hr`
