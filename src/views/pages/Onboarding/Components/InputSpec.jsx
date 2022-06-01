@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch } from '@mui/material';
+import { Button, Switch } from '@mui/material';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { highlight, languages } from 'prismjs/components/prism-core';
@@ -12,8 +12,12 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import styled from 'styled-components';
 import Editor from 'react-simple-code-editor';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import InputBox from '../../../shared/components/InputBox';
 import BTN, { Title, Type } from '../../../shared/components/SpecComponents';
+
+import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
 
 require('prismjs/components/prism-jsx');
 
@@ -28,13 +32,18 @@ const InputSpecScheduleJobDiv = styled.div`
   }
 `;
 
-export default function InputSpec() {
+const InputSpec = ({ dispatch }) => {
   const [scheduleJob, setScheduleJob] = React.useState(false);
   const [bypassExecution, setBypassExecution] = React.useState(false);
 
   const [type, setType] = React.useState(' ');
   const [api, setAPI] = React.useState(' ');
   const [jsonData, setData] = React.useState(' ');
+
+  const callInputSpec = () => {
+    dispatch(AdaptorAction.RUN_INPUT_SPEC);
+  };
+
   return (
     <div className="app">
       <Title>Input Spec</Title>
@@ -185,10 +194,21 @@ export default function InputSpec() {
               }}>
               <BTN Solid="Solid" Text="Run" Enabled={bypassExecution} />
               <BTN Solid="_" Text="Stop Execution" Enabled={bypassExecution} />
+              <Button onClick={callInputSpec}>Click me</Button>
             </div>
           </form>
         </div>
       </div>
     </div>
   );
-}
+};
+
+InputSpec.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = state => ({
+  dispatch: state.dispatch,
+});
+
+export default connect(mapStateToProps)(InputSpec);
