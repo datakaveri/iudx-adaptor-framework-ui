@@ -1,5 +1,3 @@
 import { createSelector } from 'reselect';
 
-export default class AdaptorSelector {
-  // static
-}
+export default class AdaptorSelector {}

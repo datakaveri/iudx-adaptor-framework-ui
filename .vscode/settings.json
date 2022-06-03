@@ -1,7 +1,8 @@
 {
-    "workbench.colorCustomizations": {
-        "activityBar.background": "#113516",
-        "titleBar.activeBackground": "#184A1F",
-        "titleBar.activeForeground": "#F5FCF6"
-    }
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#113516",
+    "titleBar.activeBackground": "#184A1F",
+    "titleBar.activeForeground": "#F5FCF6"
+  },
+  "cSpell.words": ["minio"]
 }

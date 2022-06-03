@@ -15,7 +15,7 @@ import { BaseModel } from 'sjs-base-model';
 //   },
 // };
 
-export default class InpuSpecResponseModel extends BaseModel {
+export default class InputSpecResponseModel extends BaseModel {
   success = Boolean;
 
   message = '';

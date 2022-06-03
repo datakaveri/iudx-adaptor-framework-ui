@@ -3,7 +3,7 @@ import HttpUtility from '../../utilities/HttpUtility';
 import InputSpecResponseModel from './models/inputSpecResponse/InputSpecResponseModel';
 
 export default class AdaptorEffect {
-  static async runInputSpec(data) {
+  static async requestInputSpec(data) {
     const response = await HttpUtility.post(
       'http://localhost:4010/onboard/run-input-spec',
       data,
@@ -13,6 +13,6 @@ export default class AdaptorEffect {
       return response;
     }
 
-    return new InputSpecResponseModel(data);
+    return new InputSpecResponseModel(response);
   }
 }
