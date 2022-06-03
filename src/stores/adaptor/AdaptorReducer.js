@@ -7,7 +7,7 @@ export default class AdaptorReducer extends BaseReducer {
     error: false,
   };
 
-  [AdaptorAction.RUN_INPUT_SPEC_FINISHED](state, action) {
+  [AdaptorAction.REQUEST_RUN_INPUT_SPEC_FINISHED](state, action) {
     return {
       ...state,
       inputSpec: action.payload,

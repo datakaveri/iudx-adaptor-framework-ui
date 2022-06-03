@@ -124,7 +124,8 @@ export default class HttpUtility {
           },
           restRequest,
         );
-      } else if (error.request) {
+      }
+      if (error.request) {
         // The request was made but no response was received `error.request` is an instance of XMLHttpRequest in the browser and an instance of http.ClientRequest in node.js
         const { status, statusText, responseURL } = error.request;
 
@@ -181,11 +182,8 @@ export default class HttpUtility {
    * @private
    */
   static _delay(duration) {
-    return new Promise(resolve =>
-      setTimeout(
-        resolve,
-        duration || RemoteConfigService.LOADING_INDICATOR_DELAY_MS,
-      ),
-    );
+    return new Promise(resolve => {
+      setTimeout(resolve, duration);
+    });
   }
 }

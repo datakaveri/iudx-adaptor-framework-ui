@@ -227,8 +227,10 @@ InputSpec.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-  dispatch: state.dispatch,
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = dispatch => ({
+  dispatch,
 });
 
-export default connect(mapStateToProps)(InputSpec);
+export default connect(mapStateToProps, mapDispatchToProps)(InputSpec);
