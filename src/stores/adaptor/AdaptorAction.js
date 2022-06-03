@@ -6,12 +6,12 @@ export default class AdaptorAction {
 
   static RUN_INPUT_SPEC_FINISHED = 'RUN_INPUT_SPEC_FINISHED';
 
-  static runInputSpec() {
+  static runInputSpec(data) {
     return async (dispatch, getState) => {
       await ActionUtility.createThunkEffect(
         dispatch,
         AdaptorAction.RUN_INPUT_SPEC,
-        AdaptorEffect.runInputSpec,
+        AdaptorEffect.runInputSpec(data),
       );
     };
   }

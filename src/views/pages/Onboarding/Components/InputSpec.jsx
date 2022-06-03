@@ -41,7 +41,7 @@ const InputSpec = ({ dispatch }) => {
   const [jsonData, setData] = React.useState(' ');
 
   const callInputSpec = () => {
-    dispatch(AdaptorAction.RUN_INPUT_SPEC);
+    dispatch(AdaptorAction.runInputSpec());
   };
 
   return (
