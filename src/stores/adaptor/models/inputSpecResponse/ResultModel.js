@@ -1,10 +1,10 @@
 import { BaseModel } from 'sjs-base-model';
-import DataModel from './DataModel';
+// import DataModel from './DataModel';
 
 export default class ResultModel extends BaseModel {
-  outerKey = '';
+  outerkey = '';
 
-  data = DataModel;
+  data = [];
 
   constructor(data) {
     super();

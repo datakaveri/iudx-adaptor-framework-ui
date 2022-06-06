@@ -18,6 +18,7 @@ import InputBox from '../../../shared/components/InputBox';
 import BTN, { Title, Type } from '../../../shared/components/SpecComponents';
 
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
+import InputSpecResponseModel from '../../../../stores/adaptor/models/inputSpecResponse/InputSpecResponseModel';
 
 require('prismjs/components/prism-jsx');
 
@@ -32,7 +33,7 @@ const InputSpecScheduleJobDiv = styled.div`
   }
 `;
 
-const InputSpec = ({ dispatch }) => {
+const InputSpec = ({ dispatch, inputSpec }) => {
   const [scheduleJob, setScheduleJob] = React.useState(false);
   const [bypassExecution, setBypassExecution] = React.useState(false);
 
@@ -225,9 +226,12 @@ const InputSpec = ({ dispatch }) => {
 
 InputSpec.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  inputSpec: PropTypes.instanceOf(InputSpecResponseModel).isRequired,
 };
 
-const mapStateToProps = () => ({});
+const mapStateToProps = state => ({
+  inputSpec: state.adaptorReducer.inputSpec,
+});
 
 const mapDispatchToProps = dispatch => ({
   dispatch,

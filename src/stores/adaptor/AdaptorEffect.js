@@ -13,6 +13,6 @@ export default class AdaptorEffect {
       return response;
     }
 
-    return new InputSpecResponseModel(response);
+    return new InputSpecResponseModel(response.data);
   }
 }
