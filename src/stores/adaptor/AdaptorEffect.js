@@ -15,4 +15,17 @@ export default class AdaptorEffect {
 
     return new InputSpecResponseModel(response.data);
   }
+
+  static async requestTransformSpec(data) {
+    const response = await HttpUtility.post(
+      'http://localhost:4010/onboard/run-transformation-spec',
+      data,
+    );
+
+    if (response instanceof HttpErrorResponseModel) {
+      return response;
+    }
+
+    return new InputSpecResponseModel(response.data);
+  }
 }
