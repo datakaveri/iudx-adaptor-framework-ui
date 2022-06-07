@@ -7,6 +7,7 @@ import { usePromiseTracker } from 'react-promise-tracker';
 import Loading from '../shared/components/Loading';
 import OnboardingPage from '../pages/Onboarding';
 import Home from '../pages/Home';
+import MyAdaptersPage from '../pages/MyAdapters';
 
 const Router = ({ dispatch }) => {
   const { promiseInProgress } = usePromiseTracker();
@@ -20,6 +21,8 @@ const Router = ({ dispatch }) => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/onboarding" element={<OnboardingPage />} />
+          <Route path="/myadapters" element={<MyAdaptersPage />} />
+
         </Routes>
       )}
     </main>
