@@ -1,6 +1,7 @@
 import HttpErrorResponseModel from '../../models/HttpErrorResponseModel';
 import HttpUtility from '../../utilities/HttpUtility';
 import InputSpecResponseModel from './models/inputSpecResponse/InputSpecResponseModel';
+import TransformSpecResponseModel from './models/transformSpecResponse/TransformSpecResponseModel';
 
 export default class AdaptorEffect {
   static async requestInputSpec(data) {
@@ -26,6 +27,6 @@ export default class AdaptorEffect {
       return response;
     }
 
-    return new InputSpecResponseModel(response.data);
+    return new TransformSpecResponseModel(response.data);
   }
 }

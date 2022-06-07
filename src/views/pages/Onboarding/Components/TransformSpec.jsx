@@ -17,7 +17,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import BTN, { Title, Type } from '../../../shared/components/SpecComponents';
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
-import InputSpecResponseModel from '../../../../stores/adaptor/models/inputSpecResponse/InputSpecResponseModel';
+import TransformSpecResponseModel from '../../../../stores/adaptor/models/transformSpecResponse/TransformSpecResponseModel';
 
 require('prismjs/components/prism-jsx');
 
@@ -29,21 +29,13 @@ const TransformSpec = ({ dispatch, transformSpec }) => {
     dispatch(
       AdaptorAction.requestTransformSpec({
         transformSpec: {
-          type: 'http',
-          url: 'https://rs.iudx.org.in/ngsi-ld/v1/entity/abc',
-          requestType: 'GET',
-          pollingInterval: -1,
-          headers: {
-            'content-type': 'application/json',
+          type: 'jsPath',
+          template: {
+            observationDateTime: '2021',
+            co2: { avgOverTime: 100 },
+            id: 'abc',
           },
-          boundedJob: true,
-          minioConfig: {
-            url: 'http://minio1:9000',
-            bucket: 'custom-state',
-            stateName: 'test-state-job',
-            accessKey: 'minio',
-            secretKey: 'minio123',
-          },
+          jsonPathSpec: [],
         },
       }),
     );
@@ -104,7 +96,7 @@ const TransformSpec = ({ dispatch, transformSpec }) => {
 
 TransformSpec.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  transformSpec: PropTypes.instanceOf(InputSpecResponseModel).isRequired,
+  transformSpec: PropTypes.instanceOf(TransformSpecResponseModel).isRequired,
 };
 
 const mapStateToProps = state => ({
