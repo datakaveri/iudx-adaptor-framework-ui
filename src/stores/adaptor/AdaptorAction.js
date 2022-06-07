@@ -13,6 +13,21 @@ export default class AdaptorAction {
   static REQUEST_RUN_TRANSFORM_SPEC_FINISHED =
     'AdaptorAction.REQUEST_RUN_TRANSFORM_SPEC_FINISHED';
 
+  static REQUEST_RUN_PARSE_SPEC='AdaptorAction.REQUEST_RUN_PARSE_SPEC';
+
+  static REQUEST_RUN_PARSE_SPEC_FINISHED= 'AdaptorAction.REQUEST_RUN_PARSE_SPEC_FINISHED';
+
+  static requestParseSpec(data){
+    return async dispatch=>{
+      await ActionUtility.createThunkEffect(
+        dispatch,
+        AdaptorAction.REQUEST_RUN_PARSE_SPEC,
+        AdaptorEffect.requestParseSpec,
+        data,
+      );
+    };
+  }
+
   static requestInputSpec(data) {
     return async dispatch => {
       await ActionUtility.createThunkEffect(

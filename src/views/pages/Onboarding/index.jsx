@@ -11,6 +11,7 @@ import Step from '@mui/material/Step';
 import StepContent from '@mui/material/StepContent';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
+import StepButton from '@mui/material/StepButton';
 import Typography from '@mui/material/Typography';
 
 import PublishSpec from './Components/PublishSpec';
@@ -21,6 +22,7 @@ import ParseSpec from './Components/ParseSpec';
 import TransformSpec from './Components/TransformSpec';
 import MetaSpec from './Components/MetaSpec';
 import Loading from '../../shared/components/Loading';
+
 
 const steps = [
   'Meta Spec',
@@ -54,6 +56,12 @@ export default function OnboardingPage() {
   const handleBack = () => {
     setActiveStep(prevActiveStep => prevActiveStep - 1);
   };
+
+  const handleStep = (step) => () => {
+    if (step<activeStep)
+    setActiveStep(step);
+  };
+
 
   const handleSkip = () => {
     if (!isStepOptional(activeStep)) {
@@ -116,7 +124,10 @@ export default function OnboardingPage() {
           }
           return (
             <Step key={label} {...stepProps}>
-              <StepLabel {...labelProps}>{label}</StepLabel>
+              {/* <StepLabel {...labelProps}>{label}</StepLabel> */}
+              <StepButton {...labelProps} onClick={handleStep(index)}>
+              {label}
+            </StepButton>
             </Step>
           );
         })}
