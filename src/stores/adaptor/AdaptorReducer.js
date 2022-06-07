@@ -4,6 +4,7 @@ import AdaptorAction from './AdaptorAction';
 export default class AdaptorReducer extends BaseReducer {
   initialState = {
     inputSpec: {},
+    parseSpec:{},
     error: false,
   };
 
@@ -11,6 +12,13 @@ export default class AdaptorReducer extends BaseReducer {
     return {
       ...state,
       inputSpec: action.payload,
+    };
+  }
+  
+  [AdaptorAction.REQUEST_RUN_PARSE_SPEC_FINISHED](state,action){
+    return{
+      ...state,
+      parseSpec:action.payload,
     };
   }
 }

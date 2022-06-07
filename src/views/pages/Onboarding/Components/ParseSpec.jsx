@@ -1,5 +1,5 @@
 import React from 'react';
-import {TextField } from '@mui/material';
+import {TextField,Button } from '@mui/material';
 import styled from 'styled-components';
 import Editor from 'react-simple-code-editor';
 import Select from '@mui/material/Select';
@@ -11,13 +11,19 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import 'prismjs/components/prism-markup';
 import "prismjs/themes/prism.css";
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { display } from '@mui/system';
 import BTN, { Title, Type } from '../../../shared/components/SpecComponents';
+
+
+import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
+import InputSpecResponseModel from '../../../../stores/adaptor/models/inputSpecResponse/InputSpecResponseModel';
 
 require('prismjs/components/prism-jsx');
 
 
-export default function ParseSpec(){
+const ParseSpec= ({ dispatch, parseSpec }) => {
     const [format, setFormat] = React.useState('');
     const [message, setMessage]=React.useState(' ');
     const [code, setCode]=React.useState(' ');
@@ -25,6 +31,30 @@ export default function ParseSpec(){
     const [keypath, setkeyPath]=React.useState(' ');
     const [trickle, setTrickle]=React.useState(' ');
     const [jsonData,setData]=React.useState(' ');
+
+    const callParseSpec=()=>{
+      dispatch(
+        AdaptorAction.requestParseSpec({
+          parseSpec:{
+            type: 'http',
+          url: 'https://rs.iudx.org.in/ngsi-ld/v1/entity/abc',
+          requestType: 'GET',
+          pollingInterval: -1,
+          headers: {
+            'content-type': 'application/json',
+          },
+          boundedJob: true,
+          minioConfig: {
+            url: 'http://minio1:9000',
+            bucket: 'custom-state',
+            stateName: 'test-state-job',
+            accessKey: 'minio',
+            secretKey: 'minio123',
+          },
+        },
+        }),
+      );
+    };
     return (
         <div className='app'>
         <Title>Parse Spec</Title>
@@ -140,9 +170,23 @@ export default function ParseSpec(){
         <div style={{marginTop:"20px",marginLeft:"80px"}}>
         <BTN Solid="Solid" Text="Run" />
         <BTN Solid="_" Text="Stop Execution" />
+        <Button onClick={callParseSpec}>Click me</Button>
         </div>
         </div>
   );
-}
+};
+
+ ParseSpec.propTypes={
+  dispatch: PropTypes.func.isRequired,
+  parseSpec: PropTypes.instanceOf(InputSpecResponseModel).isRequired
+};
+const mapStateToProps=state=>({
+  parseSpec:state.adaptorReducer.parseSpec,
+});
+
+const mapDispatchToProps=dispatch=>({
+  dispatch,
+});
+export default connect(mapStateToProps,mapDispatchToProps)(ParseSpec);
 
 
