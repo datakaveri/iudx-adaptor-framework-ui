@@ -21,7 +21,7 @@ export default class ParseSpecResponseModel extends BaseModel {
 
   message = '';
 
-  result = ResultModel;
+  result = [];
 
   constructor(data) {
     super();
