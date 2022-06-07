@@ -1,6 +1,8 @@
 import HttpErrorResponseModel from '../../models/HttpErrorResponseModel';
 import HttpUtility from '../../utilities/HttpUtility';
 import InputSpecResponseModel from './models/inputSpecResponse/InputSpecResponseModel';
+import ParseSpecResponseModel from './models/parseSpecResponse/ParseSpecResponseModel';
+
 
 export default class AdaptorEffect {
   static async requestInputSpec(data) {
@@ -25,7 +27,7 @@ export default class AdaptorEffect {
     if(response instanceof HttpErrorResponseModel){
       return response
     }
-    return new InputSpecResponseModel(response.data);
+    return new ParseSpecResponseModel(response.data);
 
   }
 }

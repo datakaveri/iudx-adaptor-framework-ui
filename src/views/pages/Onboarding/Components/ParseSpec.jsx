@@ -18,7 +18,7 @@ import BTN, { Title, Type } from '../../../shared/components/SpecComponents';
 
 
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
-import InputSpecResponseModel from '../../../../stores/adaptor/models/inputSpecResponse/InputSpecResponseModel';
+import ParseSpecResponseModel from '../../../../stores/adaptor/models/parseSpecResponse/ParseSpecResponseModel';
 
 require('prismjs/components/prism-jsx');
 
@@ -178,7 +178,7 @@ const ParseSpec= ({ dispatch, parseSpec }) => {
 
  ParseSpec.propTypes={
   dispatch: PropTypes.func.isRequired,
-  parseSpec: PropTypes.instanceOf(InputSpecResponseModel).isRequired
+  parseSpec: PropTypes.instanceOf(ParseSpecResponseModel).isRequired
 };
 const mapStateToProps=state=>({
   parseSpec:state.adaptorReducer.parseSpec,
