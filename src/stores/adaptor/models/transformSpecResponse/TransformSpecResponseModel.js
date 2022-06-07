@@ -18,7 +18,7 @@ export default class TransformSpecResponseModel extends BaseModel {
 
   message = '';
 
-  result = ResultModel;
+  result = [];
 
   constructor(data) {
     super();

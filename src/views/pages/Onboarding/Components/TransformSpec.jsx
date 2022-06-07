@@ -28,14 +28,42 @@ const TransformSpec = ({ dispatch, transformSpec }) => {
   const callTransformSpec = () => {
     dispatch(
       AdaptorAction.requestTransformSpec({
+        inputData: [
+          {
+            id: '123',
+            k: 1.5,
+            time: '2021-04-01T12:00:01+05:30',
+          },
+          {
+            id: '4356',
+            k: 2.5,
+            time: '2021-04-01T12:00:01+05:30',
+          },
+        ],
         transformSpec: {
           type: 'jsPath',
-          template: {
-            observationDateTime: '2021',
-            co2: { avgOverTime: 100 },
-            id: 'abc',
-          },
-          jsonPathSpec: [],
+          template:
+            "{ 'observationDateTime': '2021', 'co2': { 'avgOverTime': 100}, 'id': 'abc'}",
+          jsonPathSpec: [
+            {
+              outputKeyPath: '$.observationDateTime',
+              inputValuePath: '$.time',
+            },
+            {
+              outputKeyPath: '$.co2.avgOverTime',
+              inputValuePath: '$.k1',
+            },
+            {
+              outputKeyPath: '$.name',
+              inputValuePath: '$.k2',
+              regexFilter: '^(?!.*reject).*',
+            },
+            {
+              outputKeyPath: '$.id',
+              inputValuePath: '$.deviceId',
+              valueModifierScript: "value.split('-')[0]",
+            },
+          ],
         },
       }),
     );
