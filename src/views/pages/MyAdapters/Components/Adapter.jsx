@@ -21,14 +21,20 @@ export default function Adapter({ name, last, status }) {
         <p style={{ width: '30%' }}>
           <b>{name}</b>
         </p>
-        <p style={{ width: '30%', textAlign: 'center' }}>{last}</p>
-        <p style={{ color: 'green', width: '30%', textAlign: 'end' }}>
+        <p style={{ width: '30%', textAlign: 'start' }}>{last}</p>
+        <p style={{ color: 'green', width: '30%', textAlign: 'start' }}>
           <b>{status}</b>
         </p>
       </div>
 
       {status === 'Running' ? (
-        <ImageButton Solid="" Text="stop" color="#C77D00" icon="stop.png" />
+        <ImageButton
+          Solid=""
+          Text="stop"
+          color="#C77D00"
+          icon="stop.png"
+          hoverIcon="stopWhite.png"
+        />
       ) : (
         <div
           style={{
@@ -42,6 +48,7 @@ export default function Adapter({ name, last, status }) {
             Text="Restart"
             color="#009E5F"
             icon="refresh.png"
+            hoverIcon="refreshWhite.png"
           />
           <div style={{ width: '10px' }} />
           <ImageButton
@@ -49,6 +56,7 @@ export default function Adapter({ name, last, status }) {
             Text="Delete"
             color="#EA4335"
             icon="delete.png"
+            hoverIcon="deleteRed.png"
           />
         </div>
       )}

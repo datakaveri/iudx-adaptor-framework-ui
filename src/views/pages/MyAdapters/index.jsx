@@ -19,16 +19,18 @@ export default function MyAdaptersPage() {
           style={{
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            justifyContent: 'start',
             alignItems: 'center',
             width: '40%',
           }}>
           <h1>My Adapters</h1>
+          <div style={{ width: '40px' }} />
           <ImageButton
             Solid="Solid"
             Text="Create New"
             color="#2D3648"
             icon="add.png"
+            hoverIcon="addGrey.png"
           />
         </div>
         <div>
@@ -56,10 +58,10 @@ export default function MyAdaptersPage() {
           <p style={{ margin: '0px', width: '30%', textAlign: 'start' }}>
             <b>Name</b>
           </p>
-          <p style={{ margin: '0px', width: '30%', textAlign: 'center' }}>
+          <p style={{ margin: '0px', width: '30%', textAlign: 'start' }}>
             <b>Last Used</b>
           </p>
-          <p style={{ margin: '0px', width: '30%', textAlign: 'end' }}>
+          <p style={{ margin: '0px', width: '30%', textAlign: 'start' }}>
             <b>Status</b>
           </p>
         </div>
