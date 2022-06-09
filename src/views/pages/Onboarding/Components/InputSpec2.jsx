@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Switch, TextareaAutosize } from '@mui/material';
 import PropTypes from 'prop-types';
@@ -30,9 +30,12 @@ const FormWrapper = styled.div`
 
 const InputSpec2 = ({ dispatch, inputSpec }) => {
   const [scheduleJob, setScheduleJob] = useState(false);
-  const [inputSpecData, setInputSpecData] = useState(
-    new InputSpecResponseModel(),
-  );
+  const [inputSpecData, setInputSpecData] = useState();
+
+  useEffect(() => {
+    setInputSpecData(inputSpec);
+  }, [inputSpec]);
+
   return (
     <div>
       <Title>Input Spec</Title>
@@ -60,9 +63,8 @@ const InputSpec2 = ({ dispatch, inputSpec }) => {
           };
           console.log(requestBody);
           dispatch(AdaptorAction.requestInputSpec(requestBody));
-          setInputSpecData(inputSpec);
-          console.log('Input Spec Data');
-          console.log(inputSpecData);
+          // console.log('Input Spec Data');
+          // console.log(inputSpecData);
         }}>
         {() => (
           <FormWrapper>
@@ -153,7 +155,7 @@ const InputSpec2 = ({ dispatch, inputSpec }) => {
       </AdaptorForm>
       <TextareaAutosize
         // disabled={!bypassExecution}
-        value={inputSpecData}
+        value={JSON.stringify(inputSpecData)}
         // highlight={value => highlight(value, languages.jsx)}
       />
     </div>
