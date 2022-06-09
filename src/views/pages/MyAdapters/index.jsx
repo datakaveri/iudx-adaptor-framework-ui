@@ -29,8 +29,10 @@ export default function MyAdaptersPage() {
             Solid="Solid"
             Text="Create New"
             color="#2D3648"
+            hoverColor="white"
             icon="add.png"
             hoverIcon="addGrey.png"
+            hoverTextColor="#2D3648"
           />
         </div>
         <div>

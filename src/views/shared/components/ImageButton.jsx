@@ -9,6 +9,8 @@ export default function ImageButton({
   icon,
   color,
   hoverIcon,
+  hoverColor,
+  hoverTextColor,
 }) {
   const IconButton = styled.button`
     background-color: ${props =>
@@ -20,15 +22,15 @@ export default function ImageButton({
     font-family: 'Inter';
     border-color: ${props => props.color};
     height: 36px;
+    outline: null;
     padding: 0px 0px 0px 20px;
     &:disabled {
       background-color: grey;
       color: white;
     }
     &:hover {
-      background-color: ${props =>
-        props.solid === 'Solid' ? 'white' : props.color};
-      color: ${props => (props.solid === 'Solid' ? props.color : 'white')};
+      background-color: ${hoverColor};
+      color: ${hoverTextColor};
       img {
         content: url('${hoverIcon}');
         width: '20px';
@@ -69,6 +71,8 @@ ImageButton.propTypes = {
   color: PropTypes.string,
   icon: PropTypes.string,
   hoverIcon: PropTypes.string,
+  hoverColor: PropTypes.string,
+  hoverTextColor: PropTypes.string,
 };
 
 ImageButton.defaultProps = {
@@ -79,4 +83,6 @@ ImageButton.defaultProps = {
   color: PropTypes.string,
   icon: PropTypes.string,
   hoverIcon: PropTypes.string,
+  hoverColor: PropTypes.string,
+  hoverTextColor: PropTypes.string,
 };

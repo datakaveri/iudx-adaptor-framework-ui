@@ -32,8 +32,10 @@ export default function Adapter({ name, last, status }) {
           Solid=""
           Text="stop"
           color="#C77D00"
+          hoverColor="#C77D00"
           icon="stop.png"
           hoverIcon="stopWhite.png"
+          hoverTextColor="white"
         />
       ) : (
         <div
@@ -49,6 +51,8 @@ export default function Adapter({ name, last, status }) {
             color="#009E5F"
             icon="refresh.png"
             hoverIcon="refreshWhite.png"
+            hoverColor="#009E5F"
+            hoverTextColor="white"
           />
           <div style={{ width: '10px' }} />
           <ImageButton
@@ -56,7 +60,9 @@ export default function Adapter({ name, last, status }) {
             Text="Delete"
             color="#EA4335"
             icon="delete.png"
-            hoverIcon="deleteRed.png"
+            hoverIcon="delete.png"
+            hoverColor="#9b241a"
+            hoverTextColor="white"
           />
         </div>
       )}
