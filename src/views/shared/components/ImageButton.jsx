@@ -22,7 +22,8 @@ export default function ImageButton({
     font-family: 'Inter';
     border-color: ${props => props.color};
     height: 36px;
-    outline: null;
+    border: 2px solid;
+
     padding: 0px 0px 0px 20px;
     &:disabled {
       background-color: grey;
