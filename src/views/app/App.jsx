@@ -7,6 +7,7 @@ import configStore from '../../stores/configStore';
 import Loading from '../shared/components/Loading';
 import Toasts from '../toasts';
 import Router from './Router';
+import Navbar from '../shared/components/Navbar';
 
 const Wrapper = styled.section`
   margin: 0px 200px;

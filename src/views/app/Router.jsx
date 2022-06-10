@@ -7,6 +7,7 @@ import { usePromiseTracker } from 'react-promise-tracker';
 import Loading from '../shared/components/Loading';
 import OnboardingPage from '../pages/Onboarding';
 import Home from '../pages/Home';
+import Navbar from '../shared/components/Navbar';
 
 const Router = ({ dispatch }) => {
   const { promiseInProgress } = usePromiseTracker();
@@ -23,6 +24,7 @@ const Router = ({ dispatch }) => {
         </Routes>
       )}
     </main>
+    
   );
 };
 
