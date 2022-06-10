@@ -14,6 +14,7 @@ const Wrapper = styled.section`
   padding: 20px;
 `;
 
+
 const App = () => {
   const initialState = {};
   const store = configStore(initialState);
@@ -29,6 +30,7 @@ const App = () => {
         </Suspense>
       </Wrapper>
     </Provider>
+    
   );
 };
 

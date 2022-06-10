@@ -15,6 +15,7 @@ const Router = ({ dispatch }) => {
 
   return (
     <main>
+      <Navbar/>
       {promiseInProgress && <Loading loading={promiseInProgress} />}
       {loading && <Loading loading={loading} />}
       {!loading && (
