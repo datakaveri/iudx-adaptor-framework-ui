@@ -17,6 +17,7 @@ import Typography from '@mui/material/Typography';
 import PublishSpec from './Components/PublishSpec';
 import FailureRecoverySpec from './Components/FailureRecoverySpec';
 // import InputSpec from './Components/InputSpec';
+import InputSpec from './Components/InputSpec';
 import InputSpec2 from './Components/InputSpec2';
 import DuplicationSpec from './Components/DuplicationSpec';
 import ParseSpec from './Components/ParseSpec';

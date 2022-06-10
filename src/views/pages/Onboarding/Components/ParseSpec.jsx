@@ -16,6 +16,9 @@ import PropTypes from 'prop-types';
 import { display } from '@mui/system';
 import BTN, { Title, Type } from '../../../shared/components/SpecComponents';
 
+import AdaptorForm from '../../../shared/components/AdaptorForm';
+import AdaptorInput from '../../../shared/components/AdaptorInput';
+ 
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
 import ParseSpecResponseModel from '../../../../stores/adaptor/models/parseSpecResponse/ParseSpecResponseModel';
 
@@ -30,10 +33,32 @@ const ParseSpec = ({ dispatch, parseSpec }) => {
   const [trickle, setTrickle] = React.useState(' ');
   const [jsonData, setData] = React.useState(' ');
 
+
+  const [scheduleJob, setScheduleJob] = React.useState(false);
+  const [apiData,setAPIdata]=React.useState({
+    type:"",
+    url:"",
+    requestType:"",
+    headers: {
+    'content-type': 'application/json',
+  },
+  pollingInterval: -1,
+  boundedJob:'',
+  minioConfig: (!scheduleJob)
+    ? ''
+    : {
+        url: "",
+        bucket: "",
+        stateName: "",
+        accessKey: "",
+        secretKey: "",
+      },
+})
+  
   const callParseSpec = () => {
     dispatch(
       AdaptorAction.requestParseSpec({
-        parseSpec: {
+        
           type: 'http',
           url: 'https://rs.iudx.org.in/ngsi-ld/v1/entity/abc',
           requestType: 'GET',
@@ -49,7 +74,7 @@ const ParseSpec = ({ dispatch, parseSpec }) => {
             accessKey: 'minio',
             secretKey: 'minio123',
           },
-        },
+     
       }),
     );
   };

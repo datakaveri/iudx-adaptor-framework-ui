@@ -9,14 +9,17 @@ const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  
+  
 `;
 
 const ErrorText = styled.div`
+
   margin-top: 5px;
   color: #e74c3c;
   font-size: 15px;
   padding: 0px 4px;
-  min-height: 24px;
+  min-height: 20px;
 `;
 
 const AdaptorInput = props => {
@@ -36,11 +39,12 @@ const AdaptorInput = props => {
 
   return (
     <InputWrapper>
-      <InputLabel>{props.inputlabel}</InputLabel>
+      <InputLabel
+      style={{ marginLeft:"10px" }}>{props.inputlabel}</InputLabel>
       {props.inputtype ? (
         <div>
           {props.inputtype === 'select' ? (
-            <Select {...inputProps}>
+            <Select style={{width:"320px"}} {...inputProps}>
               {props.selectoptions.map(el => (
                 <MenuItem key={el} value={el}>
                   {el}
@@ -52,7 +56,7 @@ const AdaptorInput = props => {
           )}
         </div>
       ) : (
-        <TextField {...inputProps} />
+        <TextField style={{width:"320px"}} {...inputProps} />
       )}
       <ErrorText>{touched && (error || submitError) ? error : ''}</ErrorText>
     </InputWrapper>

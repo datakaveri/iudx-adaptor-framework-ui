@@ -5,8 +5,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
+import BTN, { Title, Type } from '../../../shared/components/SpecComponents';
 
-import { Title } from '../../../shared/components/SpecComponents';
+
 import AdaptorForm from '../../../shared/components/AdaptorForm';
 import AdaptorInput from '../../../shared/components/AdaptorInput';
 
@@ -19,18 +20,19 @@ const Group = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   width: fit-content;
-  margin-bottom: 1em;
+  
 `;
 
 const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: left;
+  
 `;
 
 const InputSpec2 = ({ dispatch, inputSpec }) => {
   const [scheduleJob, setScheduleJob] = useState(false);
-  const [inputSpecData, setInputSpecData] = useState();
+  const [inputSpecData, setInputSpecData] = useState({});
+  const [bypassExecution, setBypassExecution] = React.useState(false);
 
   useEffect(() => {
     setInputSpecData(inputSpec);
@@ -40,6 +42,8 @@ const InputSpec2 = ({ dispatch, inputSpec }) => {
     <div>
       <Title>Input Spec</Title>
       <hr />
+    <div style={{marginLeft:"80px"}}>
+      <div style={{display:"flex"}}>
       <AdaptorForm
         onSubmit={values => {
           const requestBody = {
@@ -67,8 +71,9 @@ const InputSpec2 = ({ dispatch, inputSpec }) => {
           // console.log(inputSpecData);
         }}>
         {() => (
-          <FormWrapper>
-            <Group>
+          <FormWrapper >
+            
+            <Group >
               <AdaptorInput
                 inputlabel="Type"
                 inputtype="select"
@@ -76,6 +81,7 @@ const InputSpec2 = ({ dispatch, inputSpec }) => {
                 name="type"
                 placeholder="type"
               />
+               
             </Group>
             <Group>
               <AdaptorInput inputlabel="URL" name="url" placeholder="URL" />
@@ -89,7 +95,7 @@ const InputSpec2 = ({ dispatch, inputSpec }) => {
                 placeholder="GET / POST"
               />
             </Group>
-            <Group>
+            <Group >
               <Switch
                 inputlabel="Scheduled Job"
                 checked={scheduleJob}
@@ -98,9 +104,11 @@ const InputSpec2 = ({ dispatch, inputSpec }) => {
             </Group>
 
             {scheduleJob ? (
-              <FormWrapper>
+              <div>
                 <Title>Minio Config</Title>
-                <hr />
+                <hr/>
+              <FormWrapper>
+                
                 <Group>
                   <AdaptorInput
                     inputlabel="URL"
@@ -136,7 +144,9 @@ const InputSpec2 = ({ dispatch, inputSpec }) => {
                     placeholder="Minio Secret Key"
                   />
                 </Group>
+                
               </FormWrapper>
+              </div>
             ) : (
               <Group>
                 <AdaptorInput
@@ -144,21 +154,51 @@ const InputSpec2 = ({ dispatch, inputSpec }) => {
                   name="pollingInterval"
                   placeholder="Polling Interval"
                 />
+               
               </Group>
             )}
 
-            <Group>
-              <button type="submit">Submit</button>
+            <Group style={{marginTop:"10px",marginBottom:"10px"}}>
+              
+              <BTN Solid= {(!bypassExecution)?"Solid":"_"} disabled={!(!bypassExecution)} Text="RUN" type="submit"/>
             </Group>
           </FormWrapper>
         )}
       </AdaptorForm>
-      <TextareaAutosize
-        // disabled={!bypassExecution}
-        value={JSON.stringify(inputSpecData)}
-        // highlight={value => highlight(value, languages.jsx)}
-      />
+      <Group style={{marginLeft:"400px",marginTop:"20px"}}>
+      <Group style={{marginBottom:"10px"}}>
+            <Switch
+                inputlabel="Bypass Execution"
+                checked={bypassExecution}
+                
+                onChange={(ev, val) => {
+                  setBypassExecution(val);
+                }}
+              />
+            </Group>
+            
+      <Editor
+                  disabled={!bypassExecution}
+                  value={JSON.stringify(inputSpecData,null,4)}
+                  highlight={value => highlight(value, languages.jsx)}
+                  padding={20}
+                  
+                  style={{
+                    fontFamily: '"Fira code", "Fira Mono", monospace',
+                    fontSize: 12,
+                    overflow: 'auto',
+                   
+                    flex: "display",
+                    width: '500px',
+                    height: "250px",
+                    border: '1px solid',
+                    borderColor: bypassExecution ? 'black' : '#b7b0b0',
+                    borderRadius: '3px',
+                  }}
+                /></Group>
+                </div>
     </div>
+  </div>
   );
 };
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React ,{useEffect} from 'react';
 import { Button, Switch } from '@mui/material';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -19,6 +19,8 @@ import BTN, { Title, Type } from '../../../shared/components/SpecComponents';
 
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
 import InputSpecResponseModel from '../../../../stores/adaptor/models/inputSpecResponse/InputSpecResponseModel';
+import AdaptorForm from '../../../shared/components/AdaptorForm';
+import AdaptorInput from '../../../shared/components/AdaptorInput';
 
 require('prismjs/components/prism-jsx');
 
@@ -36,39 +38,46 @@ const InputSpecScheduleJobDiv = styled.div`
 const InputSpec = ({ dispatch, inputSpec }) => {
   const [scheduleJob, setScheduleJob] = React.useState(false);
   const [bypassExecution, setBypassExecution] = React.useState(false);
-
+  
   const [type, setType] = React.useState(' ');
   const [api, setAPI] = React.useState(' ');
   const [jsonData, setData] = React.useState(' ');
+  const [inputSpecData, setInputSpecData] = React.useState();
+  useEffect(() => {
+    setInputSpecData(inputSpec);
+  }, [inputSpec]); 
 
-  const callInputSpec = () => {
-    dispatch(
-      AdaptorAction.requestInputSpec({
-        inputSpec: {
-          type: 'http',
-          url: 'https://rs.iudx.org.in/ngsi-ld/v1/entity/abc',
-          requestType: 'GET',
-          pollingInterval: -1,
-          headers: {
-            'content-type': 'application/json',
-          },
-          boundedJob: true,
-          minioConfig: {
-            url: 'http://minio1:9000',
-            bucket: 'custom-state',
-            stateName: 'test-state-job',
-            accessKey: 'minio',
-            secretKey: 'minio123',
-          },
-        },
-      }),
-    );
-  };
+  // const callInputSpec = () => {
+  //   dispatch(
+  //     AdaptorAction.requestInputSpec({
+  //       inputSpec: {
+  //         type: 'http',
+  //         url: 'https://rs.iudx.org.in/ngsi-ld/v1/entity/abc',
+  //         requestType: 'GET',
+  //         pollingInterval: -1,
+  //         headers: {
+  //           'content-type': 'application/json',
+  //         },
+  //         boundedJob: true,
+  //         minioConfig: {
+  //           url: 'http://minio1:9000',
+  //           bucket: 'custom-state',
+  //           stateName: 'test-state-job',
+  //           accessKey: 'minio',
+  //           secretKey: 'minio123',
+  //         },
+  //       },
+  //     }),
+  //   );
+  // };
 
   return (
-    <div className="app">
+    <div >
       <Title>Input Spec</Title>
       <hr />
+      <AdaptorForm
+        onSubmit={values=>console.log(values)}>
+          {()=>(
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div>
           <form>
@@ -97,8 +106,9 @@ const InputSpec = ({ dispatch, inputSpec }) => {
                       Type
                     </InputLabel>
                     <Select
+                    name="type"
                       labelId="TypeDropDown"
-                      id="TypeDropDown"
+                      id="type"
                       value={type}
                       label="TypeDropDown"
                       onChange={e => setType(e.target.value)}>
@@ -213,14 +223,16 @@ const InputSpec = ({ dispatch, inputSpec }) => {
                 pointerEvents: bypassExecution ? 'none' : 'inherit',
                 color: bypassExecution ? 'grey' : 'black',
               }}>
-              <BTN Solid="Solid" Text="Run" Enabled={bypassExecution} />
-              <BTN Solid="_" Text="Stop Execution" Enabled={bypassExecution} />
-              <Button onClick={callInputSpec}>Click me</Button>
+              <BTN Solid="Solid" Text="Run" />
+              <BTN Solid="_" Text="Stop Execution"/>
+              <Button onClick={()=>console.log("hello")}>Click me</Button>
             </div>
           </form>
         </div>
-      </div>
+      </div>)}
+      </AdaptorForm>
     </div>
+    
   );
 };
 
