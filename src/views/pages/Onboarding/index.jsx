@@ -107,7 +107,12 @@ export default function OnboardingPage() {
         marginTop: '20px',
         width: '100%',
         height: '100%',
-      }}>
+        display:"flex",
+        flexDirection:"column",
+        alignItems:"center"
+       }}>
+         <div style={{width:"80%"}}>
+
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
           const stepProps = {};
@@ -164,6 +169,7 @@ export default function OnboardingPage() {
           </Button>
         </Box>
       )}
+          </div>
     </div>
   );
 }

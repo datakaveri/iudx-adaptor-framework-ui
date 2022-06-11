@@ -14,8 +14,10 @@ const Router = ({ dispatch }) => {
   const [loading, setLoading] = React.useState(false);
 
   return (
-    <main>
+    <div>
+
       <Navbar/>
+    <main>
       {promiseInProgress && <Loading loading={promiseInProgress} />}
       {loading && <Loading loading={loading} />}
       {!loading && (
@@ -25,6 +27,7 @@ const Router = ({ dispatch }) => {
         </Routes>
       )}
     </main>
+      </div>
     
   );
 };

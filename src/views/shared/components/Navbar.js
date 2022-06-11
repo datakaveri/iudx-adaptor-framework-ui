@@ -1,5 +1,6 @@
 import React from "react";
 import { TextField, Button } from '@mui/material';
+import { fontFamily } from "@mui/system";
 import {
   AppBar,
   Toolbar,
@@ -12,23 +13,27 @@ import {
 import { Link } from "react-router-dom";
 import DrawerComponent from "./Drawer";
 
+const logo=require('./iudx.jpg')
+
 const useStyles = makeStyles((theme) => ({
   navlinks: {
-    marginLeft: theme.spacing(5),
     display: "flex",
+    flexdirection:"row",
   },
   logo: {
     flexGrow: "1",
     cursor: "pointer",
+    
   },
   link: {
+    fontFamily: '"Fira code", "Fira Mono", monospace',
     textDecoration: "none",
-    color: "white",
-    fontSize: "20px",
-    marginLeft: theme.spacing(20),
+    color: "grey",
+    fontSize: "15px",
+    margin:"15px",
     "&:hover": {
-      color: "yellow",
-      borderBottom: "1px solid white",
+      color: "black",
+      borderBottom: "1px solid black",
     },
   },
 }));
@@ -39,20 +44,25 @@ function Navbar() {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" color="grey" elevation={0.3}>
       <CssBaseline />
       <Toolbar>
-        <Typography variant="h4" className={classes.logo}>
-          Adaptor Framework
-        </Typography>
+        <img src={logo} height="80px" width="80px"  alt="iudx"/>
+        <Typography className={classes.logo}/> 
         {isMobile ? (
           <DrawerComponent />
         ) : (
           <div className={classes.navlinks}>
+            <Link to="/" className={classes.link}>
+              Home
+            </Link>
             <Link to="/onboarding" className={classes.link}>
               Onboarding
             </Link>
-            
+            <Link to="/adaptors" className={classes.link}>
+              My Adaptors
+            </Link>
+            <Button variant="outlined" size="small" >Login/Register</Button>
           </div>
         )}
       </Toolbar>

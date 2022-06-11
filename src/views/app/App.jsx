@@ -9,9 +9,9 @@ import Toasts from '../toasts';
 import Router from './Router';
 import Navbar from '../shared/components/Navbar';
 
-const Wrapper = styled.section`
-  margin: 0px 200px;
-  padding: 20px;
+const Wrapper = styled.div`
+ 
+ 
 `;
 
 
@@ -21,6 +21,7 @@ const App = () => {
 
   return (
     <Provider store={store}>
+       
       <Wrapper>
         <Toasts />
         <Suspense fallback={<Loading />}>
@@ -30,7 +31,6 @@ const App = () => {
         </Suspense>
       </Wrapper>
     </Provider>
-    
   );
 };
 
