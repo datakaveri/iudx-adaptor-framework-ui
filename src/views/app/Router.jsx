@@ -8,6 +8,7 @@ import Loading from '../shared/components/Loading';
 import OnboardingPage from '../pages/Onboarding';
 import Home from '../pages/Home';
 import Navbar from '../shared/components/Navbar';
+import MyAdaptersPage from '../pages/MyAdapters';
 
 const Router = ({ dispatch }) => {
   const { promiseInProgress } = usePromiseTracker();
@@ -21,9 +22,11 @@ const Router = ({ dispatch }) => {
       {promiseInProgress && <Loading loading={promiseInProgress} />}
       {loading && <Loading loading={loading} />}
       {!loading && (
+        
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/onboarding" element={<OnboardingPage />} />
+          <Route path="/myadapters" element={<MyAdaptersPage />} />
         </Routes>
       )}
     </main>
