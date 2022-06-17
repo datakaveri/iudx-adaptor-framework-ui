@@ -16,22 +16,19 @@ const Router = ({ dispatch }) => {
 
   return (
     <div>
-
-      <Navbar/>
-    <main>
-      {promiseInProgress && <Loading loading={promiseInProgress} />}
-      {loading && <Loading loading={loading} />}
-      {!loading && (
-        
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/onboarding" element={<OnboardingPage />} />
-          <Route path="/myadapters" element={<MyAdaptersPage />} />
-        </Routes>
-      )}
-    </main>
-      </div>
-    
+      <Navbar />
+      <main>
+        {promiseInProgress && <Loading loading={promiseInProgress} />}
+        {loading && <Loading loading={loading} />}
+        {!loading && (
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/onboarding" element={<OnboardingPage />} />
+            <Route path="/myadaptors" element={<MyAdaptersPage />} />
+          </Routes>
+        )}
+      </main>
+    </div>
   );
 };
 
