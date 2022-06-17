@@ -24,6 +24,7 @@ import ParseSpec from './Components/ParseSpec';
 import TransformSpec from './Components/TransformSpec';
 import MetaSpec from './Components/MetaSpec';
 import Loading from '../../shared/components/Loading';
+import MetaSpec2 from './Components/MetaSpec2';
 
 const steps = [
   'Meta Spec',
@@ -78,7 +79,8 @@ export default function OnboardingPage() {
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <MetaSpec />;
+        // return <MetaSpec />;
+        return <MetaSpec2 />;
       case 1:
         return <InputSpec2 />;
       case 2:

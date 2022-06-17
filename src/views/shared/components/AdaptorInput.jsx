@@ -3,7 +3,7 @@
 import React from 'react';
 import { useField } from 'react-final-form';
 import styled from 'styled-components';
-import { TextField, Select, MenuItem, InputLabel } from '@mui/material';
+import { TextField, Select, MenuItem, InputLabel, Switch } from '@mui/material';
 
 const InputWrapper = styled.div`
   display: flex;
@@ -17,6 +17,12 @@ const ErrorText = styled.div`
   font-size: 15px;
   padding: 0px 4px;
   min-height: 20px;
+`;
+
+export const SwitchDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
 `;
 
 const AdaptorInput = props => {
@@ -36,7 +42,13 @@ const AdaptorInput = props => {
 
   return (
     <InputWrapper>
-      <InputLabel style={{ marginLeft: '10px' }}>{props.inputlabel}</InputLabel>
+      {props.inputtype === 'switch' ? (
+        ''
+      ) : (
+        <InputLabel style={{ marginLeft: '10px' }}>
+          {props.inputlabel}
+        </InputLabel>
+      )}
       {props.inputtype ? (
         <div>
           {props.inputtype === 'select' ? (
@@ -47,6 +59,19 @@ const AdaptorInput = props => {
                 </MenuItem>
               ))}
             </Select>
+          ) : (
+            ''
+          )}
+          {props.inputtype === 'switch' ? (
+            <SwitchDiv>
+              <InputLabel style={{ marginLeft: '10px' }}>
+                {props.inputlabel}
+              </InputLabel>
+              <Switch
+                checked={props.scheduleJob}
+                onChange={(evt, val) => props.onChange(val)}
+              />
+            </SwitchDiv>
           ) : (
             ''
           )}

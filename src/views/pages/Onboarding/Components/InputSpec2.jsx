@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Switch, TextareaAutosize } from '@mui/material';
+import { InputLabel, Switch, TextareaAutosize } from '@mui/material';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Editor from 'react-simple-code-editor';
@@ -8,7 +8,9 @@ import { highlight, languages } from 'prismjs/components/prism-core';
 import BTN, { Title, Type } from '../../../shared/components/SpecComponents';
 
 import AdaptorForm from '../../../shared/components/AdaptorForm';
-import AdaptorInput from '../../../shared/components/AdaptorInput';
+import AdaptorInput, {
+  SwitchDiv,
+} from '../../../shared/components/AdaptorInput';
 
 import InputSpecResponseModel from '../../../../stores/adaptor/models/inputSpecResponse/InputSpecResponseModel';
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
@@ -91,10 +93,11 @@ const InputSpec2 = ({ dispatch, inputSpec }) => {
                   />
                 </Group>
                 <Group>
-                  <Switch
+                  <AdaptorInput
                     inputlabel="Scheduled Job"
+                    inputtype="switch"
                     checked={scheduleJob}
-                    onChange={(evt, val) => setScheduleJob(val)}
+                    onChange={setScheduleJob}
                   />
                 </Group>
 
@@ -162,15 +165,15 @@ const InputSpec2 = ({ dispatch, inputSpec }) => {
             )}
           </AdaptorForm>
           <Group style={{ marginLeft: '400px', marginTop: '20px' }}>
-            <Group style={{ marginBottom: '10px' }}>
+            <SwitchDiv>
+              <InputLabel>Bypass Execution</InputLabel>
               <Switch
-                inputlabel="Bypass Execution"
                 checked={bypassExecution}
                 onChange={(ev, val) => {
                   setBypassExecution(val);
                 }}
               />
-            </Group>
+            </SwitchDiv>
 
             <Editor
               disabled={!bypassExecution}
