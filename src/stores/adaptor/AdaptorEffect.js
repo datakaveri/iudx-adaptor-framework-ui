@@ -16,21 +16,19 @@ export default class AdaptorEffect {
     }
 
     return new InputSpecResponseModel(response.data);
-
   }
-  
-  static async requestParseSpec(data){
-    const response=await await HttpUtility.post(
+
+  static async requestParseSpec(data) {
+    const response = await await HttpUtility.post(
       'http://localhost:4010/onboard/run-parse-spec',
       data,
     );
-    
-    if(response instanceof HttpErrorResponseModel){
-      return response
-    }
-    
-    return new ParseSpecResponseModel(response.data);
 
+    if (response instanceof HttpErrorResponseModel) {
+      return response;
+    }
+
+    return new ParseSpecResponseModel(response.data);
   }
 
   static async requestTransformSpec(data) {

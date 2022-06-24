@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { Route, Routes } from 'react-router-dom';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { usePromiseTracker } from 'react-promise-tracker';
-import { act } from 'react-dom/test-utils';
+// import { Route, Routes } from 'react-router-dom';
+// import { connect } from 'react-redux';
+// import PropTypes from 'prop-types';
+// import { usePromiseTracker } from 'react-promise-tracker';
+// import { act } from 'react-dom/test-utils';
 
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
-import StepContent from '@mui/material/StepContent';
-import StepLabel from '@mui/material/StepLabel';
+// import StepContent from '@mui/material/StepContent';
+// import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import StepButton from '@mui/material/StepButton';
 import Typography from '@mui/material/Typography';
@@ -17,14 +17,13 @@ import Typography from '@mui/material/Typography';
 import PublishSpec from './Components/PublishSpec';
 import FailureRecoverySpec from './Components/FailureRecoverySpec';
 // import InputSpec from './Components/InputSpec';
-import InputSpec from './Components/InputSpec';
 import InputSpec2 from './Components/InputSpec2';
-import DuplicationSpec from './Components/DuplicationSpec';
-import ParseSpec from './Components/ParseSpec';
-import TransformSpec from './Components/TransformSpec';
-import MetaSpec from './Components/MetaSpec';
-import Loading from '../../shared/components/Loading';
+import ParseSpec2 from './Components/ParseSpec2';
+// import Loading from '../../shared/components/Loading';
 import MetaSpec2 from './Components/MetaSpec2';
+import DeduplicationSpec2 from './Components/DeduplicationSpec2';
+import TransformSpec2 from './Components/TransformSpec2';
+import FailureRecoverySpec2 from './Components/FailureRecoverySpec2';
 
 const steps = [
   'Meta Spec',
@@ -84,15 +83,15 @@ export default function OnboardingPage() {
       case 1:
         return <InputSpec2 />;
       case 2:
-        return <ParseSpec />;
+        return <ParseSpec2 />;
       case 3:
-        return <DuplicationSpec />;
+        return <DeduplicationSpec2 />;
       case 4:
-        return <TransformSpec />;
+        return <TransformSpec2 />;
       case 5:
         return <FailureRecoverySpec />;
       case 6:
-        return <PublishSpec />;
+        return <FailureRecoverySpec2 />;
 
       default:
         return 'Unknown step';
