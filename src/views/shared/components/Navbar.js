@@ -10,10 +10,11 @@ import {
   useTheme,
   useMediaQuery,
 } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import DrawerComponent from './Drawer';
 
 const logo = require('./iudx.jpg');
+
 
 const useStyles = makeStyles(theme => ({
   navlinks: {
@@ -34,15 +35,24 @@ const useStyles = makeStyles(theme => ({
       color: 'black',
       borderBottom: '1px solid black',
     },
+    '&.active':{
+      fontSize:'17px',
+      color:'black',
+      fontFamily: '"Fira code", "Fira Mono", monospace'
+    }
   },
+
 }));
 
+
+
 function Navbar() {
+    
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-
   return (
+    
     <AppBar position="static" color="grey" elevation={0.3}>
       <CssBaseline />
       <Toolbar>
@@ -52,15 +62,15 @@ function Navbar() {
           <DrawerComponent />
         ) : (
           <div className={classes.navlinks}>
-            <Link to="/" className={classes.link}>
+            <NavLink to="/" className={classes.link}>
               Home
-            </Link>
-            <Link to="/onboarding" className={classes.link}>
+            </NavLink>
+            <NavLink to="/onboarding"  className={classes.link}>
               Onboarding
-            </Link>
-            <Link to="/myadaptors" className={classes.link}>
+            </NavLink>
+            <NavLink to="/myadaptors"  className={classes.link}>
               My Adaptors
-            </Link>
+            </NavLink>
             <Button variant="outlined" size="small">
               Login/Register
             </Button>
