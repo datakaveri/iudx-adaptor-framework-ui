@@ -14,6 +14,7 @@ import Button from '@mui/material/Button';
 import StepButton from '@mui/material/StepButton';
 import Typography from '@mui/material/Typography';
 
+import PublishSpec2 from './Components/PublishSpec2';
 import PublishSpec from './Components/PublishSpec';
 import FailureRecoverySpec from './Components/FailureRecoverySpec';
 // import InputSpec from './Components/InputSpec';
@@ -89,9 +90,9 @@ export default function OnboardingPage() {
       case 4:
         return <TransformSpec2 />;
       case 5:
-        return <FailureRecoverySpec />;
-      case 6:
         return <FailureRecoverySpec2 />;
+      case 6:
+        return <PublishSpec2 />;
 
       default:
         return 'Unknown step';

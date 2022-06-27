@@ -1,19 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { Button, InputLabel, Switch } from '@mui/material';
+import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Editor from 'react-simple-code-editor';
-import { highlight, languages } from 'prismjs/components/prism-core';
 import { Title } from '../../../shared/components/SpecComponents';
 import AdaptorForm from '../../../shared/components/AdaptorForm';
-import AdaptorInput, {
-  SwitchDiv,
-} from '../../../shared/components/AdaptorInput';
+import AdaptorInput from '../../../shared/components/AdaptorInput';
 
-import InputSpecResponseModel from '../../../../stores/adaptor/models/inputSpecResponse/InputSpecResponseModel';
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
-import InputSpecInputModel from '../../../../stores/adaptor/models/specInput/inputSpec/InputSpecInputModel';
+import PublishSpecInputModel from '../../../../stores/adaptor/models/specInput/publishSpec/PublishSpecInputModel';
 
 const Group = styled.div`
   display: flex;
@@ -28,213 +23,101 @@ const FormWrapper = styled.div`
   flex-direction: column;
 `;
 
-const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
-  const [scheduleJob, setScheduleJob] = useState();
-  const [inputSpecData, setInputSpecData] = useState('');
-  const [bypassExecution, setBypassExecution] = React.useState(false);
+const PublishSpec2 = ({ dispatch, publishSpecInput }) => (
+  <div>
+    <Title>Publish Spec</Title>
+    <hr />
+    <div style={{ marginLeft: '80px' }}>
+      <div style={{ display: 'flex' }}>
+        <AdaptorForm
+          onSubmit={values => {
+            console.log(values);
+            dispatch(
+              AdaptorAction.savePublishSpec(new PublishSpecInputModel(values)),
+            );
+          }}>
+          {() => (
+            <FormWrapper>
+              <Group>
+                <AdaptorInput
+                  inputlabel="Type"
+                  name="type"
+                  initialValue={publishSpecInput.type}
+                />
+              </Group>
 
-  useEffect(() => {
-    setInputSpecData(inputSpec);
-  }, [inputSpec]);
+              <Group>
+                <AdaptorInput
+                  inputlabel="URL"
+                  name="url"
+                  initialValue={publishSpecInput.url}
+                />
+              </Group>
 
-  return (
-    <div>
-      <Title>Input Spec</Title>
-      <hr />
-      <div style={{ marginLeft: '80px' }}>
-        <div style={{ display: 'flex' }}>
-          <AdaptorForm
-            onSubmit={values => {
-              const requestBody = {
-                type: values.type,
-                url: values.url,
-                requestType: values.requestType,
-                headers: {
-                  'content-type': 'application/json',
-                },
-                pollingInterval: !scheduleJob ? values.pollingInterval : -1,
-                boundedJob: scheduleJob ? true : '',
-                minioConfig: !scheduleJob
-                  ? ''
-                  : {
-                      url: values.minioUrl,
-                      bucket: values.minioBucket,
-                      stateName: values.minioStateName,
-                      accessKey: values.minioAccessKey,
-                      secretKey: values.minioSecretKey,
-                    },
-              };
-              console.log(requestBody);
-              dispatch(AdaptorAction.saveInputSpec(requestBody));
-              dispatch(AdaptorAction.requestInputSpec(requestBody));
-              // console.log('Input Spec Data');
-              // console.log(inputSpecData);
-            }}>
-            {() => (
-              <FormWrapper>
-                <Group>
-                  <AdaptorInput
-                    inputlabel="Type"
-                    inputtype="select"
-                    selectoptions={['HTTP', 'MQTT', 'AMQP', 'GRPC']}
-                    name="type"
-                    placeholder="type"
-                    initialValue={inputSpecInput.type}
-                  />
-                </Group>
-                <Group>
-                  <AdaptorInput
-                    inputlabel="URL"
-                    name="url"
-                    placeholder="URL"
-                    initialValue={inputSpecInput.url}
-                  />
-                </Group>
-                <Group>
-                  <AdaptorInput
-                    inputlabel="Request Type"
-                    inputtype="select"
-                    selectoptions={['GET', 'POST']}
-                    name="requestType"
-                    placeholder="GET / POST"
-                    initialValue={inputSpecInput.requestType}
-                  />
-                </Group>
-                <Group>
-                  <AdaptorInput
-                    inputlabel="Scheduled Job"
-                    inputtype="switch"
-                    initialValue={inputSpecInput.boundedJob}
-                    checked={scheduleJob}
-                    onChange={setScheduleJob}
-                  />
-                </Group>
+              <Group>
+                <AdaptorInput
+                  inputlabel="Port"
+                  name="port"
+                  initialValue={publishSpecInput.port}
+                />
+              </Group>
 
-                {scheduleJob ? (
-                  <div>
-                    <Title>Minio Config</Title>
-                    <hr />
-                    <FormWrapper>
-                      <Group>
-                        ~
-                        <AdaptorInput
-                          inputlabel="URL"
-                          name="minioUrl"
-                          placeholder="Minio URL"
-                          initialValue={inputSpecInput.minioConfig.url}
-                        />
-                      </Group>
-                      <Group>
-                        <AdaptorInput
-                          inputlabel="Bucket"
-                          name="minioBucket"
-                          placeholder="Minio Bucket"
-                          initialValue={inputSpecInput.minioConfig.bucket}
-                        />
-                      </Group>
-                      <Group>
-                        <AdaptorInput
-                          inputlabel="State Name"
-                          name="minioStateName"
-                          placeholder="Minio State Name"
-                          initialValue={inputSpecInput.minioConfig.stateName}
-                        />
-                      </Group>
-                      <Group>
-                        <AdaptorInput
-                          inputlabel="Access Key"
-                          name="minioAccessKey"
-                          placeholder="Minio Access Key"
-                          initialValue={inputSpecInput.minioConfig.accessKey}
-                        />
-                      </Group>
-                      <Group>
-                        <AdaptorInput
-                          inputlabel="Secret Key"
-                          name="minioSecretKey"
-                          placeholder="Minio Secret Key"
-                          initialValue={inputSpecInput.minioConfig.secretKey}
-                        />
-                      </Group>
-                    </FormWrapper>
-                  </div>
-                ) : (
-                  <Group>
-                    <AdaptorInput
-                      inputlabel="Polling Interval"
-                      name="pollingInterval"
-                      placeholder="Polling Interval"
-                      initialValue={inputSpecInput.pollingInterval}
-                    />
-                  </Group>
-                )}
+              <Group>
+                <AdaptorInput
+                  inputlabel="Username"
+                  name="username"
+                  initialValue={publishSpecInput.username}
+                />
+              </Group>
 
-                <Group style={{ marginTop: '10px', marginBottom: '10px' }}>
-                  {/* <BTN
-                    Solid={!bypassExecution ? 'Solid' : '_'}
-                    disabled={!!bypassExecution}
-                    Text="RUN"
-                    type="submit"
-                  /> */}
-                  {/* <button type="submit">Submit</button> */}
-                  <Button type="submit">Submit</Button>
-                </Group>
-              </FormWrapper>
-            )}
-          </AdaptorForm>
-          <Group style={{ marginLeft: '400px', marginTop: '20px' }}>
-            <SwitchDiv>
-              <InputLabel>Bypass Execution</InputLabel>
-              <Switch
-                checked={bypassExecution}
-                onChange={(ev, val) => {
-                  setBypassExecution(val);
-                }}
-              />
-            </SwitchDiv>
+              <Group>
+                <AdaptorInput
+                  inputlabel="Password"
+                  name="password"
+                  initialValue={publishSpecInput.password}
+                />
+              </Group>
 
-            <Editor
-              disabled={!bypassExecution}
-              value={
-                inputSpecData.message === ''
-                  ? ''
-                  : JSON.stringify(inputSpecData, null, 4)
-              }
-              highlight={value => highlight(value, languages.jsx)}
-              padding={20}
-              style={{
-                fontFamily: '"Fira code", "Fira Mono", monospace',
-                fontSize: 12,
-                overflow: 'auto',
+              <Group>
+                <AdaptorInput
+                  inputlabel="Sink Name"
+                  name="sinkName"
+                  initialValue={publishSpecInput.sinkName}
+                />
+              </Group>
 
-                flex: 'display',
-                width: '500px',
-                height: '250px',
-                border: '1px solid',
-                borderColor: bypassExecution ? 'black' : '#b7b0b0',
-                borderRadius: '3px',
-              }}
-            />
-          </Group>
-        </div>
+              <Group>
+                <AdaptorInput
+                  inputlabel="Tag Name"
+                  name="tagName"
+                  initialValue={publishSpecInput.tagName}
+                />
+              </Group>
+
+              <Group style={{ marginTop: '10px', marginBottom: '10px' }}>
+                <Button type="submit">Submit</Button>
+              </Group>
+            </FormWrapper>
+          )}
+        </AdaptorForm>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
-InputSpec2.propTypes = {
+PublishSpec2.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  inputSpec: PropTypes.instanceOf(InputSpecResponseModel).isRequired,
-  inputSpecInput: PropTypes.instanceOf(InputSpecInputModel).isRequired,
+  publishSpecInput: PropTypes.instanceOf(PublishSpecInputModel).isRequired,
 };
 
 const mapStateToProps = state => ({
-  inputSpec: new InputSpecResponseModel(state.adaptorReducer.inputSpec),
-  inputSpecInput: new InputSpecInputModel(state.adaptorReducer.inputSpecInput),
+  publishSpecInput: new PublishSpecInputModel(
+    state.adaptorReducer.publishSpecInput,
+  ),
 });
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(InputSpec2);
+export default connect(mapStateToProps, mapDispatchToProps)(PublishSpec2);
