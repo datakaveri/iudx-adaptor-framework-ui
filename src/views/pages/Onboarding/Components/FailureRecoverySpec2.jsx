@@ -31,7 +31,6 @@ const FailureRecoverySpec2 = ({ dispatch, failureRecoverySpecInput }) => (
       <div style={{ display: 'flex' }}>
         <AdaptorForm
           onSubmit={values => {
-            console.log(values);
             dispatch(AdaptorAction.saveFailureRecoverySpec(values));
           }}>
           {() => (

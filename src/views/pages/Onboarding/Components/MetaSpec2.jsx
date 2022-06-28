@@ -25,50 +25,48 @@ const FormWrapper = styled.div`
   flex-direction: column;
 `;
 
-const MetaSpec2 = ({ dispatch, metaSpec }) => {
-  console.log(metaSpec);
-  return (
-    <div>
-      <Title>Meta Spec</Title>
-      <hr />
-      <div style={{ marginLeft: '80px' }}>
-        <div style={{ display: 'flex' }}>
-          <AdaptorForm
-            onSubmit={values => {
-              console.log(values);
-              dispatch(
-                ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
-              );
-              dispatch(AdaptorAction.saveMetaSpec(values));
-            }}>
-            {() => (
-              <FormWrapper>
-                <Group>
-                  <AdaptorInput
-                    inputlabel="Name"
-                    name="name"
-                    initialValue={metaSpec.name}
-                  />
-                </Group>
-                <Group>
-                  <AdaptorInput
-                    inputlabel="Schedule Pattern"
-                    name="schedulePattern"
-                    placeholder="CRON like schedule pattern"
-                    initialValue={metaSpec.schedulePattern}
-                  />
-                </Group>
-                <Group>
-                  <Button type="submit">Save</Button>
-                </Group>
-              </FormWrapper>
-            )}
-          </AdaptorForm>
-        </div>
+const MetaSpec2 = ({ dispatch, metaSpec }) => (
+  <div>
+    <Title>Meta Spec</Title>
+    <hr />
+    <div style={{ marginLeft: '80px' }}>
+      <div style={{ display: 'flex' }}>
+        <AdaptorForm
+          onSubmit={values => {
+            dispatch(
+              ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
+            );
+            dispatch(
+              AdaptorAction.saveMetaSpec(new MetaSpecInputModel(values)),
+            );
+          }}>
+          {() => (
+            <FormWrapper>
+              <Group>
+                <AdaptorInput
+                  inputlabel="Name"
+                  name="name"
+                  initialValue={metaSpec.name}
+                />
+              </Group>
+              <Group>
+                <AdaptorInput
+                  inputlabel="Schedule Pattern"
+                  name="schedulePattern"
+                  placeholder="CRON like schedule pattern"
+                  initialValue={metaSpec.schedulePattern}
+                />
+              </Group>
+              <Group>
+                <Button type="submit">Save</Button>
+              </Group>
+            </FormWrapper>
+          )}
+        </AdaptorForm>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 MetaSpec2.propTypes = {
   dispatch: PropTypes.func.isRequired,

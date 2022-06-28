@@ -9,7 +9,8 @@ import AdaptorForm from '../../../shared/components/AdaptorForm';
 import AdaptorInput from '../../../shared/components/AdaptorInput';
 
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
-import InputSpecInputModel from '../../../../stores/adaptor/models/specInput/inputSpec/InputSpecInputModel';
+import ToastsAction from '../../../../stores/toasts/ToastsAction';
+import DeduplicationSpecInputModel from '../../../../stores/adaptor/models/specInput/deduplicationSpec/DeduplicationSpecInputModel';
 
 const Group = styled.div`
   display: flex;
@@ -24,7 +25,7 @@ const FormWrapper = styled.div`
   flex-direction: column;
 `;
 
-const DeduplicationSpec2 = ({ dispatch, parseSpecInput }) => (
+const DeduplicationSpec2 = ({ dispatch, deduplicationSpecInput }) => (
   <div>
     <Title>Deduplication Spec</Title>
     <hr />
@@ -32,8 +33,14 @@ const DeduplicationSpec2 = ({ dispatch, parseSpecInput }) => (
       <div style={{ display: 'flex' }}>
         <AdaptorForm
           onSubmit={values => {
-            console.log(values);
-            dispatch(AdaptorAction.saveParseSpec(values));
+            dispatch(
+              ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
+            );
+            dispatch(
+              AdaptorAction.saveDeduplicationSpec(
+                new DeduplicationSpecInputModel(values),
+              ),
+            );
           }}>
           {() => (
             <FormWrapper>
@@ -45,6 +52,7 @@ const DeduplicationSpec2 = ({ dispatch, parseSpecInput }) => (
                     'Time Based',
                     'Extra Key Based (Currently not supported)',
                   ]}
+                  initialValue={deduplicationSpecInput.type}
                   name="type"
                 />
               </Group>
@@ -62,11 +70,14 @@ const DeduplicationSpec2 = ({ dispatch, parseSpecInput }) => (
 
 DeduplicationSpec2.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  parseSpecInput: PropTypes.instanceOf(InputSpecInputModel).isRequired,
+  deduplicationSpecInput: PropTypes.instanceOf(DeduplicationSpecInputModel)
+    .isRequired,
 };
 
 const mapStateToProps = state => ({
-  parseSpecInput: new InputSpecInputModel(state.adaptorReducer.parseSpecInput),
+  deduplicationSpecInput: new DeduplicationSpecInputModel(
+    state.adaptorReducer.deduplicationSpecInput,
+  ),
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -19,7 +19,7 @@ import ResultModel from './ResultModel';
 export default class InputSpecResponseModel extends BaseModel {
   success = Boolean;
 
-  message = '';
+  message = String;
 
   result = ResultModel;
 

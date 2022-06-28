@@ -13,6 +13,7 @@ import AdaptorInput, {
 
 import InputSpecResponseModel from '../../../../stores/adaptor/models/inputSpecResponse/InputSpecResponseModel';
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
+import ToastsAction from '../../../../stores/toasts/ToastsAction';
 import InputSpecInputModel from '../../../../stores/adaptor/models/specInput/inputSpec/InputSpecInputModel';
 
 const Group = styled.div`
@@ -64,11 +65,11 @@ const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
                       secretKey: values.minioSecretKey,
                     },
               };
-              console.log(requestBody);
+              dispatch(
+                ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
+              );
               dispatch(AdaptorAction.saveInputSpec(requestBody));
               dispatch(AdaptorAction.requestInputSpec(requestBody));
-              // console.log('Input Spec Data');
-              // console.log(inputSpecData);
             }}>
             {() => (
               <FormWrapper>
@@ -170,14 +171,7 @@ const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
                 )}
 
                 <Group style={{ marginTop: '10px', marginBottom: '10px' }}>
-                  {/* <BTN
-                    Solid={!bypassExecution ? 'Solid' : '_'}
-                    disabled={!!bypassExecution}
-                    Text="RUN"
-                    type="submit"
-                  /> */}
-                  {/* <button type="submit">Submit</button> */}
-                  <Button type="submit">Submit</Button>
+                  <Button type="submit">Run and Save</Button>
                 </Group>
               </FormWrapper>
             )}

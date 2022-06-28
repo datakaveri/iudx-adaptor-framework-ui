@@ -1,26 +1,22 @@
+/* eslint-disable react/require-default-props */
 import * as React from 'react';
-// import { Route, Routes } from 'react-router-dom';
-// import { connect } from 'react-redux';
-// import PropTypes from 'prop-types';
-// import { usePromiseTracker } from 'react-promise-tracker';
-// import { act } from 'react-dom/test-utils';
 
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
-// import StepContent from '@mui/material/StepContent';
-// import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import StepButton from '@mui/material/StepButton';
 import Typography from '@mui/material/Typography';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
+import Editor from 'react-simple-code-editor';
+import { highlight, languages } from 'prismjs/components/prism-core';
+
+import { Title } from '../../shared/components/SpecComponents';
 import PublishSpec2 from './Components/PublishSpec2';
-import PublishSpec from './Components/PublishSpec';
-import FailureRecoverySpec from './Components/FailureRecoverySpec';
-// import InputSpec from './Components/InputSpec';
 import InputSpec2 from './Components/InputSpec2';
 import ParseSpec2 from './Components/ParseSpec2';
-// import Loading from '../../shared/components/Loading';
 import MetaSpec2 from './Components/MetaSpec2';
 import DeduplicationSpec2 from './Components/DeduplicationSpec2';
 import TransformSpec2 from './Components/TransformSpec2';
@@ -36,7 +32,7 @@ const steps = [
   'Publish Spec',
 ];
 
-export default function OnboardingPage() {
+function OnboardingPage({ adaptorReducer }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
 
@@ -95,7 +91,7 @@ export default function OnboardingPage() {
         return <PublishSpec2 />;
 
       default:
-        return 'Unknown step';
+        return '';
     }
   }
 
@@ -138,9 +134,38 @@ export default function OnboardingPage() {
 
       {activeStep === steps.length ? (
         <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
+          {/* <Typography sx={{ mt: 2, mb: 1 }}>
             All steps completed - you&apos;re finished
-          </Typography>
+          </Typography> */}
+
+          <Title>Spec Outline</Title>
+          <hr />
+          <div style={{ marginLeft: '80px' }}>
+            <div style={{ display: 'flex' }}>
+              <Editor
+                disabled
+                value={
+                  adaptorReducer.message === ''
+                    ? ''
+                    : JSON.stringify(adaptorReducer, null, 4)
+                }
+                highlight={value => highlight(value, languages.jsx)}
+                padding={20}
+                style={{
+                  fontFamily: '"Fira code", "Fira Mono", monospace',
+                  fontSize: 12,
+                  overflow: 'auto',
+
+                  flex: 'display',
+                  width: '500px',
+                  height: '250px',
+                  border: '1px solid',
+                  borderColor: 'black',
+                  borderRadius: '3px',
+                }}
+              />
+            </div>
+          </div>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Box sx={{ flex: '1 1 auto' }} />
             <Button onClick={handleReset}>Reset</Button>
@@ -170,3 +195,19 @@ export default function OnboardingPage() {
     </div>
   );
 }
+
+OnboardingPage.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  adaptorReducer: PropTypes.any,
+};
+
+const mapStateToProps = state => ({
+  adaptorReducer: state.adaptorReducer,
+});
+
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(OnboardingPage);

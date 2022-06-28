@@ -31,7 +31,6 @@ const PublishSpec2 = ({ dispatch, publishSpecInput }) => (
       <div style={{ display: 'flex' }}>
         <AdaptorForm
           onSubmit={values => {
-            console.log(values);
             dispatch(
               AdaptorAction.savePublishSpec(new PublishSpecInputModel(values)),
             );
