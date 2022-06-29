@@ -3,6 +3,12 @@ import styled from 'styled-components';
 import { Button, InputLabel, Switch } from '@mui/material';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
+import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-javascript';
+import 'prismjs/components/prism-markup';
+import 'prismjs/themes/prism.css';
+
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
 import { Title } from '../../../shared/components/SpecComponents';
@@ -15,6 +21,8 @@ import InputSpecResponseModel from '../../../../stores/adaptor/models/inputSpecR
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
 import ToastsAction from '../../../../stores/toasts/ToastsAction';
 import InputSpecInputModel from '../../../../stores/adaptor/models/specInput/inputSpec/InputSpecInputModel';
+
+require('prismjs/components/prism-jsx');
 
 const Group = styled.div`
   display: flex;
