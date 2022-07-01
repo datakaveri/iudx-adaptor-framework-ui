@@ -7,9 +7,11 @@ import ImageButton from '../../shared/components/ImageButton';
 
 export default function MyAdaptersPage() {
   return (
-    <>
+   <div style={{alignContent:"center",alignItems:"center",justifyContent:"center",display:"flex"}}>
+    <div style={{width:"80%"}}>
       <div
         style={{
+          
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'space-between',
@@ -24,7 +26,7 @@ export default function MyAdaptersPage() {
             width: '40%',
           }}>
           <h1>My Adapters</h1>
-          <div style={{ width: '40px' }} />
+          <div style={{ width: '50px' }} />
           <ImageButton
             Solid="Solid"
             Text="Create New"
@@ -40,12 +42,13 @@ export default function MyAdaptersPage() {
             variant="outlined"
             size="small"
             fullWidth
-            placeholde="Search"
+            placeholder="Search"
           />
         </div>
       </div>
       <div
         style={{
+          
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'space-between',
@@ -72,6 +75,7 @@ export default function MyAdaptersPage() {
       <Line />
       <Adapter name="Adapter1" last="27, Jan, 2022, 17:45" status="Running" />
       <Adapter name="Adapter1" last="27, Jan, 2022, 17:45" status="" />
-    </>
+      </div>
+      </div>
   );
 }
