@@ -16,6 +16,7 @@ import AdaptorInput, {
 import ParseSpecResponseModel from '../../../../stores/adaptor/models/parseSpecResponse/ParseSpecResponseModel';
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
 import ParseSpecInputModel from '../../../../stores/adaptor/models/specInput/parseSpec/ParseSpecInputModel';
+import InputSpecResponseModel from '../../../../stores/adaptor/models/inputSpecResponse/InputSpecResponseModel';
 
 const Group = styled.div`
   display: flex;
@@ -30,11 +31,17 @@ const FormWrapper = styled.div`
   flex-direction: column;
 `;
 
-const ParseSpec2 = ({ dispatch, parseSpec, parseSpecInput }) => {
+const ParseSpec2 = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
   const [parseSpecData, setParseSpecData] = useState('');
+  const [trickle, setTrickle] = useState('');
 
   useEffect(() => {
     setParseSpecData(parseSpec);
+    setTrickle(
+      parseSpecInput.trickle.length === 0
+        ? ''
+        : JSON.stringify(parseSpecInput.trickle, null, 4),
+    );
   }, [parseSpec]);
 
   return (
@@ -45,13 +52,27 @@ const ParseSpec2 = ({ dispatch, parseSpec, parseSpecInput }) => {
         <div style={{ display: 'flex' }}>
           <AdaptorForm
             onSubmit={values => {
+              const headers = {
+                username: 'user',
+                password: 'user-password',
+                'Content-Type': 'application/json',
+              };
+
+              const spec = {
+                ...values,
+                trickle: JSON.parse(trickle),
+              };
+              const requestBody = {
+                inputData: inputSpec.result,
+                parseSpec: spec,
+              };
               dispatch(
                 ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
               );
               dispatch(
-                AdaptorAction.saveParseSpec(new ParseSpecInputModel(values)),
+                AdaptorAction.saveParseSpec(new ParseSpecInputModel(spec)),
               );
-              dispatch(AdaptorAction.requestParseSpec(values));
+              dispatch(AdaptorAction.requestParseSpec(requestBody, headers));
             }}>
             {() => (
               <FormWrapper>
@@ -59,7 +80,10 @@ const ParseSpec2 = ({ dispatch, parseSpec, parseSpecInput }) => {
                   <AdaptorInput
                     inputlabel="Serialization Format Type"
                     inputtype="select"
-                    selectoptions={['JSON', 'XML (Currently not supported)']}
+                    selectoptions={[
+                      { key: 'JSON', value: 'json' },
+                      { key: 'XML (Currently not supported)', value: 'xml' },
+                    ]}
                     name="type"
                     initialValue={parseSpecInput.type}
                   />
@@ -67,9 +91,12 @@ const ParseSpec2 = ({ dispatch, parseSpec, parseSpecInput }) => {
 
                 <Group>
                   <AdaptorInput
-                    inputlabel="Message Contained"
+                    inputlabel="Message Container"
                     inputtype="select"
-                    selectoptions={['Array', 'String']}
+                    selectoptions={[
+                      { key: 'Array', value: 'array' },
+                      { key: 'String', value: 'string' },
+                    ]}
                     name="messageContainer"
                     initialValue={parseSpecInput.messageContainer}
                   />
@@ -78,15 +105,15 @@ const ParseSpec2 = ({ dispatch, parseSpec, parseSpecInput }) => {
                 <Group>
                   <AdaptorInput
                     inputlabel="Input Datetime format"
-                    name="inputDateTimeFormat"
-                    initialValue={parseSpecInput.inputDateTimeFormat}
+                    name="inputTimeFormat"
+                    initialValue={parseSpecInput.inputTimeFormat}
                   />
                 </Group>
                 <Group>
                   <AdaptorInput
                     inputlabel="Output Datetime format"
-                    name="outputDateTimeFormat"
-                    initialValue={parseSpecInput.outputDateTimeFormat}
+                    name="outputTimeFormat"
+                    initialValue={parseSpecInput.outputTimeFormat}
                   />
                 </Group>
                 <Group>
@@ -110,13 +137,32 @@ const ParseSpec2 = ({ dispatch, parseSpec, parseSpecInput }) => {
                     initialValue={parseSpecInput.keyPath}
                   />
                 </Group>
+
                 <Group>
-                  <AdaptorInput
-                    inputlabel="Trickle"
-                    name="trickle"
-                    initialValue={parseSpecInput.trickle}
+                  <InputLabel style={{ marginLeft: '10px' }}>
+                    JSON Path Spec
+                  </InputLabel>
+                  <Editor
+                    disabled={false}
+                    value={trickle}
+                    highlight={value => highlight(value, languages.jsx)}
+                    padding={15}
+                    onValueChange={value => setTrickle(value)}
+                    style={{
+                      fontFamily: '"Fira code", "Fira Mono", monospace',
+                      fontSize: 14,
+                      overflow: 'auto',
+                      marginTop: '5px',
+                      flex: 'display',
+                      width: '500px',
+                      height: '250px',
+                      border: '1px solid',
+                      borderColor: 'black',
+                      borderRadius: '3px',
+                    }}
                   />
                 </Group>
+
                 <Group style={{ marginTop: '10px', marginBottom: '10px' }}>
                   <Button type="submit">Run and Save</Button>
                 </Group>
@@ -160,11 +206,13 @@ ParseSpec2.propTypes = {
   dispatch: PropTypes.func.isRequired,
   parseSpec: PropTypes.instanceOf(ParseSpecResponseModel).isRequired,
   parseSpecInput: PropTypes.instanceOf(ParseSpecInputModel).isRequired,
+  inputSpec: PropTypes.instanceOf(InputSpecResponseModel).isRequired,
 };
 
 const mapStateToProps = state => ({
   parseSpec: new ParseSpecResponseModel(state.adaptorReducer.parseSpec),
   parseSpecInput: new ParseSpecInputModel(state.adaptorReducer.parseSpecInput),
+  inputSpec: new InputSpecResponseModel(state.adaptorReducer.inputSpec),
 });
 
 const mapDispatchToProps = dispatch => ({

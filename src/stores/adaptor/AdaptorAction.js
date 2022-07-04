@@ -67,35 +67,38 @@ export default class AdaptorAction {
     return ActionUtility.createAction(AdaptorAction.SAVE_PUBLISH_SPEC, data);
   }
 
-  static requestParseSpec(data) {
+  static requestParseSpec(data, headers) {
     return async dispatch => {
       await ActionUtility.createThunkEffect(
         dispatch,
         AdaptorAction.REQUEST_RUN_PARSE_SPEC,
         AdaptorEffect.requestParseSpec,
         data,
+        headers,
       );
     };
   }
 
-  static requestInputSpec(data) {
+  static requestInputSpec(data, headers) {
     return async dispatch => {
       await ActionUtility.createThunkEffect(
         dispatch,
         AdaptorAction.REQUEST_RUN_INPUT_SPEC,
         AdaptorEffect.requestInputSpec,
         data,
+        headers,
       );
     };
   }
 
-  static requestTransformSpec(data) {
+  static requestTransformSpec(data, headers) {
     return async dispatch => {
       await ActionUtility.createThunkEffect(
         dispatch,
         AdaptorAction.REQUEST_RUN_TRANSFORM_SPEC,
         AdaptorEffect.requestTransformSpec,
         data,
+        headers,
       );
     };
   }

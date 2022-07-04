@@ -39,7 +39,10 @@ const FailureRecoverySpec2 = ({ dispatch, failureRecoverySpecInput }) => (
                 <AdaptorInput
                   inputlabel="Type"
                   inputtype="select"
-                  selectoptions={['Exponential Delay', 'Fixed Delay']}
+                  selectoptions={[
+                    { key: 'Exponential Delay', value: 'exponentialDelay' },
+                    { key: 'Fixed Delay', value: 'fixedDelay' },
+                  ]}
                   name="type"
                   initialValue={failureRecoverySpecInput.type}
                 />

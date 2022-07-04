@@ -5,10 +5,11 @@ import ParseSpecResponseModel from './models/parseSpecResponse/ParseSpecResponse
 import TransformSpecResponseModel from './models/transformSpecResponse/TransformSpecResponseModel';
 
 export default class AdaptorEffect {
-  static async requestInputSpec(data) {
+  static async requestInputSpec(data, headers) {
     const response = await HttpUtility.post(
-      'http://localhost:4010/onboard/run-input-spec',
+      'http://localhost:8080/onboard/run-input-spec',
       data,
+      headers,
     );
 
     if (response instanceof HttpErrorResponseModel) {
@@ -18,10 +19,11 @@ export default class AdaptorEffect {
     return new InputSpecResponseModel(response.data);
   }
 
-  static async requestParseSpec(data) {
+  static async requestParseSpec(data, headers) {
     const response = await await HttpUtility.post(
-      'http://localhost:4010/onboard/run-parse-spec',
+      'http://localhost:8080/onboard/run-parse-spec',
       data,
+      headers,
     );
 
     if (response instanceof HttpErrorResponseModel) {
@@ -31,10 +33,11 @@ export default class AdaptorEffect {
     return new ParseSpecResponseModel(response.data);
   }
 
-  static async requestTransformSpec(data) {
+  static async requestTransformSpec(data, headers) {
     const response = await HttpUtility.post(
-      'http://localhost:4010/onboard/run-transformation-spec',
+      'http://localhost:8080/onboard/run-transformation-spec',
       data,
+      headers,
     );
 
     if (response instanceof HttpErrorResponseModel) {

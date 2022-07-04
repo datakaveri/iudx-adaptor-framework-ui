@@ -13,9 +13,9 @@ export default class ParseSpecInputModel extends BaseModel {
 
   outputTimeFormat = String;
 
-  keypath = String;
+  keyPath = String;
 
-  trickle = String;
+  trickle = [];
 
   constructor(data) {
     super();

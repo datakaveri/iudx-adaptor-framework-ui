@@ -49,8 +49,11 @@ const DeduplicationSpec2 = ({ dispatch, deduplicationSpecInput }) => (
                   inputlabel="Type"
                   inputtype="select"
                   selectoptions={[
-                    'Time Based',
-                    'Extra Key Based (Currently not supported)',
+                    { key: 'Time Based', value: 'timeBased' },
+                    {
+                      key: 'Extra Key Based (Currently not supported)',
+                      value: 'extraKeyBased',
+                    },
                   ]}
                   initialValue={deduplicationSpecInput.type}
                   name="type"

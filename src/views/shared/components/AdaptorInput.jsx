@@ -54,8 +54,8 @@ const AdaptorInput = props => {
           {props.inputtype === 'select' ? (
             <Select style={{ width: '320px' }} {...inputProps}>
               {props.selectoptions.map(el => (
-                <MenuItem key={el} value={el}>
-                  {el}
+                <MenuItem key={el.key} value={el.value}>
+                  {el.key}
                 </MenuItem>
               ))}
             </Select>

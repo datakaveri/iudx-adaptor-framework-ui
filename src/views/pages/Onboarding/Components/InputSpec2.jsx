@@ -43,7 +43,9 @@ const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
   const [bypassExecution, setBypassExecution] = React.useState(false);
 
   useEffect(() => {
-    setInputSpecData(inputSpec);
+    const res = [];
+    inputSpec.result.map(el => res.push(JSON.parse(el)));
+    setInputSpecData(res);
   }, [inputSpec]);
 
   return (
@@ -54,30 +56,36 @@ const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
         <div style={{ display: 'flex' }}>
           <AdaptorForm
             onSubmit={values => {
+              const headers = {
+                username: 'user',
+                password: 'user-password',
+                'Content-Type': 'application/json',
+              };
               const requestBody = {
-                type: values.type,
-                url: values.url,
-                requestType: values.requestType,
-                headers: {
-                  'content-type': 'application/json',
+                inputSpec: {
+                  type: values.type,
+                  url: values.url,
+                  requestType: values.requestType,
+                  pollingInterval: !scheduleJob ? values.pollingInterval : -1,
+                  boundedJob: scheduleJob ? true : '',
+                  minioConfig: !scheduleJob
+                    ? ''
+                    : {
+                        url: values.minioUrl,
+                        bucket: values.minioBucket,
+                        stateName: values.minioStateName,
+                        accessKey: values.minioAccessKey,
+                        secretKey: values.minioSecretKey,
+                      },
                 },
-                pollingInterval: !scheduleJob ? values.pollingInterval : -1,
-                boundedJob: scheduleJob ? true : '',
-                minioConfig: !scheduleJob
-                  ? ''
-                  : {
-                      url: values.minioUrl,
-                      bucket: values.minioBucket,
-                      stateName: values.minioStateName,
-                      accessKey: values.minioAccessKey,
-                      secretKey: values.minioSecretKey,
-                    },
               };
               dispatch(
                 ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
               );
+              console.log('Input Spec');
+              console.table(requestBody);
               dispatch(AdaptorAction.saveInputSpec(requestBody));
-              dispatch(AdaptorAction.requestInputSpec(requestBody));
+              dispatch(AdaptorAction.requestInputSpec(requestBody, headers));
             }}>
             {() => (
               <FormWrapper>
@@ -85,10 +93,15 @@ const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
                   <AdaptorInput
                     inputlabel="Type"
                     inputtype="select"
-                    selectoptions={['HTTP', 'MQTT', 'AMQP', 'GRPC']}
+                    selectoptions={[
+                      { key: 'HTTP', value: 'http' },
+                      { key: 'MQTT', value: 'mqtt' },
+                      { key: 'AMQP', value: 'amqp' },
+                      { key: 'GRPC', value: 'grpc' },
+                    ]}
                     name="type"
                     placeholder="type"
-                    initialValue={inputSpecInput.type}
+                    initialValue={inputSpecInput.inputSpec.type}
                   />
                 </Group>
                 <Group>
@@ -103,7 +116,10 @@ const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
                   <AdaptorInput
                     inputlabel="Request Type"
                     inputtype="select"
-                    selectoptions={['GET', 'POST']}
+                    selectoptions={[
+                      { key: 'GET', value: 'GET' },
+                      { key: 'POST', value: 'POST' },
+                    ]}
                     name="requestType"
                     placeholder="GET / POST"
                     initialValue={inputSpecInput.requestType}

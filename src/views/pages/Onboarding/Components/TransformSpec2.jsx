@@ -15,6 +15,7 @@ import AdaptorInput, {
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
 import TransformSpecInputModel from '../../../../stores/adaptor/models/specInput/transformSpec/TransformSpecInputModel';
 import TransformSpecResponseModel from '../../../../stores/adaptor/models/transformSpecResponse/TransformSpecResponseModel';
+import ParseSpecResponseModel from '../../../../stores/adaptor/models/parseSpecResponse/ParseSpecResponseModel';
 
 const Group = styled.div`
   display: flex;
@@ -29,7 +30,12 @@ const FormWrapper = styled.div`
   flex-direction: column;
 `;
 
-const TransformSpec2 = ({ dispatch, transformSpec, transformSpecInput }) => {
+const TransformSpec2 = ({
+  dispatch,
+  parseSpec,
+  transformSpec,
+  transformSpecInput,
+}) => {
   const [transformSpecData, setTransformSpecData] = useState('');
   const [jsonSpec, setJsonSpec] = useState('');
 
@@ -50,16 +56,27 @@ const TransformSpec2 = ({ dispatch, transformSpec, transformSpecInput }) => {
         <div style={{ display: 'flex' }}>
           <AdaptorForm
             onSubmit={values => {
-              const requestBody = {
+              const tfSpec = {
                 ...values,
                 jsonPathSpec: JSON.parse(jsonSpec),
+              };
+              const requestBody = {
+                inputData: parseSpec.result,
+                transformSpec: tfSpec,
+              };
+              const headers = {
+                username: 'user',
+                password: 'user-password',
+                'Content-Type': 'application/json',
               };
               dispatch(
                 AdaptorAction.saveTransformSpec(
                   new TransformSpecInputModel(requestBody),
                 ),
               );
-              dispatch(AdaptorAction.requestTransformSpec(requestBody));
+              dispatch(
+                AdaptorAction.requestTransformSpec(requestBody, headers),
+              );
             }}>
             {() => (
               <FormWrapper>
@@ -67,7 +84,11 @@ const TransformSpec2 = ({ dispatch, transformSpec, transformSpecInput }) => {
                   <AdaptorInput
                     inputlabel="Type"
                     inputtype="select"
-                    selectoptions={['Jolt', 'Vanilla Javascript', 'jsPath']}
+                    selectoptions={[
+                      { key: 'Jolt', value: 'jolt' },
+                      { key: 'Vanilla Javascript', value: 'js' },
+                      { key: 'jsPath', value: 'jsPath' },
+                    ]}
                     name="type"
                     initialValue={transformSpecInput.type}
                   />
@@ -139,11 +160,13 @@ const TransformSpec2 = ({ dispatch, transformSpec, transformSpecInput }) => {
 
 TransformSpec2.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  parseSpec: PropTypes.instanceOf(ParseSpecResponseModel).isRequired,
   transformSpec: PropTypes.instanceOf(TransformSpecResponseModel).isRequired,
   transformSpecInput: PropTypes.instanceOf(TransformSpecInputModel).isRequired,
 };
 
 const mapStateToProps = state => ({
+  parseSpec: new ParseSpecResponseModel(state.adaptorReducer.parseSpec),
   transformSpec: new TransformSpecResponseModel(
     state.adaptorReducer.transformSpec,
   ),
