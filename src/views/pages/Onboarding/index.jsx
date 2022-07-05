@@ -1,28 +1,26 @@
+/* eslint-disable react/require-default-props */
 import * as React from 'react';
-import { Route, Routes } from 'react-router-dom';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { usePromiseTracker } from 'react-promise-tracker';
-import { act } from 'react-dom/test-utils';
 
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
-import StepContent from '@mui/material/StepContent';
-import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import StepButton from '@mui/material/StepButton';
 import Typography from '@mui/material/Typography';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
+import Editor from 'react-simple-code-editor';
+import { highlight, languages } from 'prismjs/components/prism-core';
+
+import { Title } from '../../shared/components/SpecComponents';
 import PublishSpec from './Components/PublishSpec';
-import FailureRecoverySpec from './Components/FailureRecoverySpec';
 import InputSpec from './Components/InputSpec';
-import DuplicationSpec from './Components/DuplicationSpec';
 import ParseSpec from './Components/ParseSpec';
+import MetaSpec2 from './Components/MetaSpec';
+import DeduplicationSpec from './Components/DeduplicationSpec';
 import TransformSpec from './Components/TransformSpec';
-import MetaSpec from './Components/MetaSpec';
-import Loading from '../../shared/components/Loading';
-
+import FailureRecoverySpec from './Components/FailureRecoverySpec';
 
 const steps = [
   'Meta Spec',
@@ -34,7 +32,7 @@ const steps = [
   'Publish Spec',
 ];
 
-export default function OnboardingPage() {
+function OnboardingPage({ adaptorReducer }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
 
@@ -57,11 +55,9 @@ export default function OnboardingPage() {
     setActiveStep(prevActiveStep => prevActiveStep - 1);
   };
 
-  const handleStep = (step) => () => {
-    if (step<activeStep)
-    setActiveStep(step);
+  const handleStep = step => () => {
+    if (step < activeStep) setActiveStep(step);
   };
-
 
   const handleSkip = () => {
     if (!isStepOptional(activeStep)) {
@@ -79,13 +75,13 @@ export default function OnboardingPage() {
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <MetaSpec />;
+        return <MetaSpec2 />;
       case 1:
         return <InputSpec />;
       case 2:
         return <ParseSpec />;
       case 3:
-        return <DuplicationSpec />;
+        return <DeduplicationSpec />;
       case 4:
         return <TransformSpec />;
       case 5:
@@ -94,12 +90,22 @@ export default function OnboardingPage() {
         return <PublishSpec />;
 
       default:
-        return 'Unknown step';
+        return '';
     }
   }
 
   const handleReset = () => {
     setActiveStep(0);
+  };
+
+  const specFile = {
+    ...adaptorReducer.metaSpecInput,
+    failureRecoverySpec: adaptorReducer.failureRecoverySpecInput,
+    inputSpec: adaptorReducer.inputSpecInput,
+    parseSpec: adaptorReducer.parseSpecInput,
+    deduplicationSpec: adaptorReducer.deduplicationSpecInput,
+    transformSpec: adaptorReducer.transformSpecInput,
+    publishSpec: adaptorReducer.publishSpecInput,
   };
 
   return (
@@ -109,63 +115,160 @@ export default function OnboardingPage() {
         marginTop: '20px',
         width: '100%',
         height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
       }}>
-      <Stepper activeStep={activeStep}>
-        {steps.map((label, index) => {
-          const stepProps = {};
-          const labelProps = {};
-          if (isStepOptional(index)) {
-            labelProps.optional = (
-              <Typography variant="caption">Optional</Typography>
+      <div style={{ width: '80%' }}>
+        <Stepper activeStep={activeStep}>
+          {steps.map((label, index) => {
+            const stepProps = {};
+            const labelProps = {};
+            if (isStepOptional(index)) {
+              labelProps.optional = (
+                <Typography variant="caption">Optional</Typography>
+              );
+            }
+            if (isStepSkipped(index)) {
+              stepProps.completed = false;
+            }
+            return (
+              <Step key={label} {...stepProps}>
+                {/* <StepLabel {...labelProps}>{label}</StepLabel> */}
+                <StepButton {...labelProps} onClick={handleStep(index)}>
+                  {label}
+                </StepButton>
+              </Step>
             );
-          }
-          if (isStepSkipped(index)) {
-            stepProps.completed = false;
-          }
-          return (
-            <Step key={label} {...stepProps}>
-              {/* <StepLabel {...labelProps}>{label}</StepLabel> */}
-              <StepButton {...labelProps} onClick={handleStep(index)}>
-              {label}
-            </StepButton>
-            </Step>
-          );
-        })}
-      </Stepper>
+          })}
+        </Stepper>
 
-      <Typography>{getStepContent(activeStep)}</Typography>
+        <Typography>{getStepContent(activeStep)}</Typography>
 
-      {activeStep === steps.length ? (
-        <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you&apos;re finished
-          </Typography>
+        {activeStep === steps.length ? (
+          <React.Fragment>
+            <Title>Spec Outline</Title>
+            <hr />
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                marginLeft: '80px',
+              }}>
+              <div style={{ display: 'flex' }}>
+                <Editor
+                  disabled
+                  value={
+                    adaptorReducer.message === ''
+                      ? ''
+                      : JSON.stringify(specFile, null, 4)
+                  }
+                  highlight={value => highlight(value, languages.jsx)}
+                  padding={20}
+                  style={{
+                    fontFamily: '"Fira code", "Fira Mono", monospace',
+                    fontSize: 12,
+                    overflow: 'auto',
+
+                    flex: 'display',
+                    width: '500px',
+                    height: '250px',
+                    border: '1px solid',
+                    borderColor: 'black',
+                    borderRadius: '3px',
+                  }}
+                />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <Editor
+                  disabled
+                  value={
+                    adaptorReducer.message === ''
+                      ? ''
+                      : JSON.stringify(adaptorReducer.inputSpecInput, null, 4)
+                  }
+                  highlight={value => highlight(value, languages.jsx)}
+                  padding={20}
+                  style={{
+                    fontFamily: '"Fira code", "Fira Mono", monospace',
+                    fontSize: 12,
+                    overflow: 'auto',
+
+                    flex: 'display',
+                    width: '500px',
+                    height: '250px',
+                    border: '1px solid',
+                    borderColor: 'black',
+                    borderRadius: '3px',
+                  }}
+                />
+                <Editor
+                  disabled
+                  value={
+                    adaptorReducer.message === ''
+                      ? ''
+                      : JSON.stringify(adaptorReducer.inputSpecInput, null, 4)
+                  }
+                  highlight={value => highlight(value, languages.jsx)}
+                  padding={20}
+                  style={{
+                    fontFamily: '"Fira code", "Fira Mono", monospace',
+                    fontSize: 12,
+                    overflow: 'auto',
+
+                    flex: 'display',
+                    width: '500px',
+                    height: '250px',
+                    border: '1px solid',
+                    borderColor: 'black',
+                    borderRadius: '3px',
+                  }}
+                />
+              </div>
+            </div>
+            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+              <Box sx={{ flex: '1 1 auto' }} />
+              <Button onClick={handleReset}>Reset</Button>
+            </Box>
+          </React.Fragment>
+        ) : (
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Box sx={{ flex: '1 1 auto' }} />
-            <Button onClick={handleReset}>Reset</Button>
-          </Box>
-        </React.Fragment>
-      ) : (
-        <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-          <Button
-            color="inherit"
-            disabled={activeStep === 0}
-            onClick={handleBack}
-            sx={{ mr: 1 }}>
-            Back
-          </Button>
-          <Box sx={{ flex: '1 1 auto' }} />
-          {isStepOptional(activeStep) && (
-            <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-              Skip
+            <Button
+              color="inherit"
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{ mr: 1 }}>
+              Back
             </Button>
-          )}
+            <Box sx={{ flex: '1 1 auto' }} />
+            {isStepOptional(activeStep) && (
+              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+                Skip
+              </Button>
+            )}
 
-          <Button onClick={handleNext}>
-            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-          </Button>
-        </Box>
-      )}
+            <Button onClick={handleNext}>
+              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            </Button>
+          </Box>
+        )}
+      </div>
     </div>
   );
 }
+
+OnboardingPage.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  adaptorReducer: PropTypes.any,
+};
+
+const mapStateToProps = state => ({
+  adaptorReducer: state.adaptorReducer,
+});
+
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(OnboardingPage);

@@ -8,9 +8,9 @@ import { Title } from '../../../shared/components/SpecComponents';
 import AdaptorForm from '../../../shared/components/AdaptorForm';
 import AdaptorInput from '../../../shared/components/AdaptorInput';
 
-import ToastsAction from '../../../../stores/toasts/ToastsAction';
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
-import MetaSpecInputModel from '../../../../stores/adaptor/models/specInput/metaSpec/MetaSpecInputModel';
+import ToastsAction from '../../../../stores/toasts/ToastsAction';
+import DeduplicationSpecInputModel from '../../../../stores/adaptor/models/specInput/deduplicationSpec/DeduplicationSpecInputModel';
 
 const Group = styled.div`
   display: flex;
@@ -25,9 +25,9 @@ const FormWrapper = styled.div`
   flex-direction: column;
 `;
 
-const MetaSpec2 = ({ dispatch, metaSpec }) => (
+const DeduplicationSpec2 = ({ dispatch, deduplicationSpecInput }) => (
   <div>
-    <Title>Meta Spec</Title>
+    <Title>Deduplication Spec</Title>
     <hr />
     <div style={{ marginLeft: '80px' }}>
       <div style={{ display: 'flex' }}>
@@ -37,28 +37,31 @@ const MetaSpec2 = ({ dispatch, metaSpec }) => (
               ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
             );
             dispatch(
-              AdaptorAction.saveMetaSpec(new MetaSpecInputModel(values)),
+              AdaptorAction.saveDeduplicationSpec(
+                new DeduplicationSpecInputModel(values),
+              ),
             );
           }}>
           {() => (
             <FormWrapper>
               <Group>
                 <AdaptorInput
-                  inputlabel="Name"
-                  name="name"
-                  initialValue={metaSpec.name}
+                  inputlabel="Type"
+                  inputtype="select"
+                  selectoptions={[
+                    { key: 'Time Based', value: 'timeBased' },
+                    {
+                      key: 'Extra Key Based (Currently not supported)',
+                      value: 'extraKeyBased',
+                    },
+                  ]}
+                  initialValue={deduplicationSpecInput.type}
+                  name="type"
                 />
               </Group>
-              <Group>
-                <AdaptorInput
-                  inputlabel="Schedule Pattern"
-                  name="schedulePattern"
-                  placeholder="CRON like schedule pattern"
-                  initialValue={metaSpec.schedulePattern}
-                />
-              </Group>
-              <Group>
-                <Button type="submit">Save</Button>
+
+              <Group style={{ marginTop: '10px', marginBottom: '10px' }}>
+                <Button type="submit">Run</Button>
               </Group>
             </FormWrapper>
           )}
@@ -68,17 +71,20 @@ const MetaSpec2 = ({ dispatch, metaSpec }) => (
   </div>
 );
 
-MetaSpec2.propTypes = {
+DeduplicationSpec2.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  metaSpec: PropTypes.instanceOf(MetaSpecInputModel).isRequired,
+  deduplicationSpecInput: PropTypes.instanceOf(DeduplicationSpecInputModel)
+    .isRequired,
 };
 
 const mapStateToProps = state => ({
-  metaSpec: new MetaSpecInputModel(state.adaptorReducer.metaSpecInput),
+  deduplicationSpecInput: new DeduplicationSpecInputModel(
+    state.adaptorReducer.deduplicationSpecInput,
+  ),
 });
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MetaSpec2);
+export default connect(mapStateToProps, mapDispatchToProps)(DeduplicationSpec2);

@@ -1,122 +1,158 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Select from '@mui/material/Select';
-import { Button } from '@mui/material';
-import Editor from 'react-simple-code-editor';
-import { highlight, languages } from 'prismjs/components/prism-core';
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/components/prism-markup';
-import 'prismjs/themes/prism.css';
-import { display } from '@mui/system';
-import InputLabel from '@mui/material/InputLabel';
+import { Button, InputLabel } from '@mui/material';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Editor from 'react-simple-code-editor';
+import { highlight, languages } from 'prismjs/components/prism-core';
+import { Title } from '../../../shared/components/SpecComponents';
 
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import BTN, { Title, Type } from '../../../shared/components/SpecComponents';
+import AdaptorForm from '../../../shared/components/AdaptorForm';
+import AdaptorInput, {
+  SwitchDiv,
+} from '../../../shared/components/AdaptorInput';
+
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
+import TransformSpecInputModel from '../../../../stores/adaptor/models/specInput/transformSpec/TransformSpecInputModel';
 import TransformSpecResponseModel from '../../../../stores/adaptor/models/transformSpecResponse/TransformSpecResponseModel';
+import ParseSpecResponseModel from '../../../../stores/adaptor/models/parseSpecResponse/ParseSpecResponseModel';
 
-require('prismjs/components/prism-jsx');
+const Group = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: fit-content;
+`;
 
-const TransformSpec = ({ dispatch, transformSpec }) => {
-  const [format, setFormat] = React.useState('');
-  const [jsonData, setData] = React.useState(' ');
+const FormWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
-  const callTransformSpec = () => {
-    dispatch(
-      AdaptorAction.requestTransformSpec({
-        inputData: [
-          {
-            id: '123',
-            k: 1.5,
-            time: '2021-04-01T12:00:01+05:30',
-          },
-          {
-            id: '4356',
-            k: 2.5,
-            time: '2021-04-01T12:00:01+05:30',
-          },
-        ],
-        transformSpec: {
-          type: 'jsPath',
-          template:
-            "{ 'observationDateTime': '2021', 'co2': { 'avgOverTime': 100}, 'id': 'abc'}",
-          jsonPathSpec: [
-            {
-              outputKeyPath: '$.observationDateTime',
-              inputValuePath: '$.time',
-            },
-            {
-              outputKeyPath: '$.co2.avgOverTime',
-              inputValuePath: '$.k1',
-            },
-            {
-              outputKeyPath: '$.name',
-              inputValuePath: '$.k2',
-              regexFilter: '^(?!.*reject).*',
-            },
-            {
-              outputKeyPath: '$.id',
-              inputValuePath: '$.deviceId',
-              valueModifierScript: "value.split('-')[0]",
-            },
-          ],
-        },
-      }),
+const TransformSpec = ({
+  dispatch,
+  parseSpec,
+  transformSpec,
+  transformSpecInput,
+}) => {
+  const [transformSpecData, setTransformSpecData] = useState('');
+  const [jsonSpec, setJsonSpec] = useState('');
+
+  useEffect(() => {
+    setTransformSpecData(transformSpec);
+    setJsonSpec(
+      transformSpecInput.jsonPathSpec.length === 0
+        ? ''
+        : JSON.stringify(transformSpecInput.jsonPathSpec, null, 4),
     );
-  };
+  }, [transformSpec]);
 
   return (
-    <div className="app">
+    <div>
       <Title>Transform Spec</Title>
       <hr />
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <div style={{ width: '320px' }} className="textbox">
-          <Type>Type</Type>
-          <FormControl sx={{ m: 1, minWidth: '320px', marginLeft: '80px' }}>
-            <InputLabel id="formattype">Select</InputLabel>
-            <Select
-              labelId="format"
-              id="format"
-              value={format}
-              label="Select"
-              onChange={e => setFormat(e.target.value)}>
-              <MenuItem value="Jolt">Jolt</MenuItem>
-              <MenuItem value="JSON">JSON</MenuItem>
-              <MenuItem value="JsPath">JsPath</MenuItem>
-            </Select>
-          </FormControl>
+      <div style={{ marginLeft: '80px' }}>
+        <div style={{ display: 'flex' }}>
+          <AdaptorForm
+            onSubmit={values => {
+              const tfSpec = {
+                ...values,
+                jsonPathSpec: JSON.parse(jsonSpec),
+              };
+              const requestBody = {
+                inputData: parseSpec.result,
+                transformSpec: tfSpec,
+              };
+              const headers = {
+                username: 'user',
+                password: 'user-password',
+                'Content-Type': 'application/json',
+              };
+              dispatch(
+                AdaptorAction.saveTransformSpec(
+                  new TransformSpecInputModel(requestBody),
+                ),
+              );
+              dispatch(
+                AdaptorAction.requestTransformSpec(requestBody, headers),
+              );
+            }}>
+            {() => (
+              <FormWrapper>
+                <Group>
+                  <AdaptorInput
+                    inputlabel="Type"
+                    inputtype="select"
+                    selectoptions={[
+                      { key: 'Jolt', value: 'jolt' },
+                      { key: 'Vanilla Javascript', value: 'js' },
+                      { key: 'jsPath', value: 'jsPath' },
+                    ]}
+                    name="type"
+                    initialValue={transformSpecInput.type}
+                  />
+                </Group>
+
+                <Group>
+                  <InputLabel style={{ marginLeft: '10px' }}>
+                    JSON Path Spec
+                  </InputLabel>
+                  <Editor
+                    disabled={false}
+                    value={jsonSpec}
+                    highlight={value => highlight(value, languages.jsx)}
+                    padding={15}
+                    onValueChange={value => setJsonSpec(value)}
+                    style={{
+                      fontFamily: '"Fira code", "Fira Mono", monospace',
+                      fontSize: 14,
+                      overflow: 'auto',
+                      marginTop: '5px',
+                      flex: 'display',
+                      width: '500px',
+                      height: '250px',
+                      border: '1px solid',
+                      borderColor: 'black',
+                      borderRadius: '3px',
+                    }}
+                  />
+                </Group>
+
+                <Group style={{ marginTop: '10px', marginBottom: '10px' }}>
+                  <Button type="submit">Run</Button>
+                </Group>
+              </FormWrapper>
+            )}
+          </AdaptorForm>
+          <Group style={{ marginLeft: '400px', marginTop: '20px' }}>
+            <SwitchDiv>
+              <InputLabel>JSON Response</InputLabel>
+            </SwitchDiv>
+            <Editor
+              disabled
+              value={
+                transformSpecData.message === ''
+                  ? ''
+                  : JSON.stringify(transformSpecData, null, 4)
+              }
+              highlight={value => highlight(value, languages.jsx)}
+              padding={20}
+              style={{
+                fontFamily: '"Fira code", "Fira Mono", monospace',
+                fontSize: 12,
+                overflow: 'auto',
+
+                flex: 'display',
+                width: '500px',
+                height: '250px',
+                border: '1px solid',
+                borderColor: '#b7b0b0',
+                borderRadius: '3px',
+              }}
+            />
+          </Group>
         </div>
-        <div
-          style={{ width: '500px', marginLeft: '250px' }}
-          className="textbox">
-          <Type>Json Data</Type>
-          <Editor
-            disabled
-            value={jsonData}
-            highlight={value => highlight(value, languages.jsx)}
-            padding={50}
-            onValueChange={value => setData(value)}
-            style={{
-              fontFamily: '"Fira code", "Fira Mono", monospace',
-              fontSize: 12,
-              overflow: 'auto',
-              marginLeft: '80px',
-              flex: display,
-              width: '100%',
-              border: '1px solid #b7b0b0',
-              borderRadius: '3px',
-            }}
-          />
-        </div>
-      </div>
-      <div style={{ marginTop: '20px', marginLeft: '80px' }}>
-        <BTN Solid="Solid" Text="Run" />
-        <BTN Solid="_" Text="Stop Execution" />
-        <Button onClick={callTransformSpec}>Click me</Button>
       </div>
     </div>
   );
@@ -124,11 +160,19 @@ const TransformSpec = ({ dispatch, transformSpec }) => {
 
 TransformSpec.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  parseSpec: PropTypes.instanceOf(ParseSpecResponseModel).isRequired,
   transformSpec: PropTypes.instanceOf(TransformSpecResponseModel).isRequired,
+  transformSpecInput: PropTypes.instanceOf(TransformSpecInputModel).isRequired,
 };
 
 const mapStateToProps = state => ({
-  transformSpec: state.adaptorReducer.transformSpec,
+  parseSpec: new ParseSpecResponseModel(state.adaptorReducer.parseSpec),
+  transformSpec: new TransformSpecResponseModel(
+    state.adaptorReducer.transformSpec,
+  ),
+  transformSpecInput: new TransformSpecInputModel(
+    state.adaptorReducer.transformSpecInput,
+  ),
 });
 
 const mapDispatchToProps = dispatch => ({

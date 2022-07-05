@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ToastsAction from '../../../stores/toasts/ToastsAction';
+import Navbar from '../../shared/components/Navbar';
 
 const Title = styled.h1`
   font-size: 1.5em;

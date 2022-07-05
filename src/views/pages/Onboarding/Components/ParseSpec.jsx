@@ -1,192 +1,222 @@
-import React from 'react';
-import {TextField,Button } from '@mui/material';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Editor from 'react-simple-code-editor';
-import Select from '@mui/material/Select';
-import { highlight, languages } from 'prismjs/components/prism-core';
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import 'prismjs/components/prism-markup';
-import "prismjs/themes/prism.css";
-import { connect } from 'react-redux';
+import { Button, InputLabel } from '@mui/material';
 import PropTypes from 'prop-types';
-import { display } from '@mui/system';
-import BTN, { Title, Type } from '../../../shared/components/SpecComponents';
+import { connect } from 'react-redux';
+import Editor from 'react-simple-code-editor';
+import { highlight, languages } from 'prismjs/components/prism-core';
+import { Title } from '../../../shared/components/SpecComponents';
 
+import AdaptorForm from '../../../shared/components/AdaptorForm';
+import ToastsAction from '../../../../stores/toasts/ToastsAction';
+import AdaptorInput, {
+  SwitchDiv,
+} from '../../../shared/components/AdaptorInput';
 
-import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
 import ParseSpecResponseModel from '../../../../stores/adaptor/models/parseSpecResponse/ParseSpecResponseModel';
+import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
+import ParseSpecInputModel from '../../../../stores/adaptor/models/specInput/parseSpec/ParseSpecInputModel';
+import InputSpecResponseModel from '../../../../stores/adaptor/models/inputSpecResponse/InputSpecResponseModel';
 
-require('prismjs/components/prism-jsx');
+const Group = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: fit-content;
+`;
 
+const FormWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
-const ParseSpec= ({ dispatch, parseSpec }) => {
-    const [format, setFormat] = React.useState('');
-    const [message, setMessage]=React.useState(' ');
-    const [code, setCode]=React.useState(' ');
-    const [timestamp, setTimeStamp]=React.useState(' ');
-    const [keypath, setkeyPath]=React.useState(' ');
-    const [trickle, setTrickle]=React.useState(' ');
-    const [jsonData,setData]=React.useState(' ');
+const ParseSpec = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
+  const [parseSpecData, setParseSpecData] = useState('');
+  const [trickle, setTrickle] = useState('');
 
-    const callParseSpec=()=>{
-      dispatch(
-        AdaptorAction.requestParseSpec({
-          parseSpec:{
-            type: 'http',
-          url: 'https://rs.iudx.org.in/ngsi-ld/v1/entity/abc',
-          requestType: 'GET',
-          pollingInterval: -1,
-          headers: {
-            'content-type': 'application/json',
-          },
-          boundedJob: true,
-          minioConfig: {
-            url: 'http://minio1:9000',
-            bucket: 'custom-state',
-            stateName: 'test-state-job',
-            accessKey: 'minio',
-            secretKey: 'minio123',
-          },
-        },
-        }),
-      );
-    };
-    return (
-        <div className='app'>
-        <Title>Parse Spec</Title>
-        <hr/>
-        <div style={{display:'flex', flexDirection:"row"}}>
-        <div style={{width:"320px"}} className="textbox">
-        <Type>Serialization Format Type</Type>
-        <FormControl sx={{ m: 1, minWidth: "320px",marginLeft:"80px" }}>
-        <InputLabel id="formattype">Select</InputLabel>
-        <Select
-          labelId="format"
-          id="format"
-          value={format}
-          label="Select"
-          onChange={e=>setFormat(e.target.value)}
-        >  
-        <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value='JSON'>JSON</MenuItem>
-          <MenuItem value="XML(Currently Not Supported">XML(Currently Not Supported)</MenuItem>
-        </Select>
-      </FormControl>
-      <Type>Message Container</Type>
-        <FormControl sx={{ m: 1, minWidth: "320px",marginLeft:"80px" }}>
-        <InputLabel id="messagetype">Select</InputLabel>
-        <Select
-          labelId="message"
-          id="message"
-          value={message}
-          label="Select"
-          onChange={e=>setMessage(e.target.value)}
-        >  
-          <MenuItem value='Array'>Array</MenuItem>
-          <MenuItem value="String">String</MenuItem>
-        </Select>
-      </FormControl>
-      <Type>Input Datatime Format</Type>
-        <TextField style={{marginLeft:"80px"}} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
-        <Type>Output Datatime Format</Type>
-        <TextField style={{marginLeft:"80px"}} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
-        <Type>Container Path</Type>
-  
+  useEffect(() => {
+    setParseSpecData(parseSpec);
+    setTrickle(
+      parseSpecInput.trickle.length === 0
+        ? ''
+        : JSON.stringify(parseSpecInput.trickle, null, 4),
+    );
+  }, [parseSpec]);
 
-      <Editor value={code} highlight={(value)=>highlight(value, languages.jsx)} padding={25}
-        onValueChange={(value)=>setCode(value)}
-        style={{
-          fontFamily: '"Fira code", "Fira Mono", monospace',
-          fontSize: 12,
-          marginLeft:"80px",
-          width: "100%",
-          overflow: 'auto',
-          border: "1px solid #b7b0b0",
-          borderRadius:"3px",
-        }}/>
-      
-        <Type>TimeStamp path</Type>
-        <Editor value={timestamp} highlight={(value)=>highlight(value, languages.jsx)} padding={25}
-        onValueChange={(value)=>setTimeStamp(value)}
-        style={{
-          fontFamily: '"Fira code", "Fira Mono", monospace',
-          fontSize: 12,
-          overflow: 'auto',
-          marginLeft:"80px",
-          flex: display,
-          width: "100%",
-          border: "1px solid #b7b0b0",
-          borderRadius:"3px"
-        }}/>
-        <Type>KeyPath</Type>
-        <Editor value={keypath} highlight={(value)=>highlight(value, languages.jsx)} padding={25}
-        onValueChange={(value)=>setkeyPath(value)}
-        style={{
-          fontFamily: '"Fira code", "Fira Mono", monospace',
-          fontSize: 12,
-          overflow: 'auto',
-          marginLeft:"80px",
-          flex: display,
-          width: "100%",
-          border: "1px solid #b7b0b0",
-          borderRadius:"3px"
-        }}/>
-        <Type>Trickle</Type>
-        <Editor value={trickle} highlight={(value)=>highlight(value, languages.jsx)} padding={25}
-        onValueChange={(value)=>setTrickle(value)}
-        style={{
-          fontFamily: '"Fira code", "Fira Mono", monospace',
-          fontSize: 12,
-          overflow: 'auto',
-          marginLeft:"80px",
-          flex: display,
-          width: "100%",
-          border: "1px solid #b7b0b0",
-          borderRadius:"3px"
-        }}/>
+  return (
+    <div>
+      <Title>Parse Spec</Title>
+      <hr />
+      <div style={{ marginLeft: '80px' }}>
+        <div style={{ display: 'flex' }}>
+          <AdaptorForm
+            onSubmit={values => {
+              const headers = {
+                username: 'user',
+                password: 'user-password',
+                'Content-Type': 'application/json',
+              };
+
+              const spec = {
+                ...values,
+                trickle: JSON.parse(trickle),
+              };
+              const requestBody = {
+                inputData: inputSpec.result,
+                parseSpec: spec,
+              };
+              dispatch(
+                ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
+              );
+              dispatch(
+                AdaptorAction.saveParseSpec(new ParseSpecInputModel(spec)),
+              );
+              dispatch(AdaptorAction.requestParseSpec(requestBody, headers));
+            }}>
+            {() => (
+              <FormWrapper>
+                <Group>
+                  <AdaptorInput
+                    inputlabel="Serialization Format Type"
+                    inputtype="select"
+                    selectoptions={[
+                      { key: 'JSON', value: 'json' },
+                      { key: 'XML (Currently not supported)', value: 'xml' },
+                    ]}
+                    name="type"
+                    initialValue={parseSpecInput.type}
+                  />
+                </Group>
+
+                <Group>
+                  <AdaptorInput
+                    inputlabel="Message Container"
+                    inputtype="select"
+                    selectoptions={[
+                      { key: 'Array', value: 'array' },
+                      { key: 'String', value: 'string' },
+                    ]}
+                    name="messageContainer"
+                    initialValue={parseSpecInput.messageContainer}
+                  />
+                </Group>
+
+                <Group>
+                  <AdaptorInput
+                    inputlabel="Input Datetime format"
+                    name="inputTimeFormat"
+                    initialValue={parseSpecInput.inputTimeFormat}
+                  />
+                </Group>
+                <Group>
+                  <AdaptorInput
+                    inputlabel="Output Datetime format"
+                    name="outputTimeFormat"
+                    initialValue={parseSpecInput.outputTimeFormat}
+                  />
+                </Group>
+                <Group>
+                  <AdaptorInput
+                    inputlabel="Container Path"
+                    name="containerPath"
+                    initialValue={parseSpecInput.containerPath}
+                  />
+                </Group>
+                <Group>
+                  <AdaptorInput
+                    inputlabel="Timestamp Path"
+                    name="timestampPath"
+                    initialValue={parseSpecInput.timestampPath}
+                  />
+                </Group>
+                <Group>
+                  <AdaptorInput
+                    inputlabel="Key Path"
+                    name="keyPath"
+                    initialValue={parseSpecInput.keyPath}
+                  />
+                </Group>
+
+                <Group>
+                  <InputLabel style={{ marginLeft: '10px' }}>
+                    JSON Path Spec
+                  </InputLabel>
+                  <Editor
+                    disabled={false}
+                    value={trickle}
+                    highlight={value => highlight(value, languages.jsx)}
+                    padding={15}
+                    onValueChange={value => setTrickle(value)}
+                    style={{
+                      fontFamily: '"Fira code", "Fira Mono", monospace',
+                      fontSize: 14,
+                      overflow: 'auto',
+                      marginTop: '5px',
+                      flex: 'display',
+                      width: '500px',
+                      height: '250px',
+                      border: '1px solid',
+                      borderColor: 'black',
+                      borderRadius: '3px',
+                    }}
+                  />
+                </Group>
+
+                <Group style={{ marginTop: '10px', marginBottom: '10px' }}>
+                  <Button type="submit">Run and Save</Button>
+                </Group>
+              </FormWrapper>
+            )}
+          </AdaptorForm>
+          <Group style={{ marginLeft: '400px', marginTop: '20px' }}>
+            <SwitchDiv>
+              <InputLabel>JSON Response</InputLabel>
+            </SwitchDiv>
+            <Editor
+              disabled
+              value={
+                parseSpecData.message === ''
+                  ? ''
+                  : JSON.stringify(parseSpecData, null, 4)
+              }
+              highlight={value => highlight(value, languages.jsx)}
+              padding={20}
+              style={{
+                fontFamily: '"Fira code", "Fira Mono", monospace',
+                fontSize: 12,
+                overflow: 'auto',
+
+                flex: 'display',
+                width: '500px',
+                height: '250px',
+                border: '1px solid',
+                borderColor: '#b7b0b0',
+                borderRadius: '3px',
+              }}
+            />
+          </Group>
         </div>
-        <div style={{width:"500px",marginLeft:"250px"}} className="textbox">
-        <Type>Json Data</Type>
-        <Editor disabled value={jsonData} highlight={(value)=>highlight(value, languages.jsx)} padding={50}
-        onValueChange={(value)=>setData(value)}
-        style={{
-          fontFamily: '"Fira code", "Fira Mono", monospace',
-          fontSize: 12,
-          overflow: 'auto',
-          marginLeft:"80px",
-          flex: display,
-          width: "100%",
-          border: "1px solid #b7b0b0",
-          borderRadius:"3px"
-        }}/>
-        </div>
-        </div>
-        <div style={{marginTop:"20px",marginLeft:"80px"}}>
-        <BTN Solid="Solid" Text="Run" />
-        <BTN Solid="_" Text="Stop Execution" />
-        <Button onClick={callParseSpec}>Click me</Button>
-        </div>
-        </div>
+      </div>
+    </div>
   );
 };
 
- ParseSpec.propTypes={
+ParseSpec.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  parseSpec: PropTypes.instanceOf(ParseSpecResponseModel).isRequired
+  parseSpec: PropTypes.instanceOf(ParseSpecResponseModel).isRequired,
+  parseSpecInput: PropTypes.instanceOf(ParseSpecInputModel).isRequired,
+  inputSpec: PropTypes.instanceOf(InputSpecResponseModel).isRequired,
 };
-const mapStateToProps=state=>({
-  parseSpec:state.adaptorReducer.parseSpec,
+
+const mapStateToProps = state => ({
+  parseSpec: new ParseSpecResponseModel(state.adaptorReducer.parseSpec),
+  parseSpecInput: new ParseSpecInputModel(state.adaptorReducer.parseSpecInput),
+  inputSpec: new InputSpecResponseModel(state.adaptorReducer.inputSpec),
 });
 
-const mapDispatchToProps=dispatch=>({
+const mapDispatchToProps = dispatch => ({
   dispatch,
 });
-export default connect(mapStateToProps,mapDispatchToProps)(ParseSpec);
 
-
+export default connect(mapStateToProps, mapDispatchToProps)(ParseSpec);

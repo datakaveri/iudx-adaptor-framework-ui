@@ -1,98 +1,121 @@
 import React from 'react';
-import {Switch,TextField } from '@mui/material';
 import styled from 'styled-components';
-import Editor from 'react-simple-code-editor';
-import { highlight, languages } from 'prismjs/components/prism-core';
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/components/prism-markup';
-import "prismjs/themes/prism.css";
-import { display } from '@mui/system';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import BTN, { Title, Type } from '../../../shared/components/SpecComponents';
+import { Button } from '@mui/material';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Title } from '../../../shared/components/SpecComponents';
+import AdaptorForm from '../../../shared/components/AdaptorForm';
+import AdaptorInput from '../../../shared/components/AdaptorInput';
 
+import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
+import FailureRecoverySpecInputModel from '../../../../stores/adaptor/models/specInput/failureRecoverySpec/FailureRecoverySpecInputModel';
 
-export default function FailureRecoverySpec() {
+const Group = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: fit-content;
+`;
 
-    const [delay, setDelay] = React.useState('');
-    const [jsonData,setData]=React.useState(' ');
-   
-    return (
-        <div className='app'>
-        <Title>Failure Recovery Spec</Title>
-        <hr/>
-        <div style={{display:'flex', flexDirection:"row"}}>
-        <div style={{width:"320px"}} className="textbox">
-        
-        <Type>Type</Type>
-        <FormControl sx={{ m: 1, minWidth: "320px",marginLeft:"80px" }}>
-        <InputLabel id="delaytype">Select</InputLabel>
-        <Select
-          labelId="delaytype"
-          id="delaytype"
-          value={delay}
-          label="Select"
-          onChange={e=>setDelay(e.target.value)}
-        >  
-        <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value='Fixed Delay'>Fixed Delay</MenuItem>
-          <MenuItem value="Exponential Delay">Exponential Delay</MenuItem>
-        </Select>
-      </FormControl>
+const FormWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
+const FailureRecoverySpec = ({ dispatch, failureRecoverySpecInput }) => (
+  <div>
+    <Title>Failure Recovery Spec</Title>
+    <hr />
+    <div style={{ marginLeft: '80px' }}>
+      <div style={{ display: 'flex' }}>
+        <AdaptorForm
+          onSubmit={values => {
+            dispatch(AdaptorAction.saveFailureRecoverySpec(values));
+          }}>
+          {() => (
+            <FormWrapper>
+              <Group>
+                <AdaptorInput
+                  inputlabel="Type"
+                  inputtype="select"
+                  selectoptions={[
+                    { key: 'Exponential Delay', value: 'exponentialDelay' },
+                    { key: 'Fixed Delay', value: 'fixedDelay' },
+                  ]}
+                  name="type"
+                  initialValue={failureRecoverySpecInput.type}
+                />
+              </Group>
 
-        
-        { delay==="Fixed Delay"?(
-          <>
-          <Type>Attemps</Type>
-        <TextField style={{marginLeft:"80px"}} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
-        <Type>Delay</Type>
-        <TextField style={{marginLeft:"80px"}} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
+              <Group>
+                <AdaptorInput
+                  inputlabel="Initial Backoff"
+                  name="initialBackoff"
+                  initialValue={failureRecoverySpecInput.initialBackoff}
+                />
+              </Group>
 
-          </>
-        ):
-        (
-        <>
-        
-        <Type>Initial Backoff</Type>
-        <TextField style={{marginLeft:"80px"}} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
-        <Type>Max Backoff</Type>
-        <TextField style={{marginLeft:"80px"}} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
-        <Type>Backoff Multiplier</Type>
-        <TextField style={{marginLeft:"80px"}} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
-        <Type>Reset Backoff Threshold</Type>
-        <TextField style={{marginLeft:"80px"}} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
-        <Type>Jitter Factor</Type>
-        <TextField style={{marginLeft:"80px"}} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
-        </>
-        
-       )}
-        </div>
-        <div style={{width:"500px",marginLeft:"250px"}} className="textbox">
-        <Type>Json Data</Type>
-        <Editor disabled value={jsonData} highlight={(value)=>highlight(value, languages.jsx)} padding={50}
-        onValueChange={(value)=>setData(value)}
-        style={{
-          fontFamily: '"Fira code", "Fira Mono", monospace',
-          fontSize: 12,
-          overflow: 'auto',
-          marginLeft:"80px",
-          flex: display,
-          width: "100%",
-          border: "1px solid #b7b0b0",
-          borderRadius:"3px"
-        }}/>
-        </div>
-        </div>
-        <div style={{marginTop:"20px",marginLeft:"80px"}}>
-        <BTN Solid="Solid" Text="Run" />
-        <BTN Solid="_" Text="Stop Execution" />
-        </div>
-        </div>
-  );
-}
+              <Group>
+                <AdaptorInput
+                  inputlabel="Max Backoff"
+                  name="maxBackoff"
+                  initialValue={failureRecoverySpecInput.maxBackoff}
+                />
+              </Group>
+
+              <Group>
+                <AdaptorInput
+                  inputlabel="Backoff Multiplier"
+                  name="backoffMultiplier"
+                  initialValue={failureRecoverySpecInput.backoffMultiplier}
+                />
+              </Group>
+
+              <Group>
+                <AdaptorInput
+                  inputlabel="Reset Backoff Threshold"
+                  name="resetBackoffThreshold"
+                  initialValue={failureRecoverySpecInput.resetBackoffThreshold}
+                />
+              </Group>
+
+              <Group>
+                <AdaptorInput
+                  inputlabel="Jitter Factor"
+                  name="jitterFactor"
+                  initialValue={failureRecoverySpecInput.jitterFactor}
+                />
+              </Group>
+
+              <Group style={{ marginTop: '10px', marginBottom: '10px' }}>
+                <Button type="submit">Submit</Button>
+              </Group>
+            </FormWrapper>
+          )}
+        </AdaptorForm>
+      </div>
+    </div>
+  </div>
+);
+
+FailureRecoverySpec.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  failureRecoverySpecInput: PropTypes.instanceOf(FailureRecoverySpecInputModel)
+    .isRequired,
+};
+
+const mapStateToProps = state => ({
+  failureRecoverySpecInput: new FailureRecoverySpecInputModel(
+    state.adaptorReducer.failureRecoverySpecInput,
+  ),
+});
+
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(FailureRecoverySpec);

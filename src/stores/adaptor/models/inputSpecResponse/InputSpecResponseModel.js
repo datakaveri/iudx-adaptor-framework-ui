@@ -1,5 +1,5 @@
 import { BaseModel } from 'sjs-base-model';
-import ResultModel from './ResultModel';
+// import ResultModel from './ResultModel';
 
 // const json = {
 //   success: true,
@@ -19,9 +19,9 @@ import ResultModel from './ResultModel';
 export default class InputSpecResponseModel extends BaseModel {
   success = Boolean;
 
-  message = '';
+  message = String;
 
-  result = ResultModel;
+  result = [];
 
   constructor(data) {
     super();
