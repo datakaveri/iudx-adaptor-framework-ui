@@ -37,7 +37,7 @@ const FormWrapper = styled.div`
   flex-direction: column;
 `;
 
-const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
+const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
   const [scheduleJob, setScheduleJob] = useState();
   const [inputSpecData, setInputSpecData] = useState('');
   const [bypassExecution, setBypassExecution] = React.useState(false);
@@ -240,7 +240,7 @@ const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
   );
 };
 
-InputSpec2.propTypes = {
+InputSpec.propTypes = {
   dispatch: PropTypes.func.isRequired,
   inputSpec: PropTypes.instanceOf(InputSpecResponseModel).isRequired,
   inputSpecInput: PropTypes.instanceOf(InputSpecInputModel).isRequired,
@@ -255,4 +255,4 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(InputSpec2);
+export default connect(mapStateToProps, mapDispatchToProps)(InputSpec);

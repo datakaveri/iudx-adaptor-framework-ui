@@ -14,13 +14,13 @@ import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
 
 import { Title } from '../../shared/components/SpecComponents';
-import PublishSpec2 from './Components/PublishSpec2';
-import InputSpec2 from './Components/InputSpec2';
-import ParseSpec2 from './Components/ParseSpec2';
-import MetaSpec2 from './Components/MetaSpec2';
-import DeduplicationSpec2 from './Components/DeduplicationSpec2';
-import TransformSpec2 from './Components/TransformSpec2';
-import FailureRecoverySpec2 from './Components/FailureRecoverySpec2';
+import PublishSpec from './Components/PublishSpec';
+import InputSpec from './Components/InputSpec';
+import ParseSpec from './Components/ParseSpec';
+import MetaSpec2 from './Components/MetaSpec';
+import DeduplicationSpec from './Components/DeduplicationSpec';
+import TransformSpec from './Components/TransformSpec';
+import FailureRecoverySpec from './Components/FailureRecoverySpec';
 
 const steps = [
   'Meta Spec',
@@ -75,20 +75,19 @@ function OnboardingPage({ adaptorReducer }) {
   function getStepContent(step) {
     switch (step) {
       case 0:
-        // return <MetaSpec />;
         return <MetaSpec2 />;
       case 1:
-        return <InputSpec2 />;
+        return <InputSpec />;
       case 2:
-        return <ParseSpec2 />;
+        return <ParseSpec />;
       case 3:
-        return <DeduplicationSpec2 />;
+        return <DeduplicationSpec />;
       case 4:
-        return <TransformSpec2 />;
+        return <TransformSpec />;
       case 5:
-        return <FailureRecoverySpec2 />;
+        return <FailureRecoverySpec />;
       case 6:
-        return <PublishSpec2 />;
+        return <PublishSpec />;
 
       default:
         return '';

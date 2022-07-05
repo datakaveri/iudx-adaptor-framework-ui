@@ -31,7 +31,7 @@ const FormWrapper = styled.div`
   flex-direction: column;
 `;
 
-const ParseSpec2 = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
+const ParseSpec = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
   const [parseSpecData, setParseSpecData] = useState('');
   const [trickle, setTrickle] = useState('');
 
@@ -202,7 +202,7 @@ const ParseSpec2 = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
   );
 };
 
-ParseSpec2.propTypes = {
+ParseSpec.propTypes = {
   dispatch: PropTypes.func.isRequired,
   parseSpec: PropTypes.instanceOf(ParseSpecResponseModel).isRequired,
   parseSpecInput: PropTypes.instanceOf(ParseSpecInputModel).isRequired,
@@ -219,4 +219,4 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ParseSpec2);
+export default connect(mapStateToProps, mapDispatchToProps)(ParseSpec);
