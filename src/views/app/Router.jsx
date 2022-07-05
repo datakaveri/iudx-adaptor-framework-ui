@@ -3,31 +3,34 @@ import { Route, Routes } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { usePromiseTracker } from 'react-promise-tracker';
-import Loading from '../shared/components/Loading';
-import Home from '../pages/Home';
 
-// TODO change this later accordingly
-const Pages = () => (
-  <Routes>
-    <Route path="" element={<Home />} />
-  </Routes>
-);
+import Loading from '../shared/components/Loading';
+import OnboardingPage from '../pages/Onboarding';
+import Home from '../pages/Home';
+import Navbar from '../shared/components/Navbar';
+import MyAdaptersPage from '../pages/MyAdapters';
 
 const Router = ({ dispatch }) => {
   const { promiseInProgress } = usePromiseTracker();
   const [loading, setLoading] = React.useState(false);
 
   return (
-    <main>
+     
+      <div>
+        <Navbar/>
+      <main>
       {promiseInProgress && <Loading loading={promiseInProgress} />}
       {loading && <Loading loading={loading} />}
       {!loading && (
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/dashboard" element={<Pages />} />
+          <Route path="/onboarding" element={<OnboardingPage />} />
+          <Route path="/myadaptors" element={<MyAdaptersPage />} />
         </Routes>
       )}
     </main>
+    </div>
+    
   );
 };
 
