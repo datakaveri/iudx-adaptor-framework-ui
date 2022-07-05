@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import ImageButton from '../../../shared/components/ImageButton';
+import environment from '../../../../environments';
 
 export default function Adapter({ name, last, status }) {
   return (
@@ -18,16 +20,26 @@ export default function Adapter({ name, last, status }) {
           justifyContent: 'space-between',
           width: '70%',
         }}>
-        <p style={{ width: '30%' }}>
+        <p style={{ width: '25%' }}>
           <b>{name}</b>
         </p>
-        <p style={{ width: '30%', textAlign: 'start' }}>{last}</p>
-        <p style={{ color: 'green', width: '30%', textAlign: 'start' }}>
+        <p style={{ width: '25%', textAlign: 'start' }}>
+          {moment(last).format('lll')}
+        </p>
+        <p style={{ width: '25%' }}>
+          <a
+            href={environment.GRAFANA_DASHBOARD_URL.replace('JOBNAME', name)}
+            target="_blank"
+            rel="noreferrer">
+            Open
+          </a>
+        </p>
+        <p style={{ color: 'green', width: '25%', textAlign: 'start' }}>
           <b>{status}</b>
         </p>
       </div>
 
-      {status === 'Running' ? (
+      {status === 'running' ? (
         <ImageButton
           Solid=""
           Text="stop"

@@ -33,6 +33,11 @@ export default class AdaptorAction {
   static REQUEST_RUN_PARSE_SPEC_FINISHED =
     'AdaptorAction.REQUEST_RUN_PARSE_SPEC_FINISHED';
 
+  static REQUEST_GET_ADAPTORS = 'AdaptorAction.REQUEST_GET_ADAPTORS';
+
+  static REQUEST_GET_ADAPTORS_FINISHED =
+    'AdaptorAction.REQUEST_GET_ADAPTORS_FINISHED';
+
   static saveMetaSpec(data) {
     return ActionUtility.createAction(AdaptorAction.SAVE_META_SPEC, data);
   }
@@ -99,6 +104,16 @@ export default class AdaptorAction {
         AdaptorEffect.requestTransformSpec,
         data,
         headers,
+      );
+    };
+  }
+
+  static getAllAdaptors() {
+    return async dispatch => {
+      await ActionUtility.createThunkEffect(
+        dispatch,
+        AdaptorAction.REQUEST_GET_ADAPTORS,
+        AdaptorEffect.getAllAdaptors,
       );
     };
   }

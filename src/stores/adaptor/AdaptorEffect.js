@@ -1,5 +1,7 @@
+import environment from '../../environments';
 import HttpErrorResponseModel from '../../models/HttpErrorResponseModel';
 import HttpUtility from '../../utilities/HttpUtility';
+import AdaptorResponseModel from './models/getAdaptorResponse/AdaptorResponseModel';
 import InputSpecResponseModel from './models/inputSpecResponse/InputSpecResponseModel';
 import ParseSpecResponseModel from './models/parseSpecResponse/ParseSpecResponseModel';
 import TransformSpecResponseModel from './models/transformSpecResponse/TransformSpecResponseModel';
@@ -45,5 +47,22 @@ export default class AdaptorEffect {
     }
 
     return new TransformSpecResponseModel(response.data);
+  }
+
+  static async getAllAdaptors() {
+    const response = await HttpUtility.get(
+      `${environment.BACKEND_URL}/adaptor`,
+    );
+
+    if (response instanceof HttpErrorResponseModel) {
+      return response;
+    }
+
+    if (response.data && Array.isArray(response.data.adaptors)) {
+      return response.data.adaptors.map(
+        adaptor => new AdaptorResponseModel(adaptor),
+      );
+    }
+    return [];
   }
 }

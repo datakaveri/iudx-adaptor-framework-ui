@@ -1,5 +1,6 @@
 import axios from 'axios';
 import HttpErrorResponseModel from '../models/HttpErrorResponseModel';
+import environment from '../environments';
 
 const RequestMethod = {
   Get: 'GET',
@@ -80,6 +81,8 @@ export default class HttpUtility {
         headers: {
           'Content-Type': 'application/json',
           ...config?.headers,
+          username: environment.BACKEND_API_USERNAME,
+          password: environment.BACKEND_API_PASSWORD,
         },
       };
 
