@@ -8,7 +8,7 @@ import AdaptorForm from '../../../shared/components/AdaptorForm';
 import AdaptorInput from '../../../shared/components/AdaptorInput';
 
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
-import PublishSpecInputModel from '../../../../stores/adaptor/models/specInput/publishSpec/PublishSpecInputModel';
+import FailureRecoverySpecInputModel from '../../../../stores/adaptor/models/specInput/failureRecoverySpec/FailureRecoverySpecInputModel';
 
 const Group = styled.div`
   display: flex;
@@ -23,73 +23,68 @@ const FormWrapper = styled.div`
   flex-direction: column;
 `;
 
-const PublishSpec2 = ({ dispatch, publishSpecInput }) => (
+const FailureRecoverySpec = ({ dispatch, failureRecoverySpecInput }) => (
   <div>
-    <Title>Publish Spec</Title>
+    <Title>Failure Recovery Spec</Title>
     <hr />
     <div style={{ marginLeft: '80px' }}>
       <div style={{ display: 'flex' }}>
         <AdaptorForm
           onSubmit={values => {
-            dispatch(
-              AdaptorAction.savePublishSpec(new PublishSpecInputModel(values)),
-            );
+            dispatch(AdaptorAction.saveFailureRecoverySpec(values));
           }}>
           {() => (
             <FormWrapper>
               <Group>
                 <AdaptorInput
                   inputlabel="Type"
+                  inputtype="select"
+                  selectoptions={[
+                    { key: 'Exponential Delay', value: 'exponentialDelay' },
+                    { key: 'Fixed Delay', value: 'fixedDelay' },
+                  ]}
                   name="type"
-                  initialValue={publishSpecInput.type}
+                  initialValue={failureRecoverySpecInput.type}
                 />
               </Group>
 
               <Group>
                 <AdaptorInput
-                  inputlabel="URL"
-                  name="url"
-                  initialValue={publishSpecInput.url}
+                  inputlabel="Initial Backoff"
+                  name="initialBackoff"
+                  initialValue={failureRecoverySpecInput.initialBackoff}
                 />
               </Group>
 
               <Group>
                 <AdaptorInput
-                  inputlabel="Port"
-                  name="port"
-                  initialValue={publishSpecInput.port}
+                  inputlabel="Max Backoff"
+                  name="maxBackoff"
+                  initialValue={failureRecoverySpecInput.maxBackoff}
                 />
               </Group>
 
               <Group>
                 <AdaptorInput
-                  inputlabel="Username"
-                  name="username"
-                  initialValue={publishSpecInput.username}
+                  inputlabel="Backoff Multiplier"
+                  name="backoffMultiplier"
+                  initialValue={failureRecoverySpecInput.backoffMultiplier}
                 />
               </Group>
 
               <Group>
                 <AdaptorInput
-                  inputlabel="Password"
-                  name="password"
-                  initialValue={publishSpecInput.password}
+                  inputlabel="Reset Backoff Threshold"
+                  name="resetBackoffThreshold"
+                  initialValue={failureRecoverySpecInput.resetBackoffThreshold}
                 />
               </Group>
 
               <Group>
                 <AdaptorInput
-                  inputlabel="Sink Name"
-                  name="sinkName"
-                  initialValue={publishSpecInput.sinkName}
-                />
-              </Group>
-
-              <Group>
-                <AdaptorInput
-                  inputlabel="Tag Name"
-                  name="tagName"
-                  initialValue={publishSpecInput.tagName}
+                  inputlabel="Jitter Factor"
+                  name="jitterFactor"
+                  initialValue={failureRecoverySpecInput.jitterFactor}
                 />
               </Group>
 
@@ -104,14 +99,15 @@ const PublishSpec2 = ({ dispatch, publishSpecInput }) => (
   </div>
 );
 
-PublishSpec2.propTypes = {
+FailureRecoverySpec.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  publishSpecInput: PropTypes.instanceOf(PublishSpecInputModel).isRequired,
+  failureRecoverySpecInput: PropTypes.instanceOf(FailureRecoverySpecInputModel)
+    .isRequired,
 };
 
 const mapStateToProps = state => ({
-  publishSpecInput: new PublishSpecInputModel(
-    state.adaptorReducer.publishSpecInput,
+  failureRecoverySpecInput: new FailureRecoverySpecInputModel(
+    state.adaptorReducer.failureRecoverySpecInput,
   ),
 });
 
@@ -119,4 +115,7 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(PublishSpec2);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(FailureRecoverySpec);

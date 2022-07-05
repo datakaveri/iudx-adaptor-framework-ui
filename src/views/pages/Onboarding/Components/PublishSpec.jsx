@@ -1,60 +1,122 @@
 import React from 'react';
-import {Switch,TextField } from '@mui/material';
-import Editor from 'react-simple-code-editor';
-import { highlight, languages } from 'prismjs/components/prism-core';
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/components/prism-markup';
-import "prismjs/themes/prism.css";
-import { display } from '@mui/system';
+import styled from 'styled-components';
+import { Button } from '@mui/material';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Title } from '../../../shared/components/SpecComponents';
+import AdaptorForm from '../../../shared/components/AdaptorForm';
+import AdaptorInput from '../../../shared/components/AdaptorInput';
 
-import BTN, { Title, Type } from '../../../shared/components/SpecComponents';
+import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
+import PublishSpecInputModel from '../../../../stores/adaptor/models/specInput/publishSpec/PublishSpecInputModel';
 
-require('prismjs/components/prism-jsx');
+const Group = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: fit-content;
+`;
 
-export default function PublishSpec() {
-  const [jsonData,setData]=React.useState(' ');
-    return (
-        <div className='app'>
-        <Title>Publish Spec</Title>
-        <hr/>
-        <div style={{display:'flex', flexDirection:"row"}}>
-        <div style={{width:"320px"}} className="textbox">
-        <Type>Type</Type>
-        <TextField style={{marginLeft:"80px"}} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
-        <Type>URL</Type>
-        <TextField style={{marginLeft:"80px"}} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
-        <Type>Port</Type>
-        <TextField style={{marginLeft:"80px"}} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
-        <Type>Username</Type>
-        <TextField style={{marginLeft:"80px"}} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
-        <Type>Password</Type>
-        <TextField style={{marginLeft:"80px"}} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
-        <Type>Sink Name</Type>
-        <TextField style={{marginLeft:"80px"}} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
-        <Type>Tag Name</Type>
-        <TextField style={{marginLeft:"80px"}} id="outlined-basic"  variant="outlined" size="small" fullWidth/>
-        </div>
-        <div style={{width:"500px",marginLeft:"250px"}} className="textbox">
-        <Type>Json Data</Type>
-        <Editor disabled value={jsonData} highlight={(value)=>highlight(value, languages.jsx)} padding={50}
-        onValueChange={(value)=>setData(value)}
-        style={{
-          fontFamily: '"Fira code", "Fira Mono", monospace',
-          fontSize: 12,
-          overflow: 'auto',
-          marginLeft:"80px",
-          flex: display,
-          width: "100%",
-          border: "1px solid #b7b0b0",
-          borderRadius:"3px"
-        }}/>
-        </div>
-        </div>
-        <div style={{marginTop:"20px",marginLeft:"80px"}}>
-        <BTN Solid="Solid" Text="Run" />
-        <BTN Solid="_" Text="Stop Execution" />
-        </div>
-        </div>
-  );
-}
+const FormWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const PublishSpec = ({ dispatch, publishSpecInput }) => (
+  <div>
+    <Title>Publish Spec</Title>
+    <hr />
+    <div style={{ marginLeft: '80px' }}>
+      <div style={{ display: 'flex' }}>
+        <AdaptorForm
+          onSubmit={values => {
+            dispatch(
+              AdaptorAction.savePublishSpec(new PublishSpecInputModel(values)),
+            );
+          }}>
+          {() => (
+            <FormWrapper>
+              <Group>
+                <AdaptorInput
+                  inputlabel="Type"
+                  name="type"
+                  initialValue={publishSpecInput.type}
+                />
+              </Group>
+
+              <Group>
+                <AdaptorInput
+                  inputlabel="URL"
+                  name="url"
+                  initialValue={publishSpecInput.url}
+                />
+              </Group>
+
+              <Group>
+                <AdaptorInput
+                  inputlabel="Port"
+                  name="port"
+                  initialValue={publishSpecInput.port}
+                />
+              </Group>
+
+              <Group>
+                <AdaptorInput
+                  inputlabel="Username"
+                  name="username"
+                  initialValue={publishSpecInput.username}
+                />
+              </Group>
+
+              <Group>
+                <AdaptorInput
+                  inputlabel="Password"
+                  name="password"
+                  initialValue={publishSpecInput.password}
+                />
+              </Group>
+
+              <Group>
+                <AdaptorInput
+                  inputlabel="Sink Name"
+                  name="sinkName"
+                  initialValue={publishSpecInput.sinkName}
+                />
+              </Group>
+
+              <Group>
+                <AdaptorInput
+                  inputlabel="Tag Name"
+                  name="tagName"
+                  initialValue={publishSpecInput.tagName}
+                />
+              </Group>
+
+              <Group style={{ marginTop: '10px', marginBottom: '10px' }}>
+                <Button type="submit">Submit</Button>
+              </Group>
+            </FormWrapper>
+          )}
+        </AdaptorForm>
+      </div>
+    </div>
+  </div>
+);
+
+PublishSpec.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  publishSpecInput: PropTypes.instanceOf(PublishSpecInputModel).isRequired,
+};
+
+const mapStateToProps = state => ({
+  publishSpecInput: new PublishSpecInputModel(
+    state.adaptorReducer.publishSpecInput,
+  ),
+});
+
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PublishSpec);
