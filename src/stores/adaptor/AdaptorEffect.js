@@ -65,4 +65,53 @@ export default class AdaptorEffect {
     }
     return [];
   }
+
+  static async submitJob(jobConfig) {
+    const response = await HttpUtility.post(
+      `${environment.BACKEND_URL}/adaptor`,
+      jobConfig,
+    );
+
+    if (response instanceof HttpErrorResponseModel) {
+      return response;
+    }
+
+    return response.data;
+  }
+
+  static async startJob(jobName) {
+    const response = await HttpUtility.post(
+      `${environment.BACKEND_URL}/adaptor/${jobName}/start`,
+    );
+
+    if (response instanceof HttpErrorResponseModel) {
+      return response;
+    }
+
+    return response.data;
+  }
+
+  static async stopJob(jobName) {
+    const response = await HttpUtility.post(
+      `${environment.BACKEND_URL}/adaptor/${jobName}/stop`,
+    );
+
+    if (response instanceof HttpErrorResponseModel) {
+      return response;
+    }
+
+    return response.data;
+  }
+
+  static async deleteJob(jobName) {
+    const response = await HttpUtility.delete(
+      `${environment.BACKEND_URL}/adaptor/${jobName}`,
+    );
+
+    if (response instanceof HttpErrorResponseModel) {
+      return response;
+    }
+
+    return response.data;
+  }
 }
