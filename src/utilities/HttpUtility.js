@@ -80,6 +80,7 @@ export default class HttpUtility {
         headers: {
           'Content-Type': 'application/json',
           ...config?.headers,
+          ...config?.params,
         },
       };
 

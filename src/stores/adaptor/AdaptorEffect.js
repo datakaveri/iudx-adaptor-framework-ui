@@ -3,11 +3,12 @@ import HttpUtility from '../../utilities/HttpUtility';
 import InputSpecResponseModel from './models/inputSpecResponse/InputSpecResponseModel';
 import ParseSpecResponseModel from './models/parseSpecResponse/ParseSpecResponseModel';
 import TransformSpecResponseModel from './models/transformSpecResponse/TransformSpecResponseModel';
+import config from '../../environments';
 
 export default class AdaptorEffect {
   static async requestInputSpec(data, headers) {
     const response = await HttpUtility.post(
-      'http://localhost:8080/onboard/run-input-spec',
+      `${config.BACKEND_URL}/onboard/run-input-spec`,
       data,
       headers,
     );
@@ -21,7 +22,7 @@ export default class AdaptorEffect {
 
   static async requestParseSpec(data, headers) {
     const response = await await HttpUtility.post(
-      'http://localhost:8080/onboard/run-parse-spec',
+      `${config.BACKEND_URL}/onboard/run-parse-spec`,
       data,
       headers,
     );
@@ -35,7 +36,7 @@ export default class AdaptorEffect {
 
   static async requestTransformSpec(data, headers) {
     const response = await HttpUtility.post(
-      'http://localhost:8080/onboard/run-transformation-spec',
+      `${config.BACKEND_URL}/onboard/run-transformation-spec`,
       data,
       headers,
     );
