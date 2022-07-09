@@ -5,6 +5,7 @@ import { TextField } from '@mui/material';
 import styled from 'styled-components';
 
 import Adaptor from './Components/Adaptor';
+import StyledDiv from './Components/Div';
 import { Line } from '../../shared/components/SpecComponents';
 import ImageButton from '../../shared/components/ImageButton';
 
@@ -22,32 +23,20 @@ function MyAdaptorsPage({ dispatch, allAdaptors }) {
 
   useEffect(() => {
     const headers = {
-      username: 'testuser',
+      username: 'testuser24',
       password: 'testuserpassword',
       'Content-Type': 'application/json',
     };
     dispatch(MyAdaptorsAction.requestGetAdaptors(headers));
     setAdaptors(allAdaptors?.adaptors);
+    console.log(allAdaptors);
   }, []);
 
   return (
     <Page>
       <div style={{ width: '80%' }}>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'start',
-              alignItems: 'center',
-              width: '40%',
-            }}>
+        <StyledDiv>
+          <StyledDiv contentJustify="start" width="40%">
             <h1>My Adapters</h1>
             <div style={{ width: '50px' }} />
             <ImageButton
@@ -59,7 +48,7 @@ function MyAdaptorsPage({ dispatch, allAdaptors }) {
               hoverIcon="addGrey.png"
               hoverTextColor="#2D3648"
             />
-          </div>
+          </StyledDiv>
           <div>
             <TextField
               variant="outlined"
@@ -68,20 +57,9 @@ function MyAdaptorsPage({ dispatch, allAdaptors }) {
               placeholder="Search"
             />
           </div>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              width: '70%',
-            }}>
+        </StyledDiv>
+        <StyledDiv>
+          <StyledDiv width="70%">
             <p style={{ margin: '0px', width: '30%', textAlign: 'start' }}>
               <b>Name</b>
             </p>
@@ -91,10 +69,15 @@ function MyAdaptorsPage({ dispatch, allAdaptors }) {
             <p style={{ margin: '0px', width: '30%', textAlign: 'start' }}>
               <b>Status</b>
             </p>
-          </div>
+          </StyledDiv>
           <div />
-        </div>
+        </StyledDiv>
         <Line />
+
+        {/* {allAdaptors?.map(item => (
+          <Adaptor name={item.name} last={item.last} status={item.status} />
+        ))} */}
+
         <Adaptor name="Adapter1" last="27, Jan, 2022, 17:45" status="Running" />
         <Adaptor name="Adapter1" last="27, Jan, 2022, 17:45" status="" />
       </div>

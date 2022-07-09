@@ -37,7 +37,7 @@ export default function Adapter({ name, last, status }) {
         <p style={{ color: 'green', width: '25%', textAlign: 'start' }}>
           <b>{status}</b>
         </p>
-      </div>
+      </StyledDiv>
 
       {status === 'running' ? (
         <ImageButton
@@ -50,13 +50,7 @@ export default function Adapter({ name, last, status }) {
           hoverTextColor="white"
         />
       ) : (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
+        <StyledDiv>
           <ImageButton
             Solid=""
             Text="Restart"
@@ -76,9 +70,9 @@ export default function Adapter({ name, last, status }) {
             hoverColor="#9b241a"
             hoverTextColor="white"
           />
-        </div>
+        </StyledDiv>
       )}
-    </div>
+    </StyledDiv>
   );
 }
 
