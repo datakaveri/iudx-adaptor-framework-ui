@@ -4,7 +4,7 @@ import moment from 'moment';
 import ImageButton from '../../../shared/components/ImageButton';
 import environment from '../../../../environments';
 
-export default function Adapter({ name, last, status }) {
+export default function Adaptor({ name, last, status }) {
   return (
     <div
       style={{
@@ -37,7 +37,7 @@ export default function Adapter({ name, last, status }) {
         <p style={{ color: 'green', width: '25%', textAlign: 'start' }}>
           <b>{status}</b>
         </p>
-      </StyledDiv>
+      </div>
 
       {status === 'running' ? (
         <ImageButton
@@ -50,7 +50,13 @@ export default function Adapter({ name, last, status }) {
           hoverTextColor="white"
         />
       ) : (
-        <StyledDiv>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
           <ImageButton
             Solid=""
             Text="Restart"
@@ -70,19 +76,19 @@ export default function Adapter({ name, last, status }) {
             hoverColor="#9b241a"
             hoverTextColor="white"
           />
-        </StyledDiv>
+        </div>
       )}
-    </StyledDiv>
+    </div>
   );
 }
 
-Adapter.propTypes = {
+Adaptor.propTypes = {
   name: PropTypes.string,
   last: PropTypes.string,
   status: PropTypes.string,
 };
 
-Adapter.defaultProps = {
+Adaptor.defaultProps = {
   name: PropTypes.string,
   last: PropTypes.string,
   status: PropTypes.string,
