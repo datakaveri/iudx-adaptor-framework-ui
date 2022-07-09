@@ -147,15 +147,15 @@ function OnboardingPage({ adaptorReducer }) {
 
         {activeStep === steps.length ? (
           <React.Fragment>
-            <Title>Spec Outline</Title>
-            <hr />
             <div
               style={{
                 display: 'flex',
+                justifyContent: 'space-around',
                 flexDirection: 'row',
                 marginLeft: '80px',
               }}>
-              <div style={{ display: 'flex' }}>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <Title>Spec Outline</Title>
                 <Editor
                   disabled
                   value={
@@ -172,7 +172,7 @@ function OnboardingPage({ adaptorReducer }) {
 
                     flex: 'display',
                     width: '500px',
-                    height: '250px',
+                    height: '900px',
                     border: '1px solid',
                     borderColor: 'black',
                     borderRadius: '3px',
@@ -180,6 +180,7 @@ function OnboardingPage({ adaptorReducer }) {
                 />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <Title>Input Spec</Title>
                 <Editor
                   disabled
                   value={
@@ -202,12 +203,13 @@ function OnboardingPage({ adaptorReducer }) {
                     borderRadius: '3px',
                   }}
                 />
+                <Title>Transform Spec Output</Title>
                 <Editor
                   disabled
                   value={
                     adaptorReducer.message === ''
                       ? ''
-                      : JSON.stringify(adaptorReducer.inputSpecInput, null, 4)
+                      : JSON.stringify(adaptorReducer.transformSpec, null, 4)
                   }
                   highlight={value => highlight(value, languages.jsx)}
                   padding={20}

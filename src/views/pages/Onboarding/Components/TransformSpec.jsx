@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Button, InputLabel } from '@mui/material';
+import { Button, InputLabel, MenuItem, Select } from '@mui/material';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Editor from 'react-simple-code-editor';
@@ -13,6 +13,7 @@ import AdaptorInput, {
 } from '../../../shared/components/AdaptorInput';
 
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
+import ToastsAction from '../../../../stores/toasts/ToastsAction';
 import TransformSpecInputModel from '../../../../stores/adaptor/models/specInput/transformSpec/TransformSpecInputModel';
 import TransformSpecResponseModel from '../../../../stores/adaptor/models/transformSpecResponse/TransformSpecResponseModel';
 import ParseSpecResponseModel from '../../../../stores/adaptor/models/parseSpecResponse/ParseSpecResponseModel';
@@ -29,6 +30,16 @@ const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
+const selectOptions = [
+  { key: 'Jolt', value: 'jolt' },
+  { key: 'Vanilla Javascript', value: 'js' },
+  { key: 'jsPath', value: 'jsPath' },
+];
+
+const handleChange = value => {
+  console.log('Changed');
+};
 
 const TransformSpec = ({
   dispatch,
@@ -70,6 +81,9 @@ const TransformSpec = ({
                 'Content-Type': 'application/json',
               };
               dispatch(
+                ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
+              );
+              dispatch(
                 AdaptorAction.saveTransformSpec(
                   new TransformSpecInputModel(requestBody),
                 ),
@@ -81,17 +95,20 @@ const TransformSpec = ({
             {() => (
               <FormWrapper>
                 <Group>
-                  <AdaptorInput
+                  {/* <AdaptorInput
                     inputlabel="Type"
                     inputtype="select"
-                    selectoptions={[
-                      { key: 'Jolt', value: 'jolt' },
-                      { key: 'Vanilla Javascript', value: 'js' },
-                      { key: 'jsPath', value: 'jsPath' },
-                    ]}
+                    selectoptions={selectOptions}
                     name="type"
                     initialValue={transformSpecInput.type}
-                  />
+                  /> */}
+                  <Select onChange={handleChange}>
+                    {selectOptions.map(el => (
+                      <MenuItem key={el.key} value={el.value}>
+                        {el.value}
+                      </MenuItem>
+                    ))}
+                  </Select>
                 </Group>
 
                 <Group>
