@@ -1,23 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImageButton from '../../../shared/components/ImageButton';
+import StyledDiv from './Div';
 
 export default function Adapter({ name, last, status }) {
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      }}>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          width: '70%',
-        }}>
+    <StyledDiv>
+      <StyledDiv width="70%">
         <p style={{ width: '30%' }}>
           <b>{name}</b>
         </p>
@@ -25,7 +14,7 @@ export default function Adapter({ name, last, status }) {
         <p style={{ color: 'green', width: '30%', textAlign: 'start' }}>
           <b>{status}</b>
         </p>
-      </div>
+      </StyledDiv>
 
       {status === 'Running' ? (
         <ImageButton
@@ -38,13 +27,7 @@ export default function Adapter({ name, last, status }) {
           hoverTextColor="white"
         />
       ) : (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
+        <StyledDiv>
           <ImageButton
             Solid=""
             Text="Restart"
@@ -64,9 +47,9 @@ export default function Adapter({ name, last, status }) {
             hoverColor="#9b241a"
             hoverTextColor="white"
           />
-        </div>
+        </StyledDiv>
       )}
-    </div>
+    </StyledDiv>
   );
 }
 
