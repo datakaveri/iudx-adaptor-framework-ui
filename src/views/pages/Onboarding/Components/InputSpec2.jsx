@@ -101,7 +101,7 @@ const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
                     ]}
                     name="type"
                     placeholder="type"
-                    initialValue={inputSpecInput.inputSpec.type}
+                    initialValue={inputSpecInput.type}
                   />
                 </Group>
                 <Group>

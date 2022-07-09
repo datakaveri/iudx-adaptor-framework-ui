@@ -1,28 +1,37 @@
-import React, { useEffect } from 'react';
-import { TextField } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { TextField } from '@mui/material';
+import styled from 'styled-components';
 
-import Adapter from './Components/Adapter';
+import Adaptor from './Components/Adaptor';
 import { Line } from '../../shared/components/SpecComponents';
 import ImageButton from '../../shared/components/ImageButton';
 
-import { selectAdaptors } from '../../../selectors/adaptor/AdaptorSelector';
-import AdaptorAction from '../../../stores/adaptor/AdaptorAction';
+import MyAdaptorsAction from '../../../stores/myAdaptors/MyAdaptorsAction';
 
-const MyAdaptersPage = ({ dispatch, adaptors }) => {
+const Page = styled.div`
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+`;
+
+function MyAdaptorsPage({ dispatch, allAdaptors }) {
+  const [adaptors, setAdaptors] = useState();
+
   useEffect(() => {
-    dispatch(AdaptorAction.getAllAdaptors());
-  }, [dispatch]);
+    const headers = {
+      username: 'testuser',
+      password: 'testuserpassword',
+      'Content-Type': 'application/json',
+    };
+    dispatch(MyAdaptorsAction.requestGetAdaptors(headers));
+    setAdaptors(allAdaptors?.adaptors);
+  }, []);
 
   return (
-    <div
-      style={{
-        alignContent: 'center',
-        alignItems: 'center',
-        justifyContent: 'center',
-        display: 'flex',
-      }}>
+    <Page>
       <div style={{ width: '80%' }}>
         <div
           style={{
@@ -73,54 +82,40 @@ const MyAdaptersPage = ({ dispatch, adaptors }) => {
               justifyContent: 'space-between',
               width: '70%',
             }}>
-            <p style={{ margin: '0px', width: '25%', textAlign: 'start' }}>
+            <p style={{ margin: '0px', width: '30%', textAlign: 'start' }}>
               <b>Name</b>
             </p>
-            <p style={{ margin: '0px', width: '25%', textAlign: 'start' }}>
+            <p style={{ margin: '0px', width: '30%', textAlign: 'start' }}>
               <b>Last Used</b>
             </p>
-            <p style={{ margin: '0px', width: '25%', textAlign: 'start' }}>
-              <b>Logs</b>
-            </p>
-            <p style={{ margin: '0px', width: '25%', textAlign: 'start' }}>
+            <p style={{ margin: '0px', width: '30%', textAlign: 'start' }}>
               <b>Status</b>
             </p>
           </div>
           <div />
         </div>
         <Line />
-        {adaptors.map(adaptor => (
-          <Adapter
-            name={adaptor.name}
-            last={adaptor.lastSeen}
-            status={adaptor.status}
-          />
-        ))}
+        <Adaptor name="Adapter1" last="27, Jan, 2022, 17:45" status="Running" />
+        <Adaptor name="Adapter1" last="27, Jan, 2022, 17:45" status="" />
       </div>
-    </div>
+    </Page>
   );
-};
+}
 
-MyAdaptersPage.propTypes = {
+MyAdaptorsPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  adaptors: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-      jarId: PropTypes.string,
-      jobId: PropTypes.string,
-      lastSeen: PropTypes.string,
-      status: PropTypes.string,
-    }),
-  ).isRequired,
+  // eslint-disable-next-line react/require-default-props
+  // eslint-disable-next-line react/forbid-prop-types
+  // eslint-disable-next-line react/forbid-prop-types
+  allAdaptors: PropTypes.any.isRequired,
 };
 
 const mapStateToProps = state => ({
-  adaptors: selectAdaptors(state),
+  allAdaptors: state.myAdaptorsReducer.allAdaptors,
 });
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyAdaptersPage);
+export default connect(mapStateToProps, mapDispatchToProps)(MyAdaptorsPage);
