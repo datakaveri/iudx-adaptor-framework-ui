@@ -47,4 +47,18 @@ export default class AdaptorEffect {
 
     return new TransformSpecResponseModel(response.data);
   }
+
+  static async requestOnboarding(data, headers) {
+    const response = await HttpUtility.post(
+      `${config.BACKEND_URL}/adaptor`,
+      data,
+      headers,
+    );
+
+    if (response instanceof HttpErrorResponseModel) {
+      return response;
+    }
+
+    return response.data;
+  }
 }

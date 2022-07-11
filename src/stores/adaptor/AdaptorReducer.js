@@ -13,6 +13,7 @@ export default class AdaptorReducer extends BaseReducer {
     inputSpec: {},
     parseSpec: {},
     transformSpec: {},
+    onboardingResponse: {},
     error: false,
   };
 
@@ -34,6 +35,13 @@ export default class AdaptorReducer extends BaseReducer {
     return {
       ...state,
       transformSpec: action.payload,
+    };
+  }
+
+  [AdaptorAction.REQUEST_ONBOARDING_FINISHED](state, action) {
+    return {
+      ...state,
+      onboardingResponse: action.payload,
     };
   }
 

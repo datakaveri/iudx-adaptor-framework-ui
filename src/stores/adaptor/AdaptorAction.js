@@ -33,6 +33,11 @@ export default class AdaptorAction {
   static REQUEST_RUN_PARSE_SPEC_FINISHED =
     'AdaptorAction.REQUEST_RUN_PARSE_SPEC_FINISHED';
 
+  static REQUEST_ONBOARDING = 'AdaptorAction.REQUEST_ONBOARDING';
+
+  static REQUEST_ONBOARDING_FINISHED =
+    'AdaptorAction.REQUEST_ONBOARDING_FINISHED';
+
   static saveMetaSpec(data) {
     return ActionUtility.createAction(AdaptorAction.SAVE_META_SPEC, data);
   }
@@ -97,6 +102,18 @@ export default class AdaptorAction {
         dispatch,
         AdaptorAction.REQUEST_RUN_TRANSFORM_SPEC,
         AdaptorEffect.requestTransformSpec,
+        data,
+        headers,
+      );
+    };
+  }
+
+  static requestOnboarding(data, headers) {
+    return async dispatch => {
+      await ActionUtility.createThunkEffect(
+        dispatch,
+        AdaptorAction.REQUEST_ONBOARDING,
+        AdaptorEffect.requestOnboarding,
         data,
         headers,
       );

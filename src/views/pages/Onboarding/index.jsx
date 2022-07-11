@@ -21,6 +21,7 @@ import MetaSpec2 from './Components/MetaSpec';
 import DeduplicationSpec from './Components/DeduplicationSpec';
 import TransformSpec from './Components/TransformSpec';
 import FailureRecoverySpec from './Components/FailureRecoverySpec';
+import AdaptorAction from '../../../stores/adaptor/AdaptorAction';
 
 const steps = [
   'Meta Spec',
@@ -32,7 +33,7 @@ const steps = [
   'Publish Spec',
 ];
 
-function OnboardingPage({ adaptorReducer }) {
+function OnboardingPage({ dispatch, adaptorReducer }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
 
@@ -106,6 +107,15 @@ function OnboardingPage({ adaptorReducer }) {
     deduplicationSpec: adaptorReducer.deduplicationSpecInput,
     transformSpec: adaptorReducer.transformSpecInput,
     publishSpec: adaptorReducer.publishSpecInput,
+  };
+
+  const onboardingFunction = () => {
+    const headers = {
+      username: 'user',
+      password: 'user-password',
+      'Content-Type': 'application/json',
+    };
+    dispatch(AdaptorAction.requestOnboarding, specFile, headers);
   };
 
   return (
@@ -227,6 +237,20 @@ function OnboardingPage({ adaptorReducer }) {
                   }}
                 />
               </div>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                margin: '3%',
+              }}>
+              <Button
+                onClick={() => {
+                  console.log('Clicked');
+                }}>
+                Submit Spec Outline
+              </Button>
             </div>
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Box sx={{ flex: '1 1 auto' }} />
