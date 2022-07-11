@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { TextField } from '@mui/material';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
 import Adaptor from './Components/Adaptor';
 import { Line } from '../../shared/components/SpecComponents';
@@ -9,6 +10,12 @@ import ImageButton from '../../shared/components/ImageButton';
 
 import { selectAdaptors } from '../../../selectors/adaptor/AdaptorSelector';
 import AdaptorAction from '../../../stores/adaptor/AdaptorAction';
+
+const Tab = styled.div`
+  margin: 0px;
+  width: 25%;
+  text-align: start;
+`;
 
 const MyAdaptorsPage = ({ dispatch, adaptors }) => {
   useEffect(() => {
@@ -73,18 +80,21 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
               justifyContent: 'space-between',
               width: '70%',
             }}>
-            <p style={{ margin: '0px', width: '25%', textAlign: 'start' }}>
+            <Tab>
               <b>Name</b>
-            </p>
-            <p style={{ margin: '0px', width: '25%', textAlign: 'start' }}>
+            </Tab>
+
+            <Tab>
               <b>Last Used</b>
-            </p>
-            <p style={{ margin: '0px', width: '25%', textAlign: 'start' }}>
+            </Tab>
+
+            <Tab>
               <b>Logs</b>
-            </p>
-            <p style={{ margin: '0px', width: '25%', textAlign: 'start' }}>
+            </Tab>
+
+            <Tab>
               <b>Status</b>
-            </p>
+            </Tab>
           </div>
           <div />
         </div>

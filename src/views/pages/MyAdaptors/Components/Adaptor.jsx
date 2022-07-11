@@ -1,18 +1,33 @@
 import React from 'react';
+import styled from 'styled-components';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import ImageButton from '../../../shared/components/ImageButton';
 import environment from '../../../../environments';
 
-export default function Adaptor({ name, last, status }) {
+const Buttons = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const LabelsRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Labels = styled.div`
+  width: 25%;
+  text-align: start;
+`;
+
+function Adaptor({ name, last, status, dispatch }) {
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      }}>
+    <LabelsRow>
       <div
         style={{
           display: 'flex',
@@ -48,15 +63,12 @@ export default function Adaptor({ name, last, status }) {
           icon="stop.png"
           hoverIcon="stopWhite.png"
           hoverTextColor="white"
+          clicked={() => {
+            console.log('Clicked stop');
+          }}
         />
       ) : (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
+        <Buttons>
           <ImageButton
             Solid=""
             Text="Restart"
@@ -76,9 +88,9 @@ export default function Adaptor({ name, last, status }) {
             hoverColor="#9b241a"
             hoverTextColor="white"
           />
-        </div>
+        </Buttons>
       )}
-    </div>
+    </LabelsRow>
   );
 }
 
@@ -86,10 +98,20 @@ Adaptor.propTypes = {
   name: PropTypes.string,
   last: PropTypes.string,
   status: PropTypes.string,
+  dispatch: PropTypes.func,
 };
 
 Adaptor.defaultProps = {
   name: PropTypes.string,
   last: PropTypes.string,
   status: PropTypes.string,
+  dispatch: PropTypes.func,
 };
+
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Adaptor);
