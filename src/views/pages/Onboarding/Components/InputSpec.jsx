@@ -86,7 +86,6 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
               console.table(requestBody);
               dispatch(AdaptorAction.saveInputSpec(requestBody));
               dispatch(AdaptorAction.saveInputSpec(new InputSpecInputModel(values)));
-              dispatch(AdaptorAction.requestInputSpec(requestBody, headers));
             }}>
             {() => (
               <FormWrapper>
@@ -132,7 +131,9 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                     inputtype="switch"
                     initialValue={inputSpecInput.boundedJob}
                     checked={scheduleJob}
-                    onChange={setScheduleJob}
+                    onChange={()=>{
+                      setScheduleJob(!scheduleJob)
+                    }}
                   />
                 </Group>
 
@@ -147,7 +148,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                           inputlabel="URL"
                           name="minioUrl"
                           placeholder="Minio URL"
-                          initialValue={inputSpecInput.minioConfig.url}
+                          initialValue=" "
                         />
                       </Group>
                       <Group>
@@ -155,7 +156,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                           inputlabel="Bucket"
                           name="minioBucket"
                           placeholder="Minio Bucket"
-                          initialValue={inputSpecInput.minioConfig.bucket}
+                          initialValue=" "
                         />
                       </Group>
                       <Group>
@@ -163,7 +164,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                           inputlabel="State Name"
                           name="minioStateName"
                           placeholder="Minio State Name"
-                          initialValue={inputSpecInput.minioConfig.stateName}
+                          initialValue=" "
                         />
                       </Group>
                       <Group>
@@ -171,7 +172,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                           inputlabel="Access Key"
                           name="minioAccessKey"
                           placeholder="Minio Access Key"
-                          initialValue={inputSpecInput.minioConfig.accessKey}
+                          initialValue=" "
                         />
                       </Group>
                       <Group>
@@ -179,10 +180,10 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                           inputlabel="Secret Key"
                           name="minioSecretKey"
                           placeholder="Minio Secret Key"
-                          initialValue={inputSpecInput.minioConfig.secretKey}
+                          initialValue=" "
                         />
                       </Group>
-                    </FormWrapper>
+                  </FormWrapper>
                   </div>
                 ) : (
                   <Group>
@@ -196,7 +197,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                 )}
 
                 <Group style={{ marginTop: '10px', marginBottom: '10px' }}>
-                  <Button type="submit">Run and Save</Button>
+                  {!bypassExecution?(<Button type="submit">Run and Save</Button>):(<Button type="submit">Run</Button>)}
                 </Group>
               </FormWrapper>
             )}
@@ -211,9 +212,9 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                 }}
               />
             </SwitchDiv>
-
-            <Editor
-              disabled={!bypassExecution}
+            {!bypassExecution?
+            (<Editor
+              disabled={bypassExecution}
               value={
                 inputSpecData.message === ''
                   ? ''
@@ -233,7 +234,12 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                 borderColor: bypassExecution ? 'black' : '#b7b0b0',
                 borderRadius: '3px',
               }}
-            />
+            />):(
+              <div>
+                <br/>
+              </div>
+            )
+            }
           </Group>
         </div>
       </div>

@@ -37,9 +37,7 @@ const selectOptions = [
   { key: 'jsPath', value: 'jsPath' },
 ];
 
-const handleChange = value => {
-  console.log('Changed');
-};
+
 
 const TransformSpec = ({
   dispatch,
@@ -49,6 +47,7 @@ const TransformSpec = ({
 }) => {
   const [transformSpecData, setTransformSpecData] = useState('');
   const [jsonSpec, setJsonSpec] = useState('');
+  const [jtitle,setJtitle]=useState('');
 
   useEffect(() => {
     setTransformSpecData(transformSpec);
@@ -58,6 +57,11 @@ const TransformSpec = ({
         : JSON.stringify(transformSpecInput.jsonPathSpec, null, 4),
     );
   }, [transformSpec]);
+  const handleChange = value => {
+    console.log('Changed');
+    console.log(value.target.value)
+    setJtitle(value.target.value)
+  };
 
   return (
     <div>
@@ -104,16 +108,17 @@ const TransformSpec = ({
                   /> */}
                   <Select onChange={handleChange}>
                     {selectOptions.map(el => (
-                      <MenuItem key={el.key} value={el.value}>
+                      <MenuItem key={el.key} value={el.value} >
                         {el.value}
                       </MenuItem>
-                    ))}
+                    )
+                    )}
                   </Select>
                 </Group>
 
                 <Group>
                   <InputLabel style={{ marginLeft: '10px' }}>
-                    JSON Path Spec
+                    {jtitle}
                   </InputLabel>
                   <Editor
                     disabled={false}
