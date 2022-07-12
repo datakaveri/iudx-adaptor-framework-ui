@@ -82,10 +82,14 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
               dispatch(
                 ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
               );
-              console.log('Input Spec');
-              console.table(requestBody);
-              dispatch(AdaptorAction.saveInputSpec(requestBody));
-              dispatch(AdaptorAction.saveInputSpec(new InputSpecInputModel(values)));
+              if (!bypassExecution) {
+                dispatch(AdaptorAction.requestInputSpec(requestBody, headers));
+              }
+              dispatch(
+                AdaptorAction.saveInputSpec(
+                  new InputSpecInputModel(requestBody.inputSpec),
+                ),
+              );
             }}>
             {() => (
               <FormWrapper>
@@ -131,8 +135,8 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                     inputtype="switch"
                     initialValue={inputSpecInput.boundedJob}
                     checked={scheduleJob}
-                    onChange={()=>{
-                      setScheduleJob(!scheduleJob)
+                    onChange={() => {
+                      setScheduleJob(!scheduleJob);
                     }}
                   />
                 </Group>
@@ -183,7 +187,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                           initialValue=" "
                         />
                       </Group>
-                  </FormWrapper>
+                    </FormWrapper>
                   </div>
                 ) : (
                   <Group>
@@ -197,7 +201,11 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                 )}
 
                 <Group style={{ marginTop: '10px', marginBottom: '10px' }}>
-                  {!bypassExecution?(<Button type="submit">Run and Save</Button>):(<Button type="submit">Run</Button>)}
+                  {!bypassExecution ? (
+                    <Button type="submit">Run and Save</Button>
+                  ) : (
+                    <Button type="submit">Run</Button>
+                  )}
                 </Group>
               </FormWrapper>
             )}
@@ -212,34 +220,34 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                 }}
               />
             </SwitchDiv>
-            {!bypassExecution?
-            (<Editor
-              disabled={bypassExecution}
-              value={
-                inputSpecData.message === ''
-                  ? ''
-                  : JSON.stringify(inputSpecData, null, 4)
-              }
-              highlight={value => highlight(value, languages.jsx)}
-              padding={20}
-              style={{
-                fontFamily: '"Fira code", "Fira Mono", monospace',
-                fontSize: 12,
-                overflow: 'auto',
+            {!bypassExecution ? (
+              <Editor
+                disabled={bypassExecution}
+                value={
+                  inputSpecData.message === ''
+                    ? ''
+                    : JSON.stringify(inputSpecData, null, 4)
+                }
+                highlight={value => highlight(value, languages.jsx)}
+                padding={20}
+                style={{
+                  fontFamily: '"Fira code", "Fira Mono", monospace',
+                  fontSize: 12,
+                  overflow: 'auto',
 
-                flex: 'display',
-                width: '500px',
-                height: '250px',
-                border: '1px solid',
-                borderColor: bypassExecution ? 'black' : '#b7b0b0',
-                borderRadius: '3px',
-              }}
-            />):(
+                  flex: 'display',
+                  width: '500px',
+                  height: '250px',
+                  border: '1px solid',
+                  borderColor: bypassExecution ? 'black' : '#b7b0b0',
+                  borderRadius: '3px',
+                }}
+              />
+            ) : (
               <div>
-                <br/>
+                <br />
               </div>
-            )
-            }
+            )}
           </Group>
         </div>
       </div>
