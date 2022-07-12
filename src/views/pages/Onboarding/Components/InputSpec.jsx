@@ -85,6 +85,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
               console.log('Input Spec');
               console.table(requestBody);
               dispatch(AdaptorAction.saveInputSpec(requestBody));
+              dispatch(AdaptorAction.saveInputSpec(new InputSpecInputModel(values)));
               dispatch(AdaptorAction.requestInputSpec(requestBody, headers));
             }}>
             {() => (
