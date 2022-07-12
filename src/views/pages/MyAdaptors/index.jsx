@@ -17,8 +17,8 @@ const Page = styled.div`
   justify-content: center;
   display: flex;
 `;
-function clickCallback() {
-  alert('You clicked me!');
+function createNewClick() {
+  alert('new adaptor created');
 }
 function MyAdaptorsPage({ dispatch, allAdaptors }) {
   const [adaptors, setAdaptors] = useState();
@@ -49,7 +49,7 @@ function MyAdaptorsPage({ dispatch, allAdaptors }) {
               icon="add.png"
               hoverIcon="addGrey.png"
               hoverTextColor="#2D3648"
-              onClicked={clickCallback}
+              onClicked={createNewClick}
             />
           </StyledDiv>
           <div>

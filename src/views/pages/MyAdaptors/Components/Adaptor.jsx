@@ -3,6 +3,15 @@ import PropTypes from 'prop-types';
 import ImageButton from '../../../shared/components/ImageButton';
 import StyledDiv from './Div';
 
+function stopClick() {
+  alert('adaptor stoped!');
+}
+function deleteClick() {
+  alert('adaptor deleted!');
+}
+function restartClick() {
+  alert('adaptor restarted!');
+}
 export default function Adapter({ name, last, status }) {
   return (
     <StyledDiv>
@@ -25,6 +34,7 @@ export default function Adapter({ name, last, status }) {
           icon="stop.png"
           hoverIcon="stopWhite.png"
           hoverTextColor="white"
+          onClicked={stopClick}
         />
       ) : (
         <StyledDiv>
@@ -36,6 +46,7 @@ export default function Adapter({ name, last, status }) {
             hoverIcon="refreshWhite.png"
             hoverColor="#009E5F"
             hoverTextColor="white"
+            onClicked={restartClick}
           />
           <div style={{ width: '10px' }} />
           <ImageButton
@@ -46,6 +57,7 @@ export default function Adapter({ name, last, status }) {
             hoverIcon="delete.png"
             hoverColor="#9b241a"
             hoverTextColor="white"
+            onClicked={deleteClick}
           />
         </StyledDiv>
       )}
