@@ -17,7 +17,9 @@ const Page = styled.div`
   justify-content: center;
   display: flex;
 `;
-
+function createNewClick() {
+  alert('new adaptor created');
+}
 function MyAdaptorsPage({ dispatch, allAdaptors }) {
   const [adaptors, setAdaptors] = useState();
 
@@ -47,6 +49,7 @@ function MyAdaptorsPage({ dispatch, allAdaptors }) {
               icon="add.png"
               hoverIcon="addGrey.png"
               hoverTextColor="#2D3648"
+              onClicked={createNewClick}
             />
           </StyledDiv>
           <div>
