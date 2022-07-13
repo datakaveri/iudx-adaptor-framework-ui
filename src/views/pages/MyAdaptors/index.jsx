@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { TextField } from '@mui/material';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 import Adaptor from './Components/Adaptor';
 import StyledDiv from './Components/Div';
@@ -37,6 +38,10 @@ function MyAdaptorsPage({ dispatch, allAdaptors }) {
 
   return (
     <Page>
+      <Helmet>
+        <title>Adapters | IUDX Adaptor Framework</title>
+      </Helmet>
+
       <div style={{ width: '80%' }}>
         <StyledDiv>
           <StyledDiv contentJustify="start" width="40%">

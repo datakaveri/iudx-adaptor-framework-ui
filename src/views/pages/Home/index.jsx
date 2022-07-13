@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { Helmet } from 'react-helmet';
 import ToastsAction from '../../../stores/toasts/ToastsAction';
 import Navbar from '../../shared/components/Navbar';
 
@@ -15,16 +16,15 @@ const Title = styled.h1`
 const Home = ({ dispatch }) => {
   const showToast = () => {
     dispatch(
-      ToastsAction.add(
-        'Notification description.',
-        'SUCCESS',
-        'success',
-      ),
+      ToastsAction.add('Notification description.', 'SUCCESS', 'success'),
     );
   };
 
   return (
     <div>
+      <Helmet>
+        <title>IUDX Adaptor Framework</title>
+      </Helmet>
       <Title>Component styled with styled component!</Title>
       <Button onClick={showToast}>Show Toast</Button>
     </div>

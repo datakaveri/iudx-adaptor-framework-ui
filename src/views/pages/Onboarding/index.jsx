@@ -9,6 +9,7 @@ import StepButton from '@mui/material/StepButton';
 import Typography from '@mui/material/Typography';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
@@ -119,6 +120,9 @@ function OnboardingPage({ adaptorReducer }) {
         flexDirection: 'column',
         alignItems: 'center',
       }}>
+      <Helmet>
+        <title>On Boarding | IUDX Adaptor Framework</title>
+      </Helmet>
       <div style={{ width: '80%' }}>
         <Stepper activeStep={activeStep}>
           {steps.map((label, index) => {
