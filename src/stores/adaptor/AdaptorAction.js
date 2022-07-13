@@ -164,7 +164,7 @@ export default class AdaptorAction {
       await ActionUtility.createThunkEffect(
         dispatch,
         AdaptorAction.REQUEST_STOP_JOB,
-        AdaptorEffect.startJob,
+        AdaptorEffect.stopJob,
         jobName,
       );
     };

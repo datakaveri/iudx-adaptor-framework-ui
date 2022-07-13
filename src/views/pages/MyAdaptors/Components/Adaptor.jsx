@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import ImageButton from '../../../shared/components/ImageButton';
 import environment from '../../../../environments';
+import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
 
 const Buttons = styled.div`
   display: flex;
@@ -25,7 +26,19 @@ const Labels = styled.div`
   text-align: start;
 `;
 
-function Adaptor({ name, last, status, dispatch }) {
+function Adaptor({ name, last, status, id, dispatch, callbackMethod }) {
+  const stopAdaptor = jobId => {
+    dispatch(AdaptorAction.stopJob(jobId));
+    callbackMethod();
+  };
+  const restartAdaptor = jobId => {
+    dispatch(AdaptorAction.startJob(jobId));
+  };
+
+  const deleteAdaptor = jobId => {
+    dispatch(AdaptorAction.deleteJob(jobId));
+  };
+
   return (
     <LabelsRow>
       <div
@@ -55,17 +68,16 @@ function Adaptor({ name, last, status, dispatch }) {
       </div>
 
       {status === 'running' ? (
-
         <ImageButton
           Solid=""
-          Text="stop"
+          Text="Stop"
           color="#C77D00"
           hoverColor="#C77D00"
           icon="stop.png"
           hoverIcon="stopWhite.png"
           hoverTextColor="white"
-          clicked={() => {
-            console.log('Clicked stop');
+          onClicked={() => {
+            stopAdaptor(id);
           }}
         />
       ) : (
@@ -78,6 +90,9 @@ function Adaptor({ name, last, status, dispatch }) {
             hoverIcon="refreshWhite.png"
             hoverColor="#009E5F"
             hoverTextColor="white"
+            onClicked={() => {
+              restartAdaptor(id);
+            }}
           />
           <div style={{ width: '10px' }} />
           <ImageButton
@@ -88,6 +103,9 @@ function Adaptor({ name, last, status, dispatch }) {
             hoverIcon="delete.png"
             hoverColor="#9b241a"
             hoverTextColor="white"
+            onClicked={() => {
+              deleteAdaptor(id);
+            }}
           />
         </Buttons>
       )}
@@ -99,14 +117,18 @@ Adaptor.propTypes = {
   name: PropTypes.string,
   last: PropTypes.string,
   status: PropTypes.string,
+  id: PropTypes.string,
   dispatch: PropTypes.func,
+  callbackMethod: PropTypes.func,
 };
 
 Adaptor.defaultProps = {
   name: PropTypes.string,
   last: PropTypes.string,
   status: PropTypes.string,
+  id: PropTypes.string,
   dispatch: PropTypes.func,
+  callbackMethod: PropTypes.func,
 };
 
 const mapStateToProps = state => ({});
@@ -116,4 +138,3 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Adaptor);
-

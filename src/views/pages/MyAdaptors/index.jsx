@@ -22,6 +22,11 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
     dispatch(AdaptorAction.getAllAdaptors());
   }, [dispatch]);
 
+  const callbackAdaptors = () => {
+    console.log('Callback method called!');
+    dispatch(AdaptorAction.getAllAdaptors());
+  };
+
   return (
     <div
       style={{
@@ -56,6 +61,9 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
               icon="add.png"
               hoverIcon="addGrey.png"
               hoverTextColor="#2D3648"
+              onClicked={() => {
+                console.log('Clicked createNew');
+              }}
             />
           </div>
           <div>
@@ -104,6 +112,8 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
             name={adaptor.name}
             last={adaptor.lastSeen}
             status={adaptor.status}
+            id={adaptor.id}
+            callbackMethod={callbackAdaptors}
           />
         ))}
       </div>
@@ -127,7 +137,6 @@ MyAdaptorsPage.propTypes = {
 
 const mapStateToProps = state => ({
   adaptors: selectAdaptors(state),
-
 });
 
 const mapDispatchToProps = dispatch => ({
