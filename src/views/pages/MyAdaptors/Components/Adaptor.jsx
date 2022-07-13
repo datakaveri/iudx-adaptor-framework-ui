@@ -55,6 +55,7 @@ function Adaptor({ name, last, status, dispatch }) {
       </div>
 
       {status === 'running' ? (
+
         <ImageButton
           Solid=""
           Text="stop"
@@ -115,3 +116,4 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Adaptor);
+

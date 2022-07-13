@@ -5,6 +5,7 @@ import AdaptorResponseModel from './models/getAdaptorResponse/AdaptorResponseMod
 import InputSpecResponseModel from './models/inputSpecResponse/InputSpecResponseModel';
 import ParseSpecResponseModel from './models/parseSpecResponse/ParseSpecResponseModel';
 import TransformSpecResponseModel from './models/transformSpecResponse/TransformSpecResponseModel';
+import config from '../../environments';
 
 export default class AdaptorEffect {
   static async requestInputSpec(data, headers) {

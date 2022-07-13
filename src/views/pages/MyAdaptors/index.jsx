@@ -127,6 +127,7 @@ MyAdaptorsPage.propTypes = {
 
 const mapStateToProps = state => ({
   adaptors: selectAdaptors(state),
+
 });
 
 const mapDispatchToProps = dispatch => ({
