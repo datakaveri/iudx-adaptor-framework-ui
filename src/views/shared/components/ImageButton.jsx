@@ -90,4 +90,5 @@ ImageButton.defaultProps = {
   hoverIcon: PropTypes.string,
   hoverColor: PropTypes.string,
   hoverTextColor: PropTypes.string,
+  onClicked:()=>{console.log("clciked")}
 };
