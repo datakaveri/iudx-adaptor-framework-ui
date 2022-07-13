@@ -8,6 +8,7 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material';
+// eslint-disable-next-line import/no-unresolved
 import { makeStyles } from '@mui/styles';
 import { NavLink } from 'react-router-dom';
 import DrawerComponent from './Drawer';

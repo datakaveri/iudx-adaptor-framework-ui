@@ -17,11 +17,10 @@ import { Title } from '../../shared/components/SpecComponents';
 import PublishSpec from './Components/PublishSpec';
 import InputSpec from './Components/InputSpec';
 import ParseSpec from './Components/ParseSpec';
-import MetaSpec2 from './Components/MetaSpec';
+import MetaSpec from './Components/MetaSpec';
 import DeduplicationSpec from './Components/DeduplicationSpec';
 import TransformSpec from './Components/TransformSpec';
 import FailureRecoverySpec from './Components/FailureRecoverySpec';
-import AdaptorAction from '../../../stores/adaptor/AdaptorAction';
 
 
 const steps = [
@@ -34,7 +33,7 @@ const steps = [
   'Publish Spec',
 ];
 
-function OnboardingPage({ dispatch, adaptorReducer }) {
+function OnboardingPage({ adaptorReducer }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [completed, setCompleted] = React.useState({});
@@ -107,7 +106,8 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <MetaSpec2 />;
+        // return <MetaSpec />;
+        return <MetaSpec />;
       case 1:
         return <InputSpec />;
       case 2:
@@ -130,160 +130,9 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
     setActiveStep(0);
   };
 
-  const specFile = {
-    ...adaptorReducer.metaSpecInput,
-    failureRecoverySpec: adaptorReducer.failureRecoverySpecInput,
-    inputSpec: adaptorReducer.inputSpecInput,
-    parseSpec: adaptorReducer.parseSpecInput,
-    deduplicationSpec: adaptorReducer.deduplicationSpecInput,
-    transformSpec: adaptorReducer.transformSpecInput,
-    publishSpec: adaptorReducer.publishSpecInput,
-  };
-
-  const onboardingFunction = () => {
-    const headers = {
-      username: 'user',
-      password: 'user-password',
-      'Content-Type': 'application/json',
-    };
-    dispatch(AdaptorAction.requestOnboarding, specFile, headers);
-  };
-
   return (
     <div
       style={{
-<<<<<<< Updated upstream
-        marginBottom: '20px',
-        marginTop: '20px',
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}>
-      <div style={{ width: '80%' }}>
-        <Stepper activeStep={activeStep}>
-          {steps.map((label, index) => {
-            const stepProps = {};
-            const labelProps = {};
-            if (isStepOptional(index)) {
-              labelProps.optional = (
-                <Typography variant="caption">Optional</Typography>
-              );
-            }
-            if (isStepSkipped(index)) {
-              stepProps.completed = false;
-            }
-            return (
-              <Step key={label} {...stepProps}>
-                {/* <StepLabel {...labelProps}>{label}</StepLabel> */}
-                <StepButton {...labelProps} onClick={handleStep(index)}>
-                  {label}
-                </StepButton>
-              </Step>
-            );
-          })}
-        </Stepper>
-
-        <Typography>{getStepContent(activeStep)}</Typography>
-
-        {activeStep === steps.length ? (
-          <React.Fragment>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-around',
-                flexDirection: 'row',
-                marginLeft: '80px',
-              }}>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <Title>Spec Outline</Title>
-                <Editor
-                  disabled
-                  value={
-                    adaptorReducer.message === ''
-                      ? ''
-                      : JSON.stringify(specFile, null, 4)
-                  }
-                  highlight={value => highlight(value, languages.jsx)}
-                  padding={20}
-                  style={{
-                    fontFamily: '"Fira code", "Fira Mono", monospace',
-                    fontSize: 12,
-                    overflow: 'auto',
-
-                    flex: 'display',
-                    width: '500px',
-                    height: '900px',
-                    border: '1px solid',
-                    borderColor: 'black',
-                    borderRadius: '3px',
-                  }}
-                />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <Title>Input Spec</Title>
-                <Editor
-                  disabled
-                  value={
-                    adaptorReducer.message === ''
-                      ? ''
-                      : JSON.stringify(adaptorReducer.inputSpecInput, null, 4)
-                  }
-                  highlight={value => highlight(value, languages.jsx)}
-                  padding={20}
-                  style={{
-                    fontFamily: '"Fira code", "Fira Mono", monospace',
-                    fontSize: 12,
-                    overflow: 'auto',
-
-                    flex: 'display',
-                    width: '500px',
-                    height: '250px',
-                    border: '1px solid',
-                    borderColor: 'black',
-                    borderRadius: '3px',
-                  }}
-                />
-                <Title>Transform Spec Output</Title>
-                <Editor
-                  disabled
-                  value={
-                    adaptorReducer.message === ''
-                      ? ''
-                      : JSON.stringify(adaptorReducer.transformSpec, null, 4)
-                  }
-                  highlight={value => highlight(value, languages.jsx)}
-                  padding={20}
-                  style={{
-                    fontFamily: '"Fira code", "Fira Mono", monospace',
-                    fontSize: 12,
-                    overflow: 'auto',
-
-                    flex: 'display',
-                    width: '500px',
-                    height: '250px',
-                    border: '1px solid',
-                    borderColor: 'black',
-                    borderRadius: '3px',
-                  }}
-                />
-              </div>
-            </div>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                margin: '3%',
-              }}>
-              <Button
-                onClick={() => {
-                  console.log('Clicked');
-                }}>
-                Submit Spec Outline
-              </Button>
-=======
         alignContent:"center",alignItems:"center",justifyContent:"center",display:"flex"
       }}>
         <div style={{ marginBottom: '20px',
@@ -294,7 +143,7 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
         {steps.map((label, index) => {
           const stepProps = {};
           const labelProps = {};
-          console.log(adaptorReducer[stepPropsState[activeStep]])
+         
           if (isStepOptional(index)) {
             labelProps.optional = (
               <Typography variant="caption">Optional</Typography>
@@ -347,44 +196,36 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
                   borderRadius: '3px',
                 }}
               />
->>>>>>> Stashed changes
             </div>
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleReset}>Reset</Button>
-            </Box>
-          </React.Fragment>
-        ) : (
+          </div>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}>
-              Back
-            </Button>
             <Box sx={{ flex: '1 1 auto' }} />
-            {isStepOptional(activeStep) && (
-              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                Skip
-              </Button>
-            )}
-
-<<<<<<< Updated upstream
-            <Button onClick={handleNext}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-            </Button>
+            <Button onClick={handleReset}>Reset</Button>
           </Box>
-        )}
-=======
+        </React.Fragment>
+      ) : (
+        <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
           <Button
-            disabled={nextButton}
+            color="inherit"
+            disabled={activeStep === 0}
+            onClick={handleBack}
+            sx={{ mr: 1 }}>
+            Back
+          </Button>
+          <Box sx={{ flex: '1 1 auto' }} />
+          {isStepOptional(activeStep) && (
+            <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+              Skip
+            </Button>
+          )}
+
+          <Button
+            disabled={false}
             onClick={handleNext}>
             {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
           </Button>
         </Box>
       )}
->>>>>>> Stashed changes
       </div>
     </div>
   );

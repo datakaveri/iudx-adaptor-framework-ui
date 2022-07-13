@@ -56,6 +56,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
         <div style={{ display: 'flex' }}>
           <AdaptorForm
             onSubmit={values => {
+              console.log(inputSpecInput.boundedJob)
               const headers = {
                 username: 'user',
                 password: 'user-password',
@@ -133,7 +134,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                   <AdaptorInput
                     inputlabel="Scheduled Job"
                     inputtype="switch"
-                    initialValue={inputSpecInput.boundedJob}
+                    initialValue={!!(inputSpecInput.boundedJob)}
                     checked={scheduleJob}
                     onChange={() => {
                       setScheduleJob(!scheduleJob);
@@ -147,7 +148,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                     <hr />
                     <FormWrapper>
                       <Group>
-                        ~
+                        
                         <AdaptorInput
                           inputlabel="URL"
                           name="minioUrl"

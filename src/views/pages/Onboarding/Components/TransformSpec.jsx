@@ -72,11 +72,23 @@ const TransformSpec = ({
           <AdaptorForm
             onSubmit={values => {
               const tfSpec = {
-                ...values,
+                type: jtitle,
+                template: jtitle === "jsPath"? values.template:
+                 "",
                 jsonPathSpec: JSON.parse(jsonSpec),
               };
               const requestBody = {
-                inputData: parseSpec.result,
+                // inputData: parseSpec.result,
+                inputData:    [{
+                  "id": "123",
+                  "k": 1.5,
+                  "time": "2021-04-01T12:00:01+05:30"
+                },
+                {
+                  "id": "4356",
+                  "k": 2.5,
+                  "time": "2021-04-01T12:00:01+05:30"
+                }],
                 transformSpec: tfSpec,
               };
               const headers = {
@@ -106,7 +118,10 @@ const TransformSpec = ({
                     name="type"
                     initialValue={transformSpecInput.type}
                   /> */}
-                  <Select onChange={handleChange}>
+                  <InputLabel>
+                  Type
+                  </InputLabel>
+                  <Select style={{width:"300px"}} onChange={handleChange}>
                     {selectOptions.map(el => (
                       <MenuItem key={el.key} value={el.value} >
                         {el.value}
@@ -116,8 +131,20 @@ const TransformSpec = ({
                   </Select>
                 </Group>
 
+                  {jtitle === "jsPath"?
+                  <Group style={{marginTop:"10px"}}>
+                  
+                  <AdaptorInput
+                    inputlabel="Template"
+                    name="template"
+                    placeholder=""
+                    initialValue=" "
+                  />
+                </Group>:""
+
+                  }
                 <Group>
-                  <InputLabel style={{ marginLeft: '10px' }}>
+                  <InputLabel style={{ marginLeft: '10px',marginTop:"10px" }}>
                     {jtitle}
                   </InputLabel>
                   <Editor
