@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { TextField } from '@mui/material';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 import Adaptor from './Components/Adaptor';
 import StyledDiv from './Components/Div';
@@ -17,10 +18,10 @@ const Page = styled.div`
   justify-content: center;
   display: flex;
 `;
-function createNewClick() {
-  alert('new adaptor created');
-}
+
 function MyAdaptorsPage({ dispatch, allAdaptors }) {
+  const navigate = useNavigate();
+
   const [adaptors, setAdaptors] = useState();
 
   useEffect(() => {
@@ -49,7 +50,7 @@ function MyAdaptorsPage({ dispatch, allAdaptors }) {
               icon="add.png"
               hoverIcon="addGrey.png"
               hoverTextColor="#2D3648"
-              onClicked={createNewClick}
+              onClicked={() => navigate('/onBoarding')}
             />
           </StyledDiv>
           <div>
