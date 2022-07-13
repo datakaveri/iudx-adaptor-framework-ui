@@ -121,7 +121,7 @@ function OnboardingPage({ adaptorReducer }) {
         alignItems: 'center',
       }}>
       <Helmet>
-        <title>On Boarding | IUDX Adaptor Framework</title>
+        <title>Onboarding | IUDX Adaptor Framework</title>
       </Helmet>
       <div style={{ width: '80%' }}>
         <Stepper activeStep={activeStep}>

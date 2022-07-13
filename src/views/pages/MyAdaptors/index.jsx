@@ -39,7 +39,7 @@ function MyAdaptorsPage({ dispatch, allAdaptors }) {
   return (
     <Page>
       <Helmet>
-        <title>Adapters | IUDX Adaptor Framework</title>
+        <title>Adaptors | IUDX Adaptor Framework</title>
       </Helmet>
 
       <div style={{ width: '80%' }}>
