@@ -23,6 +23,7 @@ import TransformSpec from './Components/TransformSpec';
 import FailureRecoverySpec from './Components/FailureRecoverySpec';
 import AdaptorAction from '../../../stores/adaptor/AdaptorAction';
 
+
 const steps = [
   'Meta Spec',
   'Input Spec',
@@ -36,12 +37,40 @@ const steps = [
 function OnboardingPage({ dispatch, adaptorReducer }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
+  const [completed, setCompleted] = React.useState({});
+  const [nextButton,setnextButton]=React.useState(true)
 
   const isStepOptional = step => step === 5;
-
+  
   const isStepSkipped = step => skipped.has(step);
+  const stepPropsState=["metaSpecInput","inputSpecInput","parseSpecInput","deduplicationSpecInput","transformSpecInput","failureRecoverySpecInput","publishSpecInput"]
+  
+  React.useEffect(() => {
+    if (activeStep===0){
+    if ((adaptorReducer[stepPropsState[activeStep]].name!=null)){
+      setnextButton(false)
+    }}
+    else 
+    if (adaptorReducer[stepPropsState[activeStep]].type!=null)
+    setnextButton(false)
+    
+  });
 
   const handleNext = () => {
+    setnextButton(true)
+    if (activeStep===0){
+    if (adaptorReducer[stepPropsState[activeStep]].name!=null){
+    const newCompleted = completed;
+    newCompleted[activeStep] = true;
+    
+  }}
+    else 
+    if (adaptorReducer[stepPropsState[activeStep]].type!=null){
+        const newCompleted = completed;
+        newCompleted[activeStep] = true;
+        setCompleted(newCompleted);}
+    
+
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -57,7 +86,7 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
   };
 
   const handleStep = step => () => {
-    if (step < activeStep) setActiveStep(step);
+    if (completed[step]===true || step < activeStep) setActiveStep(step);
   };
 
   const handleSkip = () => {
@@ -72,6 +101,8 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
       return newSkipped;
     });
   };
+
+
 
   function getStepContent(step) {
     switch (step) {
@@ -121,6 +152,7 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
   return (
     <div
       style={{
+<<<<<<< Updated upstream
         marginBottom: '20px',
         marginTop: '20px',
         width: '100%',
@@ -251,6 +283,71 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
                 }}>
                 Submit Spec Outline
               </Button>
+=======
+        alignContent:"center",alignItems:"center",justifyContent:"center",display:"flex"
+      }}>
+        <div style={{ marginBottom: '20px',
+        marginTop: '20px',
+        width: '80%',
+        height: '100%',}}>
+      <Stepper nonLinear activeStep={activeStep}>
+        {steps.map((label, index) => {
+          const stepProps = {};
+          const labelProps = {};
+          console.log(adaptorReducer[stepPropsState[activeStep]])
+          if (isStepOptional(index)) {
+            labelProps.optional = (
+              <Typography variant="caption">Optional</Typography>
+            );
+          }
+          if (isStepSkipped(index)) {
+            stepProps.completed = false;
+          }
+          return (
+            <Step key={label} completed={completed[index]}>
+              {/* <StepLabel {...labelProps}>{label}</StepLabel> */}
+              <StepButton {...labelProps} onClick={handleStep(index)}>
+                {label}
+              </StepButton>
+            </Step>
+          );
+        })}
+      </Stepper>
+
+      <Typography>{getStepContent(activeStep)}</Typography>
+
+      {activeStep === steps.length ? (
+        <React.Fragment>
+          {/* <Typography sx={{ mt: 2, mb: 1 }}>adaptorReduce
+          </Typography> */}
+
+          <Title>Spec Outline</Title>
+          <hr />
+          <div style={{ marginLeft: '80px' }}>
+            <div style={{ display: 'flex' }}>
+              <Editor
+                disabled
+                value={
+                  adaptorReducer.message === ''
+                    ? ''
+                    : JSON.stringify(adaptorReducer, null, 4)
+                }
+                highlight={value => highlight(value, languages.jsx)}
+                padding={20}
+                style={{
+                  fontFamily: '"Fira code", "Fira Mono", monospace',
+                  fontSize: 12,
+                  overflow: 'auto',
+
+                  flex: 'display',
+                  width: '500px',
+                  height: '250px',
+                  border: '1px solid',
+                  borderColor: 'black',
+                  borderRadius: '3px',
+                }}
+              />
+>>>>>>> Stashed changes
             </div>
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Box sx={{ flex: '1 1 auto' }} />
@@ -273,11 +370,21 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
               </Button>
             )}
 
+<<<<<<< Updated upstream
             <Button onClick={handleNext}>
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </Button>
           </Box>
         )}
+=======
+          <Button
+            disabled={nextButton}
+            onClick={handleNext}>
+            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+          </Button>
+        </Box>
+      )}
+>>>>>>> Stashed changes
       </div>
     </div>
   );
