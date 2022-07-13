@@ -33,6 +33,30 @@ export default class AdaptorAction {
   static REQUEST_RUN_PARSE_SPEC_FINISHED =
     'AdaptorAction.REQUEST_RUN_PARSE_SPEC_FINISHED';
 
+  static REQUEST_GET_ADAPTORS = 'AdaptorAction.REQUEST_GET_ADAPTORS';
+
+  static REQUEST_GET_ADAPTORS_FINISHED =
+    'AdaptorAction.REQUEST_GET_ADAPTORS_FINISHED';
+
+  static REQUEST_SUBMIT_JOB = 'AdaptorAction.REQUEST_SUBMIT_JOB';
+
+  static REQUEST_SUBMIT_JOB_FINISHED =
+    'AdaptorAction.REQUEST_SUBMIT_JOB_FINISHED';
+
+  static REQUEST_START_JOB = 'AdaptorAction.REQUEST_START_JOB';
+
+  static REQUEST_START_JOB_FINISHED =
+    'AdaptorAction.REQUEST_START_JOB_FINISHED';
+
+  static REQUEST_STOP_JOB = 'AdaptorAction.REQUEST_STOP_JOB';
+
+  static REQUEST_STOP_JOB_FINISHED = 'AdaptorAction.REQUEST_STOP_JOB_FINISHED';
+
+  static REQUEST_DELETE_JOB = 'AdaptorAction.REQUEST_DELETE_JOB';
+
+  static REQUEST_DELETE_JOB_FINISHED =
+    'AdaptorAction.REQUEST_DELETE_JOB_FINISHED';
+
   static saveMetaSpec(data) {
     return ActionUtility.createAction(AdaptorAction.SAVE_META_SPEC, data);
   }
@@ -99,6 +123,60 @@ export default class AdaptorAction {
         AdaptorEffect.requestTransformSpec,
         data,
         headers,
+      );
+    };
+  }
+
+  static getAllAdaptors() {
+    return async dispatch => {
+      await ActionUtility.createThunkEffect(
+        dispatch,
+        AdaptorAction.REQUEST_GET_ADAPTORS,
+        AdaptorEffect.getAllAdaptors,
+      );
+    };
+  }
+
+  static submitJob(jobConfig) {
+    return async dispatch => {
+      await ActionUtility.createThunkEffect(
+        dispatch,
+        AdaptorAction.REQUEST_SUBMIT_JOB,
+        AdaptorEffect.submitJob,
+        jobConfig,
+      );
+    };
+  }
+
+  static startJob(jobName) {
+    return async dispatch => {
+      await ActionUtility.createThunkEffect(
+        dispatch,
+        AdaptorAction.REQUEST_START_JOB,
+        AdaptorEffect.startJob,
+        jobName,
+      );
+    };
+  }
+
+  static stopJob(jobName) {
+    return async dispatch => {
+      await ActionUtility.createThunkEffect(
+        dispatch,
+        AdaptorAction.REQUEST_STOP_JOB,
+        AdaptorEffect.startJob,
+        jobName,
+      );
+    };
+  }
+
+  static deleteJob(jobName) {
+    return async dispatch => {
+      await ActionUtility.createThunkEffect(
+        dispatch,
+        AdaptorAction.REQUEST_DELETE_JOB,
+        AdaptorEffect.startJob,
+        jobName,
       );
     };
   }

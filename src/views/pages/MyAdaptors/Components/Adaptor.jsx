@@ -1,31 +1,61 @@
 import React from 'react';
+import styled from 'styled-components';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import ImageButton from '../../../shared/components/ImageButton';
-import StyledDiv from './Div';
+import environment from '../../../../environments';
 
-function stopClick() {
-  alert('adaptor stoped!');
-}
-function deleteClick() {
-  alert('adaptor deleted!');
-}
-function restartClick() {
-  alert('adaptor restarted!');
-}
-export default function Adapter({ name, last, status }) {
+const Buttons = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const LabelsRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Labels = styled.div`
+  width: 25%;
+  text-align: start;
+`;
+
+function Adaptor({ name, last, status, dispatch }) {
   return (
-    <StyledDiv>
-      <StyledDiv width="70%">
-        <p style={{ width: '30%' }}>
+    <LabelsRow>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          width: '70%',
+        }}>
+        <p style={{ width: '25%' }}>
           <b>{name}</b>
         </p>
-        <p style={{ width: '30%', textAlign: 'start' }}>{last}</p>
-        <p style={{ color: 'green', width: '30%', textAlign: 'start' }}>
+        <p style={{ width: '25%', textAlign: 'start' }}>
+          {moment(last).format('lll')}
+        </p>
+        <p style={{ width: '25%' }}>
+          <a
+            href={environment.GRAFANA_DASHBOARD_URL.replace('JOBNAME', name)}
+            target="_blank"
+            rel="noreferrer">
+            Open
+          </a>
+        </p>
+        <p style={{ color: 'green', width: '25%', textAlign: 'start' }}>
           <b>{status}</b>
         </p>
-      </StyledDiv>
+      </div>
 
-      {status === 'Running' ? (
+      {status === 'running' ? (
+
         <ImageButton
           Solid=""
           Text="stop"
@@ -34,10 +64,12 @@ export default function Adapter({ name, last, status }) {
           icon="stop.png"
           hoverIcon="stopWhite.png"
           hoverTextColor="white"
-          onClicked={stopClick}
+          clicked={() => {
+            console.log('Clicked stop');
+          }}
         />
       ) : (
-        <StyledDiv>
+        <Buttons>
           <ImageButton
             Solid=""
             Text="Restart"
@@ -46,7 +78,6 @@ export default function Adapter({ name, last, status }) {
             hoverIcon="refreshWhite.png"
             hoverColor="#009E5F"
             hoverTextColor="white"
-            onClicked={restartClick}
           />
           <div style={{ width: '10px' }} />
           <ImageButton
@@ -57,22 +88,32 @@ export default function Adapter({ name, last, status }) {
             hoverIcon="delete.png"
             hoverColor="#9b241a"
             hoverTextColor="white"
-            onClicked={deleteClick}
           />
-        </StyledDiv>
+        </Buttons>
       )}
-    </StyledDiv>
+    </LabelsRow>
   );
 }
 
-Adapter.propTypes = {
+Adaptor.propTypes = {
   name: PropTypes.string,
   last: PropTypes.string,
   status: PropTypes.string,
+  dispatch: PropTypes.func,
 };
 
-Adapter.defaultProps = {
+Adaptor.defaultProps = {
   name: PropTypes.string,
   last: PropTypes.string,
   status: PropTypes.string,
+  dispatch: PropTypes.func,
 };
+
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Adaptor);
+
