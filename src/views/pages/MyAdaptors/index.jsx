@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { TextField } from '@mui/material';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { TextField } from '@mui/material';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 import Adaptor from './Components/Adaptor';
-import StyledDiv from './Components/Div';
 import { Line } from '../../shared/components/SpecComponents';
 import ImageButton from '../../shared/components/ImageButton';
 
-import MyAdaptorsAction from '../../../stores/myAdaptors/MyAdaptorsAction';
+import { selectAdaptors } from '../../../selectors/adaptor/AdaptorSelector';
+import AdaptorAction from '../../../stores/adaptor/AdaptorAction';
 
 const Page = styled.div`
   align-content: center;
@@ -20,21 +20,18 @@ const Page = styled.div`
   display: flex;
 `;
 
-function MyAdaptorsPage({ dispatch, allAdaptors }) {
+const Tab = styled.div`
+  margin: 0px;
+  width: 25%;
+  text-align: start;
+`;
+
+const MyAdaptorsPage = ({ dispatch, adaptors }) => {
   const navigate = useNavigate();
 
-  const [adaptors, setAdaptors] = useState();
-
   useEffect(() => {
-    const headers = {
-      username: 'testuser24',
-      password: 'testuserpassword',
-      'Content-Type': 'application/json',
-    };
-    dispatch(MyAdaptorsAction.requestGetAdaptors(headers));
-    setAdaptors(allAdaptors?.adaptors);
-    console.log(allAdaptors);
-  }, []);
+    dispatch(AdaptorAction.getAllAdaptors());
+  }, [dispatch]);
 
   return (
     <Page>
@@ -43,9 +40,22 @@ function MyAdaptorsPage({ dispatch, allAdaptors }) {
       </Helmet>
 
       <div style={{ width: '80%' }}>
-        <StyledDiv>
-          <StyledDiv contentJustify="start" width="40%">
-            <h1>My Adapters</h1>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'start',
+              alignItems: 'center',
+              width: '40%',
+            }}>
+            <h1>My Adaptors</h1>
             <div style={{ width: '50px' }} />
             <ImageButton
               Solid="Solid"
@@ -57,7 +67,7 @@ function MyAdaptorsPage({ dispatch, allAdaptors }) {
               hoverTextColor="#2D3648"
               onClicked={() => navigate('/onBoarding')}
             />
-          </StyledDiv>
+          </div>
           <div>
             <TextField
               variant="outlined"
@@ -66,44 +76,67 @@ function MyAdaptorsPage({ dispatch, allAdaptors }) {
               placeholder="Search"
             />
           </div>
-        </StyledDiv>
-        <StyledDiv>
-          <StyledDiv width="70%">
-            <p style={{ margin: '0px', width: '30%', textAlign: 'start' }}>
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              width: '70%',
+            }}>
+            <Tab>
               <b>Name</b>
-            </p>
-            <p style={{ margin: '0px', width: '30%', textAlign: 'start' }}>
+            </Tab>
+
+            <Tab>
               <b>Last Used</b>
-            </p>
-            <p style={{ margin: '0px', width: '30%', textAlign: 'start' }}>
+            </Tab>
+
+            <Tab>
+              <b>Logs</b>
+            </Tab>
+
+            <Tab>
               <b>Status</b>
-            </p>
-          </StyledDiv>
+            </Tab>
+          </div>
           <div />
-        </StyledDiv>
+        </div>
         <Line />
-
-        {/* {allAdaptors?.map(item => (
-          <Adaptor name={item.name} last={item.last} status={item.status} />
-        ))} */}
-
-        <Adaptor name="Adapter1" last="27, Jan, 2022, 17:45" status="Running" />
-        <Adaptor name="Adapter1" last="27, Jan, 2022, 17:45" status="" />
+        {adaptors.map(adaptor => (
+          <Adaptor
+            name={adaptor.name}
+            last={adaptor.lastSeen}
+            status={adaptor.status}
+          />
+        ))}
       </div>
     </Page>
   );
-}
+};
 
 MyAdaptorsPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/require-default-props
-  // eslint-disable-next-line react/forbid-prop-types
-  // eslint-disable-next-line react/forbid-prop-types
-  allAdaptors: PropTypes.any.isRequired,
+  adaptors: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      jarId: PropTypes.string,
+      jobId: PropTypes.string,
+      lastSeen: PropTypes.string,
+      status: PropTypes.string,
+    }),
+  ).isRequired,
 };
 
 const mapStateToProps = state => ({
-  allAdaptors: state.myAdaptorsReducer.allAdaptors,
+  adaptors: selectAdaptors(state),
 });
 
 const mapDispatchToProps = dispatch => ({
