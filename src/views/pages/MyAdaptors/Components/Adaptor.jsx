@@ -55,16 +55,15 @@ function Adaptor({ name, last, status, dispatch }) {
       </div>
 
       {status === 'running' ? (
-
         <ImageButton
           Solid=""
-          Text="stop"
+          Text="Stop"
           color="#C77D00"
           hoverColor="#C77D00"
           icon="stop.png"
           hoverIcon="stopWhite.png"
           hoverTextColor="white"
-          clicked={() => {
+          onClicked={() => {
             console.log('Clicked stop');
           }}
         />
@@ -116,4 +115,3 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Adaptor);
-
