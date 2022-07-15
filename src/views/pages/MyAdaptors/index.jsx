@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TextField } from '@mui/material';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -9,7 +9,6 @@ import { Helmet } from 'react-helmet';
 import Adaptor from './Components/Adaptor';
 import { Line } from '../../shared/components/SpecComponents';
 import ImageButton from '../../shared/components/ImageButton';
-
 import { selectAdaptors } from '../../../selectors/adaptor/AdaptorSelector';
 import AdaptorAction from '../../../stores/adaptor/AdaptorAction';
 
@@ -28,10 +27,23 @@ const Tab = styled.div`
 
 const MyAdaptorsPage = ({ dispatch, adaptors }) => {
   const navigate = useNavigate();
+  const [results, setResults] = useState(adaptors);
 
   useEffect(() => {
     dispatch(AdaptorAction.getAllAdaptors());
+    setResults(adaptors);
+    console.log(JSON.stringify(results));
   }, [dispatch]);
+
+  const [isSearched, setIsSearched] = useState(false);
+  const searchFunction = e => {
+    setIsSearched(true);
+    setResults(
+      adaptors.filter(searchedItem =>
+        searchedItem.name.toLowerCase().includes(e.toLowerCase()),
+      ),
+    );
+  };
 
   return (
     <Page>
@@ -74,6 +86,9 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
               size="small"
               fullWidth
               placeholder="Search"
+              onChange={evt => {
+                searchFunction(evt.target.value);
+              }}
             />
           </div>
         </div>
@@ -109,13 +124,21 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
           <div />
         </div>
         <Line />
-        {adaptors.map(adaptor => (
-          <Adaptor
-            name={adaptor.name}
-            last={adaptor.lastSeen}
-            status={adaptor.status}
-          />
-        ))}
+        {isSearched
+          ? results.map(adaptor => (
+              <Adaptor
+                name={adaptor.name}
+                last={adaptor.lastSeen}
+                status={adaptor.status}
+              />
+            ))
+          : adaptors.map(adaptor => (
+              <Adaptor
+                name={adaptor.name}
+                last={adaptor.lastSeen}
+                status={adaptor.status}
+              />
+            ))}
       </div>
     </Page>
   );
