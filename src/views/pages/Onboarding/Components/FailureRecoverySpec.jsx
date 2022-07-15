@@ -8,6 +8,7 @@ import AdaptorForm from '../../../shared/components/AdaptorForm';
 import AdaptorInput from '../../../shared/components/AdaptorInput';
 
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
+import ToastsAction from '../../../../stores/toasts/ToastsAction';
 import FailureRecoverySpecInputModel from '../../../../stores/adaptor/models/specInput/failureRecoverySpec/FailureRecoverySpecInputModel';
 
 const Group = styled.div`
@@ -31,6 +32,9 @@ const FailureRecoverySpec = ({ dispatch, failureRecoverySpecInput }) => (
       <div style={{ display: 'flex' }}>
         <AdaptorForm
           onSubmit={values => {
+            dispatch(
+              ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
+            );
             dispatch(AdaptorAction.saveFailureRecoverySpec(values));
           }}>
           {() => (
