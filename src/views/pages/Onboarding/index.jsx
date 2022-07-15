@@ -21,6 +21,7 @@ import MetaSpec2 from './Components/MetaSpec';
 import DeduplicationSpec from './Components/DeduplicationSpec';
 import TransformSpec from './Components/TransformSpec';
 import FailureRecoverySpec from './Components/FailureRecoverySpec';
+import AdaptorAction from '../../../stores/adaptor/AdaptorAction';
 
 const steps = [
   'Meta Spec',
@@ -32,7 +33,7 @@ const steps = [
   'Publish Spec',
 ];
 
-function OnboardingPage({ adaptorReducer }) {
+function OnboardingPage({ dispatch, adaptorReducer }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
 
@@ -108,6 +109,15 @@ function OnboardingPage({ adaptorReducer }) {
     publishSpec: adaptorReducer.publishSpecInput,
   };
 
+  const onboardingFunction = () => {
+    const headers = {
+      username: 'user',
+      password: 'user-password',
+      'Content-Type': 'application/json',
+    };
+    dispatch(AdaptorAction.requestOnboarding, specFile, headers);
+  };
+
   return (
     <div
       style={{
@@ -147,15 +157,15 @@ function OnboardingPage({ adaptorReducer }) {
 
         {activeStep === steps.length ? (
           <React.Fragment>
-            <Title>Spec Outline</Title>
-            <hr />
             <div
               style={{
                 display: 'flex',
+                justifyContent: 'space-around',
                 flexDirection: 'row',
                 marginLeft: '80px',
               }}>
-              <div style={{ display: 'flex' }}>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <Title>Spec Outline</Title>
                 <Editor
                   disabled
                   value={
@@ -172,7 +182,7 @@ function OnboardingPage({ adaptorReducer }) {
 
                     flex: 'display',
                     width: '500px',
-                    height: '250px',
+                    height: '900px',
                     border: '1px solid',
                     borderColor: 'black',
                     borderRadius: '3px',
@@ -180,6 +190,7 @@ function OnboardingPage({ adaptorReducer }) {
                 />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <Title>Input Spec</Title>
                 <Editor
                   disabled
                   value={
@@ -202,12 +213,13 @@ function OnboardingPage({ adaptorReducer }) {
                     borderRadius: '3px',
                   }}
                 />
+                <Title>Transform Spec Output</Title>
                 <Editor
                   disabled
                   value={
                     adaptorReducer.message === ''
                       ? ''
-                      : JSON.stringify(adaptorReducer.inputSpecInput, null, 4)
+                      : JSON.stringify(adaptorReducer.transformSpec, null, 4)
                   }
                   highlight={value => highlight(value, languages.jsx)}
                   padding={20}
@@ -225,6 +237,20 @@ function OnboardingPage({ adaptorReducer }) {
                   }}
                 />
               </div>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                margin: '3%',
+              }}>
+              <Button
+                onClick={() => {
+                  console.log('Clicked');
+                }}>
+                Submit Spec Outline
+              </Button>
             </div>
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Box sx={{ flex: '1 1 auto' }} />

@@ -8,6 +8,7 @@ import AdaptorForm from '../../../shared/components/AdaptorForm';
 import AdaptorInput from '../../../shared/components/AdaptorInput';
 
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
+import ToastsAction from '../../../../stores/toasts/ToastsAction';
 import PublishSpecInputModel from '../../../../stores/adaptor/models/specInput/publishSpec/PublishSpecInputModel';
 
 const Group = styled.div`
@@ -31,6 +32,9 @@ const PublishSpec = ({ dispatch, publishSpecInput }) => (
       <div style={{ display: 'flex' }}>
         <AdaptorForm
           onSubmit={values => {
+            dispatch(
+              ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
+            );
             dispatch(
               AdaptorAction.savePublishSpec(new PublishSpecInputModel(values)),
             );

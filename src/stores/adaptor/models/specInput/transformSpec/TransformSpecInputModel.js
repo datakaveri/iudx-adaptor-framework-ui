@@ -1,13 +1,13 @@
 import { BaseModel } from 'sjs-base-model';
 
 export default class TransformSpecInputModel extends BaseModel {
-  type = String;
+  type = '';
 
-  joltSpec = String;
+  joltSpec = '';
 
-  script = String;
+  script = '';
 
-  template = String;
+  template = '';
 
   jsonPathSpec = [];
 

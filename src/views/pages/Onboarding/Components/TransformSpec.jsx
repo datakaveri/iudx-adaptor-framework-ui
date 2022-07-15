@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Button, InputLabel } from '@mui/material';
+import { Button, InputLabel, MenuItem, Select } from '@mui/material';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Editor from 'react-simple-code-editor';
@@ -13,6 +13,7 @@ import AdaptorInput, {
 } from '../../../shared/components/AdaptorInput';
 
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
+import ToastsAction from '../../../../stores/toasts/ToastsAction';
 import TransformSpecInputModel from '../../../../stores/adaptor/models/specInput/transformSpec/TransformSpecInputModel';
 import TransformSpecResponseModel from '../../../../stores/adaptor/models/transformSpecResponse/TransformSpecResponseModel';
 import ParseSpecResponseModel from '../../../../stores/adaptor/models/parseSpecResponse/ParseSpecResponseModel';
@@ -30,6 +31,14 @@ const FormWrapper = styled.div`
   flex-direction: column;
 `;
 
+const selectOptions = [
+  { key: 'Jolt', value: 'jolt' },
+  { key: 'Vanilla Javascript', value: 'js' },
+  { key: 'jsPath', value: 'jsPath' },
+];
+
+
+
 const TransformSpec = ({
   dispatch,
   parseSpec,
@@ -38,6 +47,7 @@ const TransformSpec = ({
 }) => {
   const [transformSpecData, setTransformSpecData] = useState('');
   const [jsonSpec, setJsonSpec] = useState('');
+  const [jtitle,setJtitle]=useState('');
 
   useEffect(() => {
     setTransformSpecData(transformSpec);
@@ -47,6 +57,11 @@ const TransformSpec = ({
         : JSON.stringify(transformSpecInput.jsonPathSpec, null, 4),
     );
   }, [transformSpec]);
+  const handleChange = value => {
+    console.log('Changed');
+    console.log(value.target.value)
+    setJtitle(value.target.value)
+  };
 
   return (
     <div>
@@ -57,11 +72,23 @@ const TransformSpec = ({
           <AdaptorForm
             onSubmit={values => {
               const tfSpec = {
-                ...values,
+                type: jtitle,
+                template: jtitle === "jsPath"? values.template:
+                 "",
                 jsonPathSpec: JSON.parse(jsonSpec),
               };
               const requestBody = {
-                inputData: parseSpec.result,
+                // inputData: parseSpec.result,
+                inputData:    [{
+                  "id": "123",
+                  "k": 1.5,
+                  "time": "2021-04-01T12:00:01+05:30"
+                },
+                {
+                  "id": "4356",
+                  "k": 2.5,
+                  "time": "2021-04-01T12:00:01+05:30"
+                }],
                 transformSpec: tfSpec,
               };
               const headers = {
@@ -69,6 +96,9 @@ const TransformSpec = ({
                 password: 'user-password',
                 'Content-Type': 'application/json',
               };
+              dispatch(
+                ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
+              );
               dispatch(
                 AdaptorAction.saveTransformSpec(
                   new TransformSpecInputModel(requestBody),
@@ -81,22 +111,41 @@ const TransformSpec = ({
             {() => (
               <FormWrapper>
                 <Group>
-                  <AdaptorInput
+                  {/* <AdaptorInput
                     inputlabel="Type"
                     inputtype="select"
-                    selectoptions={[
-                      { key: 'Jolt', value: 'jolt' },
-                      { key: 'Vanilla Javascript', value: 'js' },
-                      { key: 'jsPath', value: 'jsPath' },
-                    ]}
+                    selectoptions={selectOptions}
                     name="type"
                     initialValue={transformSpecInput.type}
-                  />
+                  /> */}
+                  <InputLabel>
+                  Type
+                  </InputLabel>
+                  <Select style={{width:"300px"}} onChange={handleChange}>
+                    {selectOptions.map(el => (
+                      <MenuItem key={el.key} value={el.value} >
+                        {el.value}
+                      </MenuItem>
+                    )
+                    )}
+                  </Select>
                 </Group>
 
+                  {jtitle === "jsPath"?
+                  <Group style={{marginTop:"10px"}}>
+                  
+                  <AdaptorInput
+                    inputlabel="Template"
+                    name="template"
+                    placeholder=""
+                    initialValue=" "
+                  />
+                </Group>:""
+
+                  }
                 <Group>
-                  <InputLabel style={{ marginLeft: '10px' }}>
-                    JSON Path Spec
+                  <InputLabel style={{ marginLeft: '10px',marginTop:"10px" }}>
+                    {jtitle}
                   </InputLabel>
                   <Editor
                     disabled={false}

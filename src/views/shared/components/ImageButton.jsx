@@ -20,7 +20,6 @@ export default function ImageButton({
     font-weight: 700;
     width: 140px;
     border-radius: 5px;
-    font-family: 'Inter';
     border-color: ${props => props.color};
     height: 36px;
     border: 2px solid;

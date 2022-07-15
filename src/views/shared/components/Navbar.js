@@ -24,7 +24,6 @@ const useStyles = makeStyles(theme => ({
     cursor: 'pointer',
   },
   link: {
-    fontFamily: '"Fira code", "Fira Mono", monospace',
     textDecoration: 'none',
     color: 'grey',
     fontSize: '15px',
@@ -34,9 +33,7 @@ const useStyles = makeStyles(theme => ({
       borderBottom: '1px solid black',
     },
     '&.active': {
-      fontSize: '17px',
       color: 'black',
-      fontFamily: '"Fira code", "Fira Mono", monospace',
     },
   },
 }));

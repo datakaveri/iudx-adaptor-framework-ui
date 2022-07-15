@@ -1,15 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TextField } from '@mui/material';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 import Adaptor from './Components/Adaptor';
 import { Line } from '../../shared/components/SpecComponents';
 import ImageButton from '../../shared/components/ImageButton';
-
 import { selectAdaptors } from '../../../selectors/adaptor/AdaptorSelector';
 import AdaptorAction from '../../../stores/adaptor/AdaptorAction';
+
+const Page = styled.div`
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+`;
 
 const Tab = styled.div`
   margin: 0px;
@@ -18,23 +26,35 @@ const Tab = styled.div`
 `;
 
 const MyAdaptorsPage = ({ dispatch, adaptors }) => {
+  const navigate = useNavigate();
+  const [results, setResults] = useState(adaptors);
+
   useEffect(() => {
     dispatch(AdaptorAction.getAllAdaptors());
+    setResults(adaptors);
+    console.log(JSON.stringify(results));
   }, [dispatch]);
 
   const callbackAdaptors = () => {
     console.log('Callback method called!');
     dispatch(AdaptorAction.getAllAdaptors());
   };
+  const [isSearched, setIsSearched] = useState(false);
+  const searchFunction = e => {
+    setIsSearched(true);
+    setResults(
+      adaptors.filter(searchedItem =>
+        searchedItem.name.toLowerCase().includes(e.toLowerCase()),
+      ),
+    );
+  };
 
   return (
-    <div
-      style={{
-        alignContent: 'center',
-        alignItems: 'center',
-        justifyContent: 'center',
-        display: 'flex',
-      }}>
+    <Page>
+      <Helmet>
+        <title>Adaptors | IUDX Adaptor Framework</title>
+      </Helmet>
+
       <div style={{ width: '80%' }}>
         <div
           style={{
@@ -61,9 +81,7 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
               icon="add.png"
               hoverIcon="addGrey.png"
               hoverTextColor="#2D3648"
-              onClicked={() => {
-                console.log('Clicked createNew');
-              }}
+              onClicked={() => navigate('/onBoarding')}
             />
           </div>
           <div>
@@ -72,6 +90,9 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
               size="small"
               fullWidth
               placeholder="Search"
+              onChange={evt => {
+                searchFunction(evt.target.value);
+              }}
             />
           </div>
         </div>
@@ -107,17 +128,25 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
           <div />
         </div>
         <Line />
-        {adaptors.map(adaptor => (
-          <Adaptor
-            name={adaptor.name}
-            last={adaptor.lastSeen}
-            status={adaptor.status}
-            id={adaptor.id}
-            callbackMethod={callbackAdaptors}
-          />
-        ))}
+        {isSearched
+          ? results.map(adaptor => (
+              <Adaptor
+                name={adaptor.name}
+                last={adaptor.lastSeen}
+                status={adaptor.status}
+                id={adaptor.id}
+              />
+            ))
+          : adaptors.map(adaptor => (
+              <Adaptor
+                name={adaptor.name}
+                last={adaptor.lastSeen}
+                status={adaptor.status}
+                id={adaptor.id}
+              />
+            ))}
       </div>
-    </div>
+    </Page>
   );
 };
 
