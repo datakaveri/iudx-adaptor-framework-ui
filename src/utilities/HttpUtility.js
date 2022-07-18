@@ -81,9 +81,9 @@ export default class HttpUtility {
         headers: {
           'Content-Type': 'application/json',
           ...config?.headers,
-          username: environment.BACKEND_API_USERNAME,
-          password: environment.BACKEND_API_PASSWORD,
-          // ...config?.params,
+          // username: environment.BACKEND_API_USERNAME,
+          // password: environment.BACKEND_API_PASSWORD,
+          ...config?.params,
         },
       };
 

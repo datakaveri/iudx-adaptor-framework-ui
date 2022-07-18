@@ -66,10 +66,11 @@ export default class AdaptorEffect {
     return [];
   }
 
-  static async submitJob(jobConfig) {
+  static async submitJob(jobConfig, headers) {
     const response = await HttpUtility.post(
-      `${environment.BACKEND_URL}/adaptor`,
+      `http://localhost:8080/adaptor`,
       jobConfig,
+      headers,
     );
 
     if (response instanceof HttpErrorResponseModel) {

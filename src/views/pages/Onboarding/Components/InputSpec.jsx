@@ -21,6 +21,7 @@ import InputSpecResponseModel from '../../../../stores/adaptor/models/inputSpecR
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
 import ToastsAction from '../../../../stores/toasts/ToastsAction';
 import InputSpecInputModel from '../../../../stores/adaptor/models/specInput/inputSpec/InputSpecInputModel';
+import EditorStyle from '../../../shared/constants/EditorStyle';
 
 require('prismjs/components/prism-jsx');
 
@@ -35,6 +36,14 @@ const Group = styled.div`
 const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+const LeftMargin = styled.div`
+  margin-left: 80px;
+`;
+
+const Flex = styled.div`
+  display: flex;
 `;
 
 const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
@@ -52,12 +61,10 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
     <div>
       <Title>Input Spec</Title>
       <hr />
-      <div style={{ marginLeft: '80px' }}>
-        <div style={{ display: 'flex' }}>
+      <LeftMargin>
+        <Flex>
           <AdaptorForm
-          
             onSubmit={values => {
-             
               const headers = {
                 username: 'user',
                 password: 'user-password',
@@ -91,7 +98,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                 AdaptorAction.saveInputSpec(
                   new InputSpecInputModel(requestBody.inputSpec),
                 ),
-                console.log(scheduleJob)
+                console.log(scheduleJob),
               );
             }}>
             {() => (
@@ -134,15 +141,18 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                 </Group>
                 <Group>
                   <SwitchDiv>
-                  <InputLabel>Schedule Job</InputLabel>
-                 <Switch
-                  
-                    initialValue={inputSpecInput.boundedJob}
-                    checked={scheduleJob}
-                    onChange={() => {
-                      setScheduleJob(inputSpecInput.boundedJob === 'true'?scheduleJob:!scheduleJob);
-                    }}
-                  />
+                    <InputLabel>Schedule Job</InputLabel>
+                    <Switch
+                      initialValue={inputSpecInput.boundedJob}
+                      checked={scheduleJob}
+                      onChange={() => {
+                        setScheduleJob(
+                          inputSpecInput.boundedJob === 'true'
+                            ? scheduleJob
+                            : !scheduleJob,
+                        );
+                      }}
+                    />
                   </SwitchDiv>
                 </Group>
 
@@ -152,12 +162,15 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                     <hr />
                     <FormWrapper>
                       <Group>
-                        
                         <AdaptorInput
                           inputlabel="URL"
                           name="minioUrl"
                           placeholder="Minio URL"
-                          initialValue={inputSpecInput.minioConfig?inputSpecInput.minioConfig.url:""}
+                          initialValue={
+                            inputSpecInput.minioConfig
+                              ? inputSpecInput.minioConfig.url
+                              : ''
+                          }
                         />
                       </Group>
                       <Group>
@@ -165,7 +178,11 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                           inputlabel="Bucket"
                           name="minioBucket"
                           placeholder="Minio Bucket"
-                          initialValue={inputSpecInput.minioConfig?inputSpecInput.minioConfig.bucket:""}
+                          initialValue={
+                            inputSpecInput.minioConfig
+                              ? inputSpecInput.minioConfig.bucket
+                              : ''
+                          }
                         />
                       </Group>
                       <Group>
@@ -173,7 +190,11 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                           inputlabel="State Name"
                           name="minioStateName"
                           placeholder="Minio State Name"
-                          initialValue={inputSpecInput.minioConfig?inputSpecInput.minioConfig.stateName:""}
+                          initialValue={
+                            inputSpecInput.minioConfig
+                              ? inputSpecInput.minioConfig.stateName
+                              : ''
+                          }
                         />
                       </Group>
                       <Group>
@@ -181,7 +202,11 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                           inputlabel="Access Key"
                           name="minioAccessKey"
                           placeholder="Minio Access Key"
-                          initialValue={inputSpecInput.minioConfig?inputSpecInput.minioConfig.accessKey:""}
+                          initialValue={
+                            inputSpecInput.minioConfig
+                              ? inputSpecInput.minioConfig.accessKey
+                              : ''
+                          }
                         />
                       </Group>
                       <Group>
@@ -189,13 +214,17 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                           inputlabel="Secret Key"
                           name="minioSecretKey"
                           placeholder="Minio Secret Key"
-                          initialValue={inputSpecInput.minioConfig?inputSpecInput.minioConfig.secretKey:""}
+                          initialValue={
+                            inputSpecInput.minioConfig
+                              ? inputSpecInput.minioConfig.secretKey
+                              : ''
+                          }
                         />
                       </Group>
                     </FormWrapper>
                   </div>
                 ) : (
-                  <Group style={{marginTop:'10px'}}>
+                  <Group style={{ marginTop: '10px' }}>
                     <AdaptorInput
                       inputlabel="Polling Interval"
                       name="pollingInterval"
@@ -235,18 +264,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                 }
                 highlight={value => highlight(value, languages.jsx)}
                 padding={20}
-                style={{
-                  fontFamily: '"Fira code", "Fira Mono", monospace',
-                  fontSize: 12,
-                  overflow: 'auto',
-
-                  flex: 'display',
-                  width: '500px',
-                  height: '250px',
-                  border: '1px solid',
-                  borderColor: bypassExecution ? 'black' : '#b7b0b0',
-                  borderRadius: '3px',
-                }}
+                style={EditorStyle}
               />
             ) : (
               <div>
@@ -254,8 +272,8 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
               </div>
             )}
           </Group>
-        </div>
-      </div>
+        </Flex>
+      </LeftMargin>
     </div>
   );
 };

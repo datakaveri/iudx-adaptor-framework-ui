@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable no-nested-ternary */
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -26,17 +27,23 @@ const Labels = styled.div`
   text-align: start;
 `;
 
+const Splitter = styled.div`
+  width: 10px;
+`;
+
 function Adaptor({ name, last, status, id, dispatch, callbackMethod }) {
-  const stopAdaptor = jobId => {
-    dispatch(AdaptorAction.stopJob(jobId));
+  const stopAdaptor = async jobId => {
+    await dispatch(AdaptorAction.stopJob(jobId));
     callbackMethod();
   };
-  const restartAdaptor = jobId => {
-    dispatch(AdaptorAction.startJob(jobId));
+  const restartAdaptor = async jobId => {
+    await dispatch(AdaptorAction.startJob(jobId));
+    callbackMethod();
   };
 
-  const deleteAdaptor = jobId => {
-    dispatch(AdaptorAction.deleteJob(jobId));
+  const deleteAdaptor = async jobId => {
+    await dispatch(AdaptorAction.deleteJob(jobId));
+    callbackMethod();
   };
 
   return (
@@ -80,7 +87,7 @@ function Adaptor({ name, last, status, id, dispatch, callbackMethod }) {
             stopAdaptor(id);
           }}
         />
-      ) : (
+      ) : status === 'stopped' ? (
         <Buttons>
           <ImageButton
             Solid=""
@@ -94,7 +101,7 @@ function Adaptor({ name, last, status, id, dispatch, callbackMethod }) {
               restartAdaptor(id);
             }}
           />
-          <div style={{ width: '10px' }} />
+          <Splitter />
           <ImageButton
             Solid="Solid"
             Text="Delete"
@@ -108,6 +115,21 @@ function Adaptor({ name, last, status, id, dispatch, callbackMethod }) {
             }}
           />
         </Buttons>
+      ) : status === 'cg-completed' ? (
+        <ImageButton
+          Solid=""
+          Text="Start"
+          color="#009E5F"
+          icon="refresh.png"
+          hoverIcon="refreshWhite.png"
+          hoverColor="#009E5F"
+          hoverTextColor="white"
+          onClicked={() => {
+            restartAdaptor(id);
+          }}
+        />
+      ) : (
+        ''
       )}
     </LabelsRow>
   );

@@ -39,28 +39,23 @@ export default function ImageButton({
     }
   `;
 
+  const ImageContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: start;
+  `;
+
   return (
     <div role="button" tabIndex={0} onKeyDown={() => {}} onClick={onClicked}>
-      <IconButton
-        disabled={Enabled}
-        solid={Solid}
-        color={color}
-        type="button"
-        // onClick={onClicked}
-      >
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'start',
-          }}>
+      <IconButton disabled={Enabled} solid={Solid} color={color} type="button">
+        <ImageContainer>
           <img
             style={{ width: '20px', height: '20px', marginRight: '10px' }}
             src={icon}
             alt="pic"
           />
           {Text}
-        </div>
+        </ImageContainer>
       </IconButton>
     </div>
   );

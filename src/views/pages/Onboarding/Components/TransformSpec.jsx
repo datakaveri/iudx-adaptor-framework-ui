@@ -17,6 +17,7 @@ import ToastsAction from '../../../../stores/toasts/ToastsAction';
 import TransformSpecInputModel from '../../../../stores/adaptor/models/specInput/transformSpec/TransformSpecInputModel';
 import TransformSpecResponseModel from '../../../../stores/adaptor/models/transformSpecResponse/TransformSpecResponseModel';
 import ParseSpecResponseModel from '../../../../stores/adaptor/models/parseSpecResponse/ParseSpecResponseModel';
+import EditorStyle from '../../../shared/constants/EditorStyle';
 
 const Group = styled.div`
   display: flex;
@@ -37,7 +38,13 @@ const selectOptions = [
   { key: 'jsPath', value: 'jsPath' },
 ];
 
+const LeftMargin = styled.div`
+  margin-left: 80px;
+`;
 
+const Flex = styled.div`
+  display: flex;
+`;
 
 const TransformSpec = ({
   dispatch,
@@ -47,48 +54,48 @@ const TransformSpec = ({
 }) => {
   const [transformSpecData, setTransformSpecData] = useState('');
   const [jsonSpec, setJsonSpec] = useState('');
-  const [jtitle,setJtitle]=useState('');
+  const [jtitle, setJtitle] = useState('');
 
   useEffect(() => {
     setTransformSpecData(transformSpec);
     setJsonSpec(
-      transformSpecInput.jsonPathSpec.length === 0
+      transformSpecInput.jsonPathSpec === null
         ? ''
         : JSON.stringify(transformSpecInput.jsonPathSpec, null, 4),
     );
   }, [transformSpec]);
+
   const handleChange = value => {
-    console.log('Changed');
-    console.log(value.target.value)
-    setJtitle(value.target.value)
+    setJtitle(value.target.value);
   };
 
   return (
     <div>
       <Title>Transform Spec</Title>
       <hr />
-      <div style={{ marginLeft: '80px' }}>
-        <div style={{ display: 'flex' }}>
+      <LeftMargin>
+        <Flex>
           <AdaptorForm
             onSubmit={values => {
               const tfSpec = {
                 type: jtitle,
-                template: jtitle === "jsPath"? values.template:
-                 "",
+                template: jtitle === 'jsPath' ? values.template : '',
                 jsonPathSpec: JSON.parse(jsonSpec),
               };
               const requestBody = {
                 // inputData: parseSpec.result,
-                inputData:    [{
-                  "id": "123",
-                  "k": 1.5,
-                  "time": "2021-04-01T12:00:01+05:30"
-                },
-                {
-                  "id": "4356",
-                  "k": 2.5,
-                  "time": "2021-04-01T12:00:01+05:30"
-                }],
+                inputData: [
+                  {
+                    id: '123',
+                    k: 1.5,
+                    time: '2021-04-01T12:00:01+05:30',
+                  },
+                  {
+                    id: '4356',
+                    k: 2.5,
+                    time: '2021-04-01T12:00:01+05:30',
+                  },
+                ],
                 transformSpec: tfSpec,
               };
               const headers = {
@@ -118,33 +125,30 @@ const TransformSpec = ({
                     name="type"
                     initialValue={transformSpecInput.type}
                   /> */}
-                  <InputLabel>
-                  Type
-                  </InputLabel>
-                  <Select style={{width:"300px"}} onChange={handleChange}>
+                  <InputLabel>Type</InputLabel>
+                  <Select style={{ width: '300px' }} onChange={handleChange}>
                     {selectOptions.map(el => (
-                      <MenuItem key={el.key} value={el.value} >
+                      <MenuItem key={el.key} value={el.value}>
                         {el.value}
                       </MenuItem>
-                    )
-                    )}
+                    ))}
                   </Select>
                 </Group>
 
-                  {jtitle === "jsPath"?
-                  <Group style={{marginTop:"10px"}}>
-                  
-                  <AdaptorInput
-                    inputlabel="Template"
-                    name="template"
-                    placeholder=""
-                    initialValue=" "
-                  />
-                </Group>:""
-
-                  }
+                {jtitle === 'jsPath' ? (
+                  <Group style={{ marginTop: '10px' }}>
+                    <AdaptorInput
+                      inputlabel="Template"
+                      name="template"
+                      placeholder=""
+                      initialValue=" "
+                    />
+                  </Group>
+                ) : (
+                  ''
+                )}
                 <Group>
-                  <InputLabel style={{ marginLeft: '10px',marginTop:"10px" }}>
+                  <InputLabel style={{ marginLeft: '10px', marginTop: '10px' }}>
                     {jtitle}
                   </InputLabel>
                   <Editor
@@ -187,22 +191,11 @@ const TransformSpec = ({
               }
               highlight={value => highlight(value, languages.jsx)}
               padding={20}
-              style={{
-                fontFamily: '"Fira code", "Fira Mono", monospace',
-                fontSize: 12,
-                overflow: 'auto',
-
-                flex: 'display',
-                width: '500px',
-                height: '250px',
-                border: '1px solid',
-                borderColor: '#b7b0b0',
-                borderRadius: '3px',
-              }}
+              style={EditorStyle}
             />
           </Group>
-        </div>
-      </div>
+        </Flex>
+      </LeftMargin>
     </div>
   );
 };

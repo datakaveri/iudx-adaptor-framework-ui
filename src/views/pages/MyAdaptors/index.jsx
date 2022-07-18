@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TextField } from '@mui/material';
+import { CircularProgress, TextField } from '@mui/material';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -11,6 +11,7 @@ import { Line } from '../../shared/components/SpecComponents';
 import ImageButton from '../../shared/components/ImageButton';
 import { selectAdaptors } from '../../../selectors/adaptor/AdaptorSelector';
 import AdaptorAction from '../../../stores/adaptor/AdaptorAction';
+import Loading from '../../shared/components/Loading';
 
 const Page = styled.div`
   align-content: center;
@@ -19,26 +20,55 @@ const Page = styled.div`
   display: flex;
 `;
 
+const Navbar = styled.div`
+  width: 80%;
+`;
+
+const NavbarContent = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Buttons = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const Tab = styled.div`
   margin: 0px;
   width: 25%;
   text-align: start;
 `;
 
+const Splitter = styled.div`
+  width: 50px;
+`;
+
+const TabsBar = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 70%;
+`;
+
 const MyAdaptorsPage = ({ dispatch, adaptors }) => {
   const navigate = useNavigate();
   const [results, setResults] = useState(adaptors);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     dispatch(AdaptorAction.getAllAdaptors());
     setResults(adaptors);
-    console.log(JSON.stringify(results));
   }, [dispatch]);
 
   const callbackAdaptors = () => {
-    console.log('Callback method called!');
     dispatch(AdaptorAction.getAllAdaptors());
   };
+
   const [isSearched, setIsSearched] = useState(false);
   const searchFunction = e => {
     setIsSearched(true);
@@ -55,24 +85,11 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
         <title>Adaptors | IUDX Adaptor Framework</title>
       </Helmet>
 
-      <div style={{ width: '80%' }}>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'start',
-              alignItems: 'center',
-              width: '40%',
-            }}>
+      <Navbar>
+        <NavbarContent>
+          <Buttons>
             <h1>My Adaptors</h1>
-            <div style={{ width: '50px' }} />
+            <Splitter />
             <ImageButton
               Solid="Solid"
               Text="Create New"
@@ -81,9 +98,9 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
               icon="add.png"
               hoverIcon="addGrey.png"
               hoverTextColor="#2D3648"
-              onClicked={() => navigate('/onBoarding')}
+              onClicked={() => navigate('/onboarding')}
             />
-          </div>
+          </Buttons>
           <div>
             <TextField
               variant="outlined"
@@ -95,39 +112,28 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
               }}
             />
           </div>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              width: '70%',
-            }}>
-            <Tab>
-              <b>Name</b>
-            </Tab>
+        </NavbarContent>
 
-            <Tab>
-              <b>Last Used</b>
-            </Tab>
+        <TabsBar>
+          <Tab>
+            <b>Name</b>
+          </Tab>
 
-            <Tab>
-              <b>Logs</b>
-            </Tab>
+          <Tab>
+            <b>Last Used</b>
+          </Tab>
 
-            <Tab>
-              <b>Status</b>
-            </Tab>
-          </div>
-          <div />
-        </div>
+          <Tab>
+            <b>Logs</b>
+          </Tab>
+
+          <Tab>
+            <b>Status</b>
+          </Tab>
+        </TabsBar>
+        <div />
         <Line />
+
         {isSearched
           ? results.map(adaptor => (
               <Adaptor
@@ -135,6 +141,7 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
                 last={adaptor.lastSeen}
                 status={adaptor.status}
                 id={adaptor.id}
+                callbackMethod={callbackAdaptors}
               />
             ))
           : adaptors.map(adaptor => (
@@ -143,9 +150,10 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
                 last={adaptor.lastSeen}
                 status={adaptor.status}
                 id={adaptor.id}
+                callbackMethod={callbackAdaptors}
               />
             ))}
-      </div>
+      </Navbar>
     </Page>
   );
 };

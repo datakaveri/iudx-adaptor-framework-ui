@@ -137,13 +137,14 @@ export default class AdaptorAction {
     };
   }
 
-  static submitJob(jobConfig) {
+  static submitJob(jobConfig, headers) {
     return async dispatch => {
       await ActionUtility.createThunkEffect(
         dispatch,
         AdaptorAction.REQUEST_SUBMIT_JOB,
         AdaptorEffect.submitJob,
         jobConfig,
+        headers,
       );
     };
   }

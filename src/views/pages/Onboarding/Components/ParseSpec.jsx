@@ -17,6 +17,7 @@ import ParseSpecResponseModel from '../../../../stores/adaptor/models/parseSpecR
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
 import ParseSpecInputModel from '../../../../stores/adaptor/models/specInput/parseSpec/ParseSpecInputModel';
 import InputSpecResponseModel from '../../../../stores/adaptor/models/inputSpecResponse/InputSpecResponseModel';
+import EditorStyle from '../../../shared/constants/EditorStyle';
 
 const Group = styled.div`
   display: flex;
@@ -29,6 +30,14 @@ const Group = styled.div`
 const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+const LeftMargin = styled.div`
+  margin-left: 80px;
+`;
+
+const Flex = styled.div`
+  display: flex;
 `;
 
 const ParseSpec = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
@@ -48,8 +57,8 @@ const ParseSpec = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
     <div>
       <Title>Parse Spec</Title>
       <hr />
-      <div style={{ marginLeft: '80px' }}>
-        <div style={{ display: 'flex' }}>
+      <LeftMargin>
+        <Flex>
           <AdaptorForm
             onSubmit={values => {
               const headers = {
@@ -182,22 +191,11 @@ const ParseSpec = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
               }
               highlight={value => highlight(value, languages.jsx)}
               padding={20}
-              style={{
-                fontFamily: '"Fira code", "Fira Mono", monospace',
-                fontSize: 12,
-                overflow: 'auto',
-
-                flex: 'display',
-                width: '500px',
-                height: '250px',
-                border: '1px solid',
-                borderColor: '#b7b0b0',
-                borderRadius: '3px',
-              }}
+              style={EditorStyle}
             />
           </Group>
-        </div>
-      </div>
+        </Flex>
+      </LeftMargin>
     </div>
   );
 };

@@ -24,12 +24,20 @@ const FormWrapper = styled.div`
   flex-direction: column;
 `;
 
+const LeftMargin = styled.div`
+  margin-left: 80px;
+`;
+
+const Flex = styled.div`
+  display: 'flex';
+`;
+
 const FailureRecoverySpec = ({ dispatch, failureRecoverySpecInput }) => (
   <div>
     <Title>Failure Recovery Spec</Title>
     <hr />
-    <div style={{ marginLeft: '80px' }}>
-      <div style={{ display: 'flex' }}>
+    <LeftMargin>
+      <Flex>
         <AdaptorForm
           onSubmit={values => {
             dispatch(
@@ -98,8 +106,8 @@ const FailureRecoverySpec = ({ dispatch, failureRecoverySpecInput }) => (
             </FormWrapper>
           )}
         </AdaptorForm>
-      </div>
-    </div>
+      </Flex>
+    </LeftMargin>
   </div>
 );
 
