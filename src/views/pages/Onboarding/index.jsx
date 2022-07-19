@@ -25,6 +25,7 @@ import FailureRecoverySpec from './Components/FailureRecoverySpec';
 import AdaptorAction from '../../../stores/adaptor/AdaptorAction';
 import EditorStyle from '../../shared/constants/EditorStyle';
 import EditorStyleLarge from '../../shared/constants/EditorStyleLarge';
+import ToastsAction from '../../../stores/toasts/ToastsAction';
 
 const steps = [
   'Meta Spec',
@@ -54,7 +55,6 @@ const Container = styled.div`
   display: flex;
   justify-content: space-around;
   flex-direction: row;
-  margin-left: 80px;
 `;
 
 const Column = styled.div`
@@ -147,11 +147,14 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
 
   const onboardingFunction = () => {
     const headers = {
-      username: 'user',
-      password: 'user-password',
+      username: 'testuser',
+      password: 'testuserpassword',
       'Content-Type': 'application/json',
     };
-    dispatch(AdaptorAction.submitJob, specFile, headers);
+    dispatch(AdaptorAction.submitJob(specFile, headers));
+    dispatch(
+      ToastsAction.add('Adaptor Created Successfully!', 'SUCCESS', 'success'),
+    );
   };
 
   return (

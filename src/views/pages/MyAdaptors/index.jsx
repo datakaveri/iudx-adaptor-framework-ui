@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CircularProgress, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -11,7 +11,6 @@ import { Line } from '../../shared/components/SpecComponents';
 import ImageButton from '../../shared/components/ImageButton';
 import { selectAdaptors } from '../../../selectors/adaptor/AdaptorSelector';
 import AdaptorAction from '../../../stores/adaptor/AdaptorAction';
-import Loading from '../../shared/components/Loading';
 
 const Page = styled.div`
   align-content: center;
@@ -58,7 +57,7 @@ const TabsBar = styled.div`
 const MyAdaptorsPage = ({ dispatch, adaptors }) => {
   const navigate = useNavigate();
   const [results, setResults] = useState(adaptors);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     dispatch(AdaptorAction.getAllAdaptors());

@@ -71,8 +71,13 @@ const ParseSpec = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
                 ...values,
                 trickle: JSON.parse(trickle),
               };
+              const inputData = [];
+              inputSpec.result.map(el => inputData.push(JSON.parse(el)));
               const requestBody = {
-                inputData: inputSpec.result,
+                inputData: {
+                  outerkey: 'outerkeyval',
+                  data: inputData,
+                },
                 parseSpec: spec,
               };
               dispatch(
@@ -149,7 +154,7 @@ const ParseSpec = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
 
                 <Group>
                   <InputLabel style={{ marginLeft: '10px' }}>
-                    JSON Path Spec
+                    Trickle
                   </InputLabel>
                   <Editor
                     disabled={false}

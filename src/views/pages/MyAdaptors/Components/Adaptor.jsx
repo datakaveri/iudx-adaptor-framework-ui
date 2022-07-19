@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -22,9 +22,26 @@ const LabelsRow = styled.div`
   align-items: center;
 `;
 
+const LabelsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 70%;
+`;
+
 const Labels = styled.div`
+  margin-top: 5px;
+  padding: 10px 0px 10px 0px;
   width: 25%;
   text-align: start;
+`;
+
+const GreenLabel = styled.div`
+  margin-top: 5px;
+  padding: 10px 0px 10px 0px;
+  width: 25%;
+  text-align: start;
+  color: green;
 `;
 
 const Splitter = styled.div`
@@ -48,31 +65,23 @@ function Adaptor({ name, last, status, id, dispatch, callbackMethod }) {
 
   return (
     <LabelsRow>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          width: '70%',
-        }}>
-        <p style={{ width: '25%' }}>
+      <LabelsContainer>
+        <Labels>
           <b>{name}</b>
-        </p>
-        <p style={{ width: '25%', textAlign: 'start' }}>
-          {moment(last).format('lll')}
-        </p>
-        <p style={{ width: '25%' }}>
+        </Labels>
+        <Labels>{moment(last).format('lll')}</Labels>
+        <Labels>
           <a
             href={environment.GRAFANA_DASHBOARD_URL.replace('JOBNAME', name)}
             target="_blank"
             rel="noreferrer">
             Open
           </a>
-        </p>
-        <p style={{ color: 'green', width: '25%', textAlign: 'start' }}>
+        </Labels>
+        <GreenLabel>
           <b>{status}</b>
-        </p>
-      </div>
+        </GreenLabel>
+      </LabelsContainer>
 
       {status === 'running' ? (
         <ImageButton
@@ -87,7 +96,7 @@ function Adaptor({ name, last, status, id, dispatch, callbackMethod }) {
             stopAdaptor(id);
           }}
         />
-      ) : status === 'stopped' ? (
+      ) : status === 'stopped' || status === 'cg-failed' ? (
         <Buttons>
           <ImageButton
             Solid=""
@@ -153,7 +162,7 @@ Adaptor.defaultProps = {
   callbackMethod: PropTypes.func,
 };
 
-const mapStateToProps = state => ({});
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = dispatch => ({
   dispatch,

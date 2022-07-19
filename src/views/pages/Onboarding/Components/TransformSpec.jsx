@@ -58,8 +58,10 @@ const TransformSpec = ({
 
   useEffect(() => {
     setTransformSpecData(transformSpec);
+    console.log('TRansform Spec');
+    console.log(transformSpecInput);
     setJsonSpec(
-      transformSpecInput.jsonPathSpec === null
+      transformSpecInput.jsonPathSpec.length === 0
         ? ''
         : JSON.stringify(transformSpecInput.jsonPathSpec, null, 4),
     );
@@ -83,19 +85,12 @@ const TransformSpec = ({
                 jsonPathSpec: JSON.parse(jsonSpec),
               };
               const requestBody = {
-                // inputData: parseSpec.result,
-                inputData: [
-                  {
-                    id: '123',
-                    k: 1.5,
-                    time: '2021-04-01T12:00:01+05:30',
-                  },
-                  {
-                    id: '4356',
-                    k: 2.5,
-                    time: '2021-04-01T12:00:01+05:30',
-                  },
-                ],
+                inputData: parseSpec.result,
+                // inputData: {
+                //   deviceId: 'abc-123',
+                //   k1: 'a',
+                //   time: '2021-04-01T12:00:01+05:30',
+                // },
                 transformSpec: tfSpec,
               };
               const headers = {
@@ -106,11 +101,8 @@ const TransformSpec = ({
               dispatch(
                 ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
               );
-              dispatch(
-                AdaptorAction.saveTransformSpec(
-                  new TransformSpecInputModel(requestBody),
-                ),
-              );
+              console.log();
+              dispatch(AdaptorAction.saveTransformSpec(tfSpec));
               dispatch(
                 AdaptorAction.requestTransformSpec(requestBody, headers),
               );
@@ -126,7 +118,10 @@ const TransformSpec = ({
                     initialValue={transformSpecInput.type}
                   /> */}
                   <InputLabel>Type</InputLabel>
-                  <Select style={{ width: '300px' }} onChange={handleChange}>
+                  <Select
+                    style={{ width: '300px' }}
+                    defaultValue={transformSpecInput.type}
+                    onChange={handleChange}>
                     {selectOptions.map(el => (
                       <MenuItem key={el.key} value={el.value}>
                         {el.value}
@@ -135,13 +130,13 @@ const TransformSpec = ({
                   </Select>
                 </Group>
 
-                {jtitle === 'jsPath' ? (
+                {jtitle === 'jsPath' || transformSpecInput.type === 'jsPath' ? (
                   <Group style={{ marginTop: '10px' }}>
                     <AdaptorInput
                       inputlabel="Template"
                       name="template"
                       placeholder=""
-                      initialValue=" "
+                      initialValue={transformSpecInput.template}
                     />
                   </Group>
                 ) : (

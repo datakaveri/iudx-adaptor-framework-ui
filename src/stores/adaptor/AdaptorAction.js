@@ -176,7 +176,7 @@ export default class AdaptorAction {
       await ActionUtility.createThunkEffect(
         dispatch,
         AdaptorAction.REQUEST_DELETE_JOB,
-        AdaptorEffect.startJob,
+        AdaptorEffect.deleteJob,
         jobName,
       );
     };

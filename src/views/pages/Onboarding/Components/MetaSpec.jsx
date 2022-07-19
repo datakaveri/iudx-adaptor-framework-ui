@@ -41,10 +41,10 @@ const MetaSpec2 = ({ dispatch, metaSpec }) => (
         <AdaptorForm
           onSubmit={values => {
             dispatch(
-              ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
+              AdaptorAction.saveMetaSpec(new MetaSpecInputModel(values)),
             );
             dispatch(
-              AdaptorAction.saveMetaSpec(new MetaSpecInputModel(values)),
+              ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
             );
           }}>
           {() => (
