@@ -44,7 +44,8 @@ const FailureRecoverySpec = ({ dispatch, failureRecoverySpecInput }) => (
               ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
             );
             dispatch(AdaptorAction.saveFailureRecoverySpec(values));
-          }}>
+          }}
+        >
           {() => (
             <FormWrapper>
               <Group>
