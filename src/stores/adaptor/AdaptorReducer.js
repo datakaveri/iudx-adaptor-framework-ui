@@ -13,7 +13,9 @@ export default class AdaptorReducer extends BaseReducer {
     inputSpec: {},
     parseSpec: {},
     transformSpec: {},
+    onboardingResponse: {},
     error: false,
+    adaptors: [],
   };
 
   [AdaptorAction.REQUEST_RUN_INPUT_SPEC_FINISHED](state, action) {
@@ -34,6 +36,13 @@ export default class AdaptorReducer extends BaseReducer {
     return {
       ...state,
       transformSpec: action.payload,
+    };
+  }
+
+  [AdaptorAction.REQUEST_ONBOARDING_FINISHED](state, action) {
+    return {
+      ...state,
+      onboardingResponse: action.payload,
     };
   }
 
@@ -83,6 +92,13 @@ export default class AdaptorReducer extends BaseReducer {
     return {
       ...state,
       publishSpecInput: action.payload,
+    };
+  }
+
+  [AdaptorAction.REQUEST_GET_ADAPTORS_FINISHED](state, action) {
+    return {
+      ...state,
+      adaptors: action.payload,
     };
   }
 }

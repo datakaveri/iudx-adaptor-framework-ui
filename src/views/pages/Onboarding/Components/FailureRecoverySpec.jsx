@@ -8,6 +8,7 @@ import AdaptorForm from '../../../shared/components/AdaptorForm';
 import AdaptorInput from '../../../shared/components/AdaptorInput';
 
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
+import ToastsAction from '../../../../stores/toasts/ToastsAction';
 import FailureRecoverySpecInputModel from '../../../../stores/adaptor/models/specInput/failureRecoverySpec/FailureRecoverySpecInputModel';
 
 const Group = styled.div`
@@ -23,14 +24,25 @@ const FormWrapper = styled.div`
   flex-direction: column;
 `;
 
-const FailureRecoverySpec2 = ({ dispatch, failureRecoverySpecInput }) => (
+const LeftMargin = styled.div`
+  margin-left: 80px;
+`;
+
+const Flex = styled.div`
+  display: 'flex';
+`;
+
+const FailureRecoverySpec = ({ dispatch, failureRecoverySpecInput }) => (
   <div>
     <Title>Failure Recovery Spec</Title>
     <hr />
-    <div style={{ marginLeft: '80px' }}>
-      <div style={{ display: 'flex' }}>
+    <LeftMargin>
+      <Flex>
         <AdaptorForm
           onSubmit={values => {
+            dispatch(
+              ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
+            );
             dispatch(AdaptorAction.saveFailureRecoverySpec(values));
           }}>
           {() => (
@@ -94,12 +106,12 @@ const FailureRecoverySpec2 = ({ dispatch, failureRecoverySpecInput }) => (
             </FormWrapper>
           )}
         </AdaptorForm>
-      </div>
-    </div>
+      </Flex>
+    </LeftMargin>
   </div>
 );
 
-FailureRecoverySpec2.propTypes = {
+FailureRecoverySpec.propTypes = {
   dispatch: PropTypes.func.isRequired,
   failureRecoverySpecInput: PropTypes.instanceOf(FailureRecoverySpecInputModel)
     .isRequired,
@@ -118,4 +130,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(FailureRecoverySpec2);
+)(FailureRecoverySpec);

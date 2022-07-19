@@ -17,6 +17,7 @@ import ParseSpecResponseModel from '../../../../stores/adaptor/models/parseSpecR
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
 import ParseSpecInputModel from '../../../../stores/adaptor/models/specInput/parseSpec/ParseSpecInputModel';
 import InputSpecResponseModel from '../../../../stores/adaptor/models/inputSpecResponse/InputSpecResponseModel';
+import EditorStyle from '../../../shared/constants/EditorStyle';
 
 const Group = styled.div`
   display: flex;
@@ -31,7 +32,15 @@ const FormWrapper = styled.div`
   flex-direction: column;
 `;
 
-const ParseSpec2 = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
+const LeftMargin = styled.div`
+  margin-left: 80px;
+`;
+
+const Flex = styled.div`
+  display: flex;
+`;
+
+const ParseSpec = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
   const [parseSpecData, setParseSpecData] = useState('');
   const [trickle, setTrickle] = useState('');
 
@@ -48,8 +57,8 @@ const ParseSpec2 = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
     <div>
       <Title>Parse Spec</Title>
       <hr />
-      <div style={{ marginLeft: '80px' }}>
-        <div style={{ display: 'flex' }}>
+      <LeftMargin>
+        <Flex>
           <AdaptorForm
             onSubmit={values => {
               const headers = {
@@ -62,8 +71,13 @@ const ParseSpec2 = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
                 ...values,
                 trickle: JSON.parse(trickle),
               };
+              const inputData = [];
+              inputSpec.result.map(el => inputData.push(JSON.parse(el)));
               const requestBody = {
-                inputData: inputSpec.result,
+                inputData: {
+                  outerkey: 'outerkeyval',
+                  data: inputData,
+                },
                 parseSpec: spec,
               };
               dispatch(
@@ -140,7 +154,7 @@ const ParseSpec2 = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
 
                 <Group>
                   <InputLabel style={{ marginLeft: '10px' }}>
-                    JSON Path Spec
+                    Trickle
                   </InputLabel>
                   <Editor
                     disabled={false}
@@ -182,27 +196,16 @@ const ParseSpec2 = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
               }
               highlight={value => highlight(value, languages.jsx)}
               padding={20}
-              style={{
-                fontFamily: '"Fira code", "Fira Mono", monospace',
-                fontSize: 12,
-                overflow: 'auto',
-
-                flex: 'display',
-                width: '500px',
-                height: '250px',
-                border: '1px solid',
-                borderColor: '#b7b0b0',
-                borderRadius: '3px',
-              }}
+              style={EditorStyle}
             />
           </Group>
-        </div>
-      </div>
+        </Flex>
+      </LeftMargin>
     </div>
   );
 };
 
-ParseSpec2.propTypes = {
+ParseSpec.propTypes = {
   dispatch: PropTypes.func.isRequired,
   parseSpec: PropTypes.instanceOf(ParseSpecResponseModel).isRequired,
   parseSpecInput: PropTypes.instanceOf(ParseSpecInputModel).isRequired,
@@ -219,4 +222,4 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ParseSpec2);
+export default connect(mapStateToProps, mapDispatchToProps)(ParseSpec);

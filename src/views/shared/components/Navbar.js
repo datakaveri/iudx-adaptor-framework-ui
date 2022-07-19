@@ -1,20 +1,18 @@
 import React from 'react';
-import { TextField, Button } from '@mui/material';
-import { fontFamily } from '@mui/system';
 import {
+  Button,
   AppBar,
   Toolbar,
   CssBaseline,
   Typography,
-  makeStyles,
   useTheme,
   useMediaQuery,
-} from '@material-ui/core';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { NavLink } from 'react-router-dom';
 import DrawerComponent from './Drawer';
 
 const logo = require('./iudx.jpg');
-
 
 const useStyles = makeStyles(theme => ({
   navlinks: {
@@ -26,7 +24,6 @@ const useStyles = makeStyles(theme => ({
     cursor: 'pointer',
   },
   link: {
-    fontFamily: '"Fira code", "Fira Mono", monospace',
     textDecoration: 'none',
     color: 'grey',
     fontSize: '15px',
@@ -35,24 +32,17 @@ const useStyles = makeStyles(theme => ({
       color: 'black',
       borderBottom: '1px solid black',
     },
-    '&.active':{
-      fontSize:'17px',
-      color:'black',
-      fontFamily: '"Fira code", "Fira Mono", monospace'
-    }
+    '&.active': {
+      color: 'black',
+    },
   },
-
 }));
 
-
-
 function Navbar() {
-    
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   return (
-    
     <AppBar position="static" color="grey" elevation={0.3}>
       <CssBaseline />
       <Toolbar>
@@ -65,10 +55,10 @@ function Navbar() {
             <NavLink to="/" className={classes.link}>
               Home
             </NavLink>
-            <NavLink to="/onboarding"  className={classes.link}>
+            <NavLink to="/onboarding" className={classes.link}>
               Onboarding
             </NavLink>
-            <NavLink to="/myadaptors"  className={classes.link}>
+            <NavLink to="/myadaptors" className={classes.link}>
               My Adaptors
             </NavLink>
             <Button variant="outlined" size="small">

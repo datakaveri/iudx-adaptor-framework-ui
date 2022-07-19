@@ -1,3 +1,15 @@
 import { createSelector } from 'reselect';
 
-export default class AdaptorSelector {}
+export class AdaptorSelector {
+  static selectAdaptors(adaptors) {
+    if (Array.isArray(adaptors) && adaptors.length) {
+      return adaptors;
+    }
+    return [];
+  }
+}
+
+export const selectAdaptors = createSelector(
+  state => state.adaptorReducer.adaptors,
+  AdaptorSelector.selectAdaptors,
+);

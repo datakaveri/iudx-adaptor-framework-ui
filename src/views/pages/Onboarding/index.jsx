@@ -9,18 +9,23 @@ import StepButton from '@mui/material/StepButton';
 import Typography from '@mui/material/Typography';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
 
 import { Title } from '../../shared/components/SpecComponents';
-import PublishSpec2 from './Components/PublishSpec2';
-import InputSpec2 from './Components/InputSpec2';
-import ParseSpec2 from './Components/ParseSpec2';
-import MetaSpec2 from './Components/MetaSpec2';
-import DeduplicationSpec2 from './Components/DeduplicationSpec2';
-import TransformSpec2 from './Components/TransformSpec2';
-import FailureRecoverySpec2 from './Components/FailureRecoverySpec2';
+import PublishSpec from './Components/PublishSpec';
+import InputSpec from './Components/InputSpec';
+import ParseSpec from './Components/ParseSpec';
+import MetaSpec2 from './Components/MetaSpec';
+import DeduplicationSpec from './Components/DeduplicationSpec';
+import TransformSpec from './Components/TransformSpec';
+import FailureRecoverySpec from './Components/FailureRecoverySpec';
+import AdaptorAction from '../../../stores/adaptor/AdaptorAction';
+import EditorStyle from '../../shared/constants/EditorStyle';
+import EditorStyleLarge from '../../shared/constants/EditorStyleLarge';
+import ToastsAction from '../../../stores/toasts/ToastsAction';
 
 const steps = [
   'Meta Spec',
@@ -32,7 +37,39 @@ const steps = [
   'Publish Spec',
 ];
 
-function OnboardingPage({ adaptorReducer }) {
+const Page = styled.div`
+  margin-bottom: 20px;
+  margin-top: 20px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Header = styled.div`
+  width: 80%;
+`;
+
+const Container = styled.div`
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+`;
+
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Center = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 3%;
+`;
+
+function OnboardingPage({ dispatch, adaptorReducer }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
 
@@ -75,20 +112,19 @@ function OnboardingPage({ adaptorReducer }) {
   function getStepContent(step) {
     switch (step) {
       case 0:
-        // return <MetaSpec />;
         return <MetaSpec2 />;
       case 1:
-        return <InputSpec2 />;
+        return <InputSpec />;
       case 2:
-        return <ParseSpec2 />;
+        return <ParseSpec />;
       case 3:
-        return <DeduplicationSpec2 />;
+        return <DeduplicationSpec />;
       case 4:
-        return <TransformSpec2 />;
+        return <TransformSpec />;
       case 5:
-        return <FailureRecoverySpec2 />;
+        return <FailureRecoverySpec />;
       case 6:
-        return <PublishSpec2 />;
+        return <PublishSpec />;
 
       default:
         return '';
@@ -109,18 +145,21 @@ function OnboardingPage({ adaptorReducer }) {
     publishSpec: adaptorReducer.publishSpecInput,
   };
 
+  const onboardingFunction = () => {
+    const headers = {
+      username: 'testuser',
+      password: 'testuserpassword',
+      'Content-Type': 'application/json',
+    };
+    dispatch(AdaptorAction.submitJob(specFile, headers));
+    dispatch(
+      ToastsAction.add('Adaptor Created Successfully!', 'SUCCESS', 'success'),
+    );
+  };
+
   return (
-    <div
-      style={{
-        marginBottom: '20px',
-        marginTop: '20px',
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}>
-      <div style={{ width: '80%' }}>
+    <Page>
+      <Header>
         <Stepper activeStep={activeStep}>
           {steps.map((label, index) => {
             const stepProps = {};
@@ -135,7 +174,6 @@ function OnboardingPage({ adaptorReducer }) {
             }
             return (
               <Step key={label} {...stepProps}>
-                {/* <StepLabel {...labelProps}>{label}</StepLabel> */}
                 <StepButton {...labelProps} onClick={handleStep(index)}>
                   {label}
                 </StepButton>
@@ -148,15 +186,9 @@ function OnboardingPage({ adaptorReducer }) {
 
         {activeStep === steps.length ? (
           <React.Fragment>
-            <Title>Spec Outline</Title>
-            <hr />
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                marginLeft: '80px',
-              }}>
-              <div style={{ display: 'flex' }}>
+            <Container>
+              <Column>
+                <Title>Spec Outline</Title>
                 <Editor
                   disabled
                   value={
@@ -166,21 +198,11 @@ function OnboardingPage({ adaptorReducer }) {
                   }
                   highlight={value => highlight(value, languages.jsx)}
                   padding={20}
-                  style={{
-                    fontFamily: '"Fira code", "Fira Mono", monospace',
-                    fontSize: 12,
-                    overflow: 'auto',
-
-                    flex: 'display',
-                    width: '500px',
-                    height: '250px',
-                    border: '1px solid',
-                    borderColor: 'black',
-                    borderRadius: '3px',
-                  }}
+                  style={EditorStyleLarge}
                 />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
+              </Column>
+              <Column>
+                <Title>Input Spec</Title>
                 <Editor
                   disabled
                   value={
@@ -190,43 +212,25 @@ function OnboardingPage({ adaptorReducer }) {
                   }
                   highlight={value => highlight(value, languages.jsx)}
                   padding={20}
-                  style={{
-                    fontFamily: '"Fira code", "Fira Mono", monospace',
-                    fontSize: 12,
-                    overflow: 'auto',
-
-                    flex: 'display',
-                    width: '500px',
-                    height: '250px',
-                    border: '1px solid',
-                    borderColor: 'black',
-                    borderRadius: '3px',
-                  }}
+                  style={EditorStyle}
                 />
+                <Title>Transform Spec Output</Title>
                 <Editor
                   disabled
                   value={
                     adaptorReducer.message === ''
                       ? ''
-                      : JSON.stringify(adaptorReducer.inputSpecInput, null, 4)
+                      : JSON.stringify(adaptorReducer.transformSpec, null, 4)
                   }
                   highlight={value => highlight(value, languages.jsx)}
                   padding={20}
-                  style={{
-                    fontFamily: '"Fira code", "Fira Mono", monospace',
-                    fontSize: 12,
-                    overflow: 'auto',
-
-                    flex: 'display',
-                    width: '500px',
-                    height: '250px',
-                    border: '1px solid',
-                    borderColor: 'black',
-                    borderRadius: '3px',
-                  }}
+                  style={EditorStyle}
                 />
-              </div>
-            </div>
+              </Column>
+            </Container>
+            <Center>
+              <Button onClick={onboardingFunction}>Submit Spec Outline</Button>
+            </Center>
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Box sx={{ flex: '1 1 auto' }} />
               <Button onClick={handleReset}>Reset</Button>
@@ -253,8 +257,8 @@ function OnboardingPage({ adaptorReducer }) {
             </Button>
           </Box>
         )}
-      </div>
-    </div>
+      </Header>
+    </Page>
   );
 }
 

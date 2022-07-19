@@ -1,11 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TextField } from '@mui/material';
+import styled from 'styled-components';
 import { Type } from './SpecComponents';
+
+const TextBox = styled.div`
+  width: 320px;
+`;
 
 export default function InputBox({ name, id }) {
   return (
-    <div style={{ width: '320px' }} className="textbox">
+    <TextBox>
       <Type>{name}</Type>
       <TextField
         style={{ marginLeft: '80px' }}
@@ -14,7 +19,7 @@ export default function InputBox({ name, id }) {
         size="small"
         fullWidth
       />
-    </div>
+    </TextBox>
   );
 }
 

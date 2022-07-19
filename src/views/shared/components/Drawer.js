@@ -1,59 +1,64 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
-    Divider,
+  Divider,
   Drawer,
   IconButton,
   List,
   ListItem,
   ListItemText,
-  makeStyles,
-} from "@material-ui/core";
-import { Link } from "react-router-dom";
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Link } from 'react-router-dom';
 
-import MenuIcon from "@material-ui/icons/Menu";
+import MenuIcon from '@mui/icons-material/Menu';
 
-const useStyles = makeStyles(()=>({
-    link:{
-        textDecoration:"none",
-        color: "white",
-        fontSize: "5px",
-    },
-    icon:{
-        color: "white"
-    }
+const useStyles = makeStyles(() => ({
+  link: {
+    textDecoration: 'none',
+    color: 'white',
+    fontSize: '5px',
+  },
+  icon: {
+    color: 'white',
+  },
 }));
 
 function DrawerComponent() {
-    const classes = useStyles();
+  const classes = useStyles();
   const [openDrawer, setOpenDrawer] = useState(false);
   return (
     <>
-      <Drawer
-        open={openDrawer}
-        onClose={() => setOpenDrawer(false)}
-      >
+      <Drawer open={openDrawer} onClose={() => setOpenDrawer(false)}>
         <List>
-        <ListItem onClick={() => setOpenDrawer(false)}>
-            <ListItemText>
-              <Link to="/" className={classes.link}>Home</Link>
-            </ListItemText>
-          </ListItem>
-          <Divider/>
           <ListItem onClick={() => setOpenDrawer(false)}>
             <ListItemText>
-              <Link to="/onboarding" className={classes.link}>Onboarding</Link>
+              <Link to="/" className={classes.link}>
+                Home
+              </Link>
             </ListItemText>
           </ListItem>
-          <Divider/>
+          <Divider />
           <ListItem onClick={() => setOpenDrawer(false)}>
             <ListItemText>
-              <Link to="/adaptors" className={classes.link}>My Adaptors</Link>
+              <Link to="/onboarding" className={classes.link}>
+                Onboarding
+              </Link>
             </ListItemText>
           </ListItem>
-          <Divider/>
+          <Divider />
+          <ListItem onClick={() => setOpenDrawer(false)}>
+            <ListItemText>
+              <Link to="/adaptors" className={classes.link}>
+                My Adaptors
+              </Link>
+            </ListItemText>
+          </ListItem>
+          <Divider />
         </List>
       </Drawer>
-      <IconButton onClick={() => setOpenDrawer(!openDrawer)}className={classes.icon}>
+      <IconButton
+        onClick={() => setOpenDrawer(!openDrawer)}
+        className={classes.icon}>
         <MenuIcon />
       </IconButton>
     </>

@@ -8,29 +8,27 @@ import Loading from '../shared/components/Loading';
 import OnboardingPage from '../pages/Onboarding';
 import Home from '../pages/Home';
 import Navbar from '../shared/components/Navbar';
-import MyAdaptersPage from '../pages/MyAdapters';
+import MyAdaptorsPage from '../pages/MyAdaptors';
 
 const Router = ({ dispatch }) => {
   const { promiseInProgress } = usePromiseTracker();
   const [loading, setLoading] = React.useState(false);
 
   return (
-     
-      <div>
-        <Navbar/>
+    <div>
+      <Navbar />
       <main>
-      {promiseInProgress && <Loading loading={promiseInProgress} />}
-      {loading && <Loading loading={loading} />}
-      {!loading && (
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/onboarding" element={<OnboardingPage />} />
-          <Route path="/myadaptors" element={<MyAdaptersPage />} />
-        </Routes>
-      )}
-    </main>
+        {promiseInProgress && <Loading loading={promiseInProgress} />}
+        {loading && <Loading loading={loading} />}
+        {!loading && (
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/onboarding" element={<OnboardingPage />} />
+            <Route path="/myadaptors" element={<MyAdaptorsPage />} />
+          </Routes>
+        )}
+      </main>
     </div>
-    
   );
 };
 
