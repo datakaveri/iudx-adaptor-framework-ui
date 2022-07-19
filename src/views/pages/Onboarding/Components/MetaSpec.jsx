@@ -25,19 +25,26 @@ const FormWrapper = styled.div`
   flex-direction: column;
 `;
 
+const LeftMargin = styled.div`
+  margin-left: 80px;
+`;
+
+const Flex = styled.div`
+  display: 'flex';
+`;
 const MetaSpec2 = ({ dispatch, metaSpec }) => (
   <div>
     <Title>Meta Spec</Title>
     <hr />
-    <div style={{ marginLeft: '80px' }}>
-      <div style={{ display: 'flex' }}>
+    <LeftMargin>
+      <Flex>
         <AdaptorForm
           onSubmit={values => {
             dispatch(
-              ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
+              AdaptorAction.saveMetaSpec(new MetaSpecInputModel(values)),
             );
             dispatch(
-              AdaptorAction.saveMetaSpec(new MetaSpecInputModel(values)),
+              ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
             );
           }}>
           {() => (
@@ -63,8 +70,8 @@ const MetaSpec2 = ({ dispatch, metaSpec }) => (
             </FormWrapper>
           )}
         </AdaptorForm>
-      </div>
-    </div>
+      </Flex>
+    </LeftMargin>
   </div>
 );
 

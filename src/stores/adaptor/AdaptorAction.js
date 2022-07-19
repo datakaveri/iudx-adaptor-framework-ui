@@ -137,13 +137,14 @@ export default class AdaptorAction {
     };
   }
 
-  static submitJob(jobConfig) {
+  static submitJob(jobConfig, headers) {
     return async dispatch => {
       await ActionUtility.createThunkEffect(
         dispatch,
         AdaptorAction.REQUEST_SUBMIT_JOB,
         AdaptorEffect.submitJob,
         jobConfig,
+        headers,
       );
     };
   }
@@ -164,7 +165,7 @@ export default class AdaptorAction {
       await ActionUtility.createThunkEffect(
         dispatch,
         AdaptorAction.REQUEST_STOP_JOB,
-        AdaptorEffect.startJob,
+        AdaptorEffect.stopJob,
         jobName,
       );
     };
@@ -175,7 +176,7 @@ export default class AdaptorAction {
       await ActionUtility.createThunkEffect(
         dispatch,
         AdaptorAction.REQUEST_DELETE_JOB,
-        AdaptorEffect.startJob,
+        AdaptorEffect.deleteJob,
         jobName,
       );
     };

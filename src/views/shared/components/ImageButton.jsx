@@ -11,6 +11,7 @@ export default function ImageButton({
   hoverIcon,
   hoverColor,
   hoverTextColor,
+  onClicked,
 }) {
   const IconButton = styled.button`
     background-color: ${props =>
@@ -19,7 +20,6 @@ export default function ImageButton({
     font-weight: 700;
     width: 140px;
     border-radius: 5px;
-    font-family: 'Inter';
     border-color: ${props => props.color};
     height: 36px;
     border: 2px solid;
@@ -39,27 +39,25 @@ export default function ImageButton({
     }
   `;
 
+  const ImageContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: start;
+  `;
+
   return (
-    <IconButton
-      disabled={Enabled}
-      solid={Solid}
-      color={color}
-      onClick={() => console.log('CLICKED')}
-      type="button">
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'start',
-        }}>
-        <img
-          style={{ width: '20px', height: '20px', marginRight: '10px' }}
-          src={icon}
-          alt="pic"
-        />
-        {Text}
-      </div>
-    </IconButton>
+    <div role="button" tabIndex={0} onKeyDown={() => {}} onClick={onClicked}>
+      <IconButton disabled={Enabled} solid={Solid} color={color} type="button">
+        <ImageContainer>
+          <img
+            style={{ width: '20px', height: '20px', marginRight: '10px' }}
+            src={icon}
+            alt="pic"
+          />
+          {Text}
+        </ImageContainer>
+      </IconButton>
+    </div>
   );
 }
 
@@ -73,6 +71,7 @@ ImageButton.propTypes = {
   hoverIcon: PropTypes.string,
   hoverColor: PropTypes.string,
   hoverTextColor: PropTypes.string,
+  onClicked: PropTypes.func,
 };
 
 ImageButton.defaultProps = {
@@ -85,4 +84,5 @@ ImageButton.defaultProps = {
   hoverIcon: PropTypes.string,
   hoverColor: PropTypes.string,
   hoverTextColor: PropTypes.string,
+  onClicked: PropTypes.func,
 };

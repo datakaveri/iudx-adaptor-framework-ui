@@ -68,7 +68,7 @@ const AdaptorInput = props => {
                 {props.inputlabel}
               </InputLabel>
               <Switch
-                checked={props.scheduleJob}
+                checked={props.initialValue}
                 onChange={(evt, val) => props.onChange(val)}
               />
             </SwitchDiv>

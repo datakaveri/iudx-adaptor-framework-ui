@@ -1,5 +1,4 @@
 import { BaseModel } from 'sjs-base-model';
-import ResultModel from './ResultModel';
 
 // const json = {
 //   success: true,

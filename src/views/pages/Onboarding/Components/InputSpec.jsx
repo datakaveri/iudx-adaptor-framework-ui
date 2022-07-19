@@ -21,6 +21,7 @@ import InputSpecResponseModel from '../../../../stores/adaptor/models/inputSpecR
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
 import ToastsAction from '../../../../stores/toasts/ToastsAction';
 import InputSpecInputModel from '../../../../stores/adaptor/models/specInput/inputSpec/InputSpecInputModel';
+import EditorStyle from '../../../shared/constants/EditorStyle';
 
 require('prismjs/components/prism-jsx');
 
@@ -37,8 +38,16 @@ const FormWrapper = styled.div`
   flex-direction: column;
 `;
 
-const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
-  const [scheduleJob, setScheduleJob] = useState();
+const LeftMargin = styled.div`
+  margin-left: 80px;
+`;
+
+const Flex = styled.div`
+  display: flex;
+`;
+
+const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
+  const [scheduleJob, setScheduleJob] = useState(inputSpecInput.boundedJob);
   const [inputSpecData, setInputSpecData] = useState('');
   const [bypassExecution, setBypassExecution] = React.useState(false);
 
@@ -52,8 +61,8 @@ const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
     <div>
       <Title>Input Spec</Title>
       <hr />
-      <div style={{ marginLeft: '80px' }}>
-        <div style={{ display: 'flex' }}>
+      <LeftMargin>
+        <Flex>
           <AdaptorForm
             onSubmit={values => {
               const headers = {
@@ -82,10 +91,15 @@ const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
               dispatch(
                 ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
               );
-              console.log('Input Spec');
-              console.table(requestBody);
-              dispatch(AdaptorAction.saveInputSpec(requestBody));
-              dispatch(AdaptorAction.requestInputSpec(requestBody, headers));
+              if (!bypassExecution) {
+                dispatch(AdaptorAction.requestInputSpec(requestBody, headers));
+              }
+              dispatch(
+                AdaptorAction.saveInputSpec(
+                  new InputSpecInputModel(requestBody.inputSpec),
+                ),
+                console.log(scheduleJob),
+              );
             }}>
             {() => (
               <FormWrapper>
@@ -101,7 +115,7 @@ const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
                     ]}
                     name="type"
                     placeholder="type"
-                    initialValue={inputSpecInput.inputSpec.type}
+                    initialValue={inputSpecInput.type}
                   />
                 </Group>
                 <Group>
@@ -126,13 +140,20 @@ const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
                   />
                 </Group>
                 <Group>
-                  <AdaptorInput
-                    inputlabel="Scheduled Job"
-                    inputtype="switch"
-                    initialValue={inputSpecInput.boundedJob}
-                    checked={scheduleJob}
-                    onChange={setScheduleJob}
-                  />
+                  <SwitchDiv>
+                    <InputLabel>Schedule Job</InputLabel>
+                    <Switch
+                      initialValue={inputSpecInput.boundedJob}
+                      checked={scheduleJob}
+                      onChange={() => {
+                        setScheduleJob(
+                          inputSpecInput.boundedJob === 'true'
+                            ? scheduleJob
+                            : !scheduleJob,
+                        );
+                      }}
+                    />
+                  </SwitchDiv>
                 </Group>
 
                 {scheduleJob ? (
@@ -141,12 +162,15 @@ const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
                     <hr />
                     <FormWrapper>
                       <Group>
-                        ~
                         <AdaptorInput
                           inputlabel="URL"
                           name="minioUrl"
                           placeholder="Minio URL"
-                          initialValue={inputSpecInput.minioConfig.url}
+                          initialValue={
+                            inputSpecInput.minioConfig
+                              ? inputSpecInput.minioConfig.url
+                              : ''
+                          }
                         />
                       </Group>
                       <Group>
@@ -154,7 +178,11 @@ const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
                           inputlabel="Bucket"
                           name="minioBucket"
                           placeholder="Minio Bucket"
-                          initialValue={inputSpecInput.minioConfig.bucket}
+                          initialValue={
+                            inputSpecInput.minioConfig
+                              ? inputSpecInput.minioConfig.bucket
+                              : ''
+                          }
                         />
                       </Group>
                       <Group>
@@ -162,7 +190,11 @@ const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
                           inputlabel="State Name"
                           name="minioStateName"
                           placeholder="Minio State Name"
-                          initialValue={inputSpecInput.minioConfig.stateName}
+                          initialValue={
+                            inputSpecInput.minioConfig
+                              ? inputSpecInput.minioConfig.stateName
+                              : ''
+                          }
                         />
                       </Group>
                       <Group>
@@ -170,7 +202,11 @@ const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
                           inputlabel="Access Key"
                           name="minioAccessKey"
                           placeholder="Minio Access Key"
-                          initialValue={inputSpecInput.minioConfig.accessKey}
+                          initialValue={
+                            inputSpecInput.minioConfig
+                              ? inputSpecInput.minioConfig.accessKey
+                              : ''
+                          }
                         />
                       </Group>
                       <Group>
@@ -178,13 +214,17 @@ const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
                           inputlabel="Secret Key"
                           name="minioSecretKey"
                           placeholder="Minio Secret Key"
-                          initialValue={inputSpecInput.minioConfig.secretKey}
+                          initialValue={
+                            inputSpecInput.minioConfig
+                              ? inputSpecInput.minioConfig.secretKey
+                              : ''
+                          }
                         />
                       </Group>
                     </FormWrapper>
                   </div>
                 ) : (
-                  <Group>
+                  <Group style={{ marginTop: '10px' }}>
                     <AdaptorInput
                       inputlabel="Polling Interval"
                       name="pollingInterval"
@@ -195,7 +235,11 @@ const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
                 )}
 
                 <Group style={{ marginTop: '10px', marginBottom: '10px' }}>
-                  <Button type="submit">Run and Save</Button>
+                  {!bypassExecution ? (
+                    <Button type="submit">Run and Save</Button>
+                  ) : (
+                    <Button type="submit">Run</Button>
+                  )}
                 </Group>
               </FormWrapper>
             )}
@@ -210,37 +254,31 @@ const InputSpec2 = ({ dispatch, inputSpec, inputSpecInput }) => {
                 }}
               />
             </SwitchDiv>
-
-            <Editor
-              disabled={!bypassExecution}
-              value={
-                inputSpecData.message === ''
-                  ? ''
-                  : JSON.stringify(inputSpecData, null, 4)
-              }
-              highlight={value => highlight(value, languages.jsx)}
-              padding={20}
-              style={{
-                fontFamily: '"Fira code", "Fira Mono", monospace',
-                fontSize: 12,
-                overflow: 'auto',
-
-                flex: 'display',
-                width: '500px',
-                height: '250px',
-                border: '1px solid',
-                borderColor: bypassExecution ? 'black' : '#b7b0b0',
-                borderRadius: '3px',
-              }}
-            />
+            {!bypassExecution ? (
+              <Editor
+                disabled={bypassExecution}
+                value={
+                  inputSpecData.message === ''
+                    ? ''
+                    : JSON.stringify(inputSpecData, null, 4)
+                }
+                highlight={value => highlight(value, languages.jsx)}
+                padding={20}
+                style={EditorStyle}
+              />
+            ) : (
+              <div>
+                <br />
+              </div>
+            )}
           </Group>
-        </div>
-      </div>
+        </Flex>
+      </LeftMargin>
     </div>
   );
 };
 
-InputSpec2.propTypes = {
+InputSpec.propTypes = {
   dispatch: PropTypes.func.isRequired,
   inputSpec: PropTypes.instanceOf(InputSpecResponseModel).isRequired,
   inputSpecInput: PropTypes.instanceOf(InputSpecInputModel).isRequired,
@@ -255,4 +293,4 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(InputSpec2);
+export default connect(mapStateToProps, mapDispatchToProps)(InputSpec);

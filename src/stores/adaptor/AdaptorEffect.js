@@ -9,7 +9,7 @@ import TransformSpecResponseModel from './models/transformSpecResponse/Transform
 export default class AdaptorEffect {
   static async requestInputSpec(data, headers) {
     const response = await HttpUtility.post(
-      'http://localhost:8080/onboard/run-input-spec',
+      `${environment.BACKEND_URL}/onboard/run-input-spec`,
       data,
       headers,
     );
@@ -23,7 +23,7 @@ export default class AdaptorEffect {
 
   static async requestParseSpec(data, headers) {
     const response = await await HttpUtility.post(
-      'http://localhost:8080/onboard/run-parse-spec',
+      `${environment.BACKEND_URL}/onboard/run-parse-spec`,
       data,
       headers,
     );
@@ -37,7 +37,7 @@ export default class AdaptorEffect {
 
   static async requestTransformSpec(data, headers) {
     const response = await HttpUtility.post(
-      'http://localhost:8080/onboard/run-transformation-spec',
+      `${environment.BACKEND_URL}/onboard/run-transform-spec`,
       data,
       headers,
     );
@@ -66,10 +66,11 @@ export default class AdaptorEffect {
     return [];
   }
 
-  static async submitJob(jobConfig) {
+  static async submitJob(jobConfig, headers) {
     const response = await HttpUtility.post(
       `${environment.BACKEND_URL}/adaptor`,
       jobConfig,
+      headers,
     );
 
     if (response instanceof HttpErrorResponseModel) {
