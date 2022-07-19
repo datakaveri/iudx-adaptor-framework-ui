@@ -1,41 +1,77 @@
-import { Button } from '@mui/material';
 import React from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Helmet } from 'react-helmet';
-import ToastsAction from '../../../stores/toasts/ToastsAction';
+import Footer from './Components/Footer';
 
-const Title = styled.h1`
-  font-size: 1.5em;
-  text-align: center;
-  color: palevioletred;
+const Banner = styled.div`
+  position: relative;
+  background-color: #f2f2f2;
+  margin: 0 30px;
+  padding: 60px;
+  overflow: hidden;
+  border-radius: 6px;
+  display: flex;
+  height: calc(100vh - 100px);
+  align-items: center;
+  justify-content: space-between;
+`;
+const Video = styled.div`
+  width: 70%;
+  height: 100%;
+`;
+const Vid = styled.video`
+  width: 100%;
+`;
+const Text = styled.div`
+  width: 40%;
 `;
 
-const Home = ({ dispatch }) => {
-  const showToast = () => {
-    dispatch(
-      ToastsAction.add('Notification description.', 'SUCCESS', 'success'),
-    );
-  };
+const FlatButton = styled.button`
+  font-size: 18px;
+  font-weight: 600;
+  transition: 0.4s;
+  background: #0b457f;
+  border-radius: 5px;
+  border-color: #002a55;
+  padding: 20px 60px;
+  color: white;
+  border: 2px solid;
 
-  return (
-    <div>
-      <Helmet>
-        <title>IUDX Adaptor Framework</title>
-      </Helmet>
-      <Title>Component styled with styled component!</Title>
-      <Button onClick={showToast}>Show Toast</Button>
-    </div>
-  );
-};
+  &:hover {
+    background: #002a55;
+  }
+`;
 
-Home.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-};
+const Home = () => (
+  <div>
+    <Helmet>
+      <title>IUDX Adaptor Framework</title>
+    </Helmet>
 
-const mapStateToProps = state => ({
-  dispatch: state.dispatch,
-});
+    <Banner>
+      <Text>
+        <h2>Try out IUDX datasets in our Sandbox</h2>
+        <p>
+          IUDX offers a no-setup, customizable, Jupyter Notebooks environment.
+          Access free GPUs and a huge repository of community published data &
+          code.
+        </p>
+        <FlatButton type="button">Login /Register</FlatButton>
+      </Text>
+      <Video>
+        <Vid
+          loop
+          muted
+          autoPlay
+          oncanplay="this.play()"
+          onloadedmetadata="this.muted = true">
+          <source src="https://iudx-catalogue-assets.s3.ap-south-1.amazonaws.com/video/sandbox.mp4" />
+        </Vid>
+      </Video>
+    </Banner>
 
-export default connect(mapStateToProps)(Home);
+    <Footer />
+  </div>
+);
+
+export default Home;
