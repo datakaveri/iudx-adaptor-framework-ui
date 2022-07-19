@@ -32,7 +32,8 @@ export default function BTN({ Solid, Text, onClick, disabled }) {
       disabled={disabled}
       solid={Solid}
       onClick={onClick}
-      type="submit">
+      type="submit"
+    >
       {Text}
     </ColoredButton>
   );

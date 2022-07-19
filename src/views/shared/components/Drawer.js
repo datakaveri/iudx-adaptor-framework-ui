@@ -58,7 +58,8 @@ function DrawerComponent() {
       </Drawer>
       <IconButton
         onClick={() => setOpenDrawer(!openDrawer)}
-        className={classes.icon}>
+        className={classes.icon}
+      >
         <MenuIcon />
       </IconButton>
     </>

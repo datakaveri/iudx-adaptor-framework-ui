@@ -46,7 +46,8 @@ const MetaSpec2 = ({ dispatch, metaSpec }) => (
             dispatch(
               ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
             );
-          }}>
+          }}
+        >
           {() => (
             <FormWrapper>
               <Group>

@@ -74,7 +74,8 @@ function Adaptor({ name, last, status, id, dispatch, callbackMethod }) {
           <a
             href={environment.GRAFANA_DASHBOARD_URL.replace('JOBNAME', name)}
             target="_blank"
-            rel="noreferrer">
+            rel="noreferrer"
+          >
             Open
           </a>
         </Labels>

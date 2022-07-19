@@ -68,24 +68,27 @@ export class ErrorSelector {
    * @static
    */
   static hasErrors(errorState, actionTypes) {
-    return actionTypes.map((actionType) => errorState[actionType]).filter(Boolean).length > 0;
+    return (
+      actionTypes.map(actionType => errorState[actionType]).filter(Boolean)
+        .length > 0
+    );
   }
 }
 
 export const selectRawErrors = createSelector(
-  (state) => state.error,
+  state => state.error,
   (state, actionTypes) => actionTypes,
-  ErrorSelector.selectRawErrors
+  ErrorSelector.selectRawErrors,
 );
 
 export const selectErrorText = createSelector(
-  (state) => state.error,
+  state => state.error,
   (state, actionTypes) => actionTypes,
-  ErrorSelector.selectErrorText
+  ErrorSelector.selectErrorText,
 );
 
 export const hasErrors = createSelector(
-  (state) => state.error,
+  state => state.error,
   (state, actionTypes) => actionTypes,
-  ErrorSelector.hasErrors
+  ErrorSelector.hasErrors,
 );

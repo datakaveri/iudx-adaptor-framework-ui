@@ -46,7 +46,8 @@ const PublishSpec = ({ dispatch, publishSpecInput }) => (
             dispatch(
               AdaptorAction.savePublishSpec(new PublishSpecInputModel(values)),
             );
-          }}>
+          }}
+        >
           {() => (
             <FormWrapper>
               <Group>

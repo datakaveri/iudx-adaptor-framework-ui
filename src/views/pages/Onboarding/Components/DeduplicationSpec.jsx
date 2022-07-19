@@ -49,7 +49,8 @@ const DeduplicationSpec2 = ({ dispatch, deduplicationSpecInput }) => (
                 new DeduplicationSpecInputModel(values),
               ),
             );
-          }}>
+          }}
+        >
           {() => (
             <FormWrapper>
               <Group>

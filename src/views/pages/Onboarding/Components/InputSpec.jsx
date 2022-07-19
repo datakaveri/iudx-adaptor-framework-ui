@@ -100,7 +100,8 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                 ),
                 console.log(scheduleJob),
               );
-            }}>
+            }}
+          >
             {() => (
               <FormWrapper>
                 <Group>
