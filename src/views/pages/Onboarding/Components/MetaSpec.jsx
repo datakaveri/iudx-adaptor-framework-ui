@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Button } from '@mui/material';
+import { Button, InputLabel } from '@mui/material';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Title } from '../../../shared/components/SpecComponents';
@@ -32,49 +32,65 @@ const LeftMargin = styled.div`
 const Flex = styled.div`
   display: 'flex';
 `;
-const MetaSpec2 = ({ dispatch, metaSpec }) => (
-  <div>
-    <Title>Meta Spec</Title>
-    <hr />
-    <LeftMargin>
-      <Flex>
-        <AdaptorForm
-          onSubmit={values => {
-            dispatch(
-              AdaptorAction.saveMetaSpec(new MetaSpecInputModel(values)),
-            );
-            dispatch(
-              ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
-            );
-          }}
-        >
-          {() => (
-            <FormWrapper>
-              <Group>
-                <AdaptorInput
-                  inputlabel="Name"
-                  name="name"
-                  initialValue={metaSpec.name}
-                />
-              </Group>
-              <Group>
-                <AdaptorInput
-                  inputlabel="Schedule Pattern"
-                  name="schedulePattern"
-                  placeholder="CRON like schedule pattern"
-                  initialValue={metaSpec.schedulePattern}
-                />
-              </Group>
-              <Group>
-                <Button type="submit">Save</Button>
-              </Group>
-            </FormWrapper>
-          )}
-        </AdaptorForm>
-      </Flex>
-    </LeftMargin>
-  </div>
-);
+const MetaSpec2 = ({ dispatch, metaSpec }) => {
+  const [spaceError, setSpaceError] = useState(false);
+
+  return (
+    <div>
+      <Title>Meta Spec</Title>
+      <hr />
+      <LeftMargin>
+        <Flex>
+          <AdaptorForm
+            onSubmit={values => {
+              if (values.name.indexOf(' ') >= 0) setSpaceError(true);
+              else {
+                setSpaceError(false);
+                dispatch(
+                  ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
+                );
+                dispatch(
+                  AdaptorAction.saveMetaSpec(new MetaSpecInputModel(values)),
+                );
+                console.log(values);
+              }
+            }}>
+            {() => (
+              <FormWrapper>
+                <Group>
+                  <AdaptorInput
+                    inputlabel="Name"
+                    name="name"
+                    initialValue={metaSpec.name}
+                  />
+                </Group>
+                {spaceError ? (
+                  <InputLabel style={{ marginLeft: '10px', color: 'red' }}>
+                    {' '}
+                    Please remove white spaces
+                  </InputLabel>
+                ) : (
+                  ''
+                )}
+                <Group>
+                  <AdaptorInput
+                    inputlabel="Schedule Pattern"
+                    name="schedulePattern"
+                    placeholder="CRON like schedule pattern"
+                    initialValue={metaSpec.schedulePattern}
+                  />
+                </Group>
+                <Group>
+                  <Button type="submit">Save</Button>
+                </Group>
+              </FormWrapper>
+            )}
+          </AdaptorForm>
+        </Flex>
+      </LeftMargin>
+    </div>
+  );
+};
 
 MetaSpec2.propTypes = {
   dispatch: PropTypes.func.isRequired,
