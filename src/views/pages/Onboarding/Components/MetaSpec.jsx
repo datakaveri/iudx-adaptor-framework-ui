@@ -32,6 +32,7 @@ const LeftMargin = styled.div`
 const Flex = styled.div`
   display: 'flex';
 `;
+
 const MetaSpec2 = ({ dispatch, metaSpec }) => {
   const [spaceError, setSpaceError] = useState(false);
 
@@ -43,20 +44,20 @@ const MetaSpec2 = ({ dispatch, metaSpec }) => {
         <Flex>
           <AdaptorForm
             onSubmit={values => {
+              const pattern = /^[a-z ]+$/;
               if (values.name.indexOf(' ') >= 0) setSpaceError(true);
-              else {
+
+              if (!pattern.test(values.name)) {
+                setSpaceError(true);
+              } else {
                 setSpaceError(false);
-                const reqBody = {
-                  name: values.name,
-                  schedulePattern:
-                    values.schedulePattern !== ''
-                      ? values.schedulePattern
-                      : undefined,
-                };
+
                 dispatch(
                   ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
                 );
-                dispatch(AdaptorAction.saveMetaSpec(reqBody));
+                dispatch(
+                  AdaptorAction.saveMetaSpec(new MetaSpecInputModel(values)),
+                );
                 console.log(values);
               }
             }}>
@@ -70,16 +71,21 @@ const MetaSpec2 = ({ dispatch, metaSpec }) => {
                   />
                 </Group>
                 {spaceError ? (
-                  <InputLabel style={{ marginLeft: '10px', color: 'red' }}>
+                  <InputLabel
+                    style={{
+                      marginLeft: '10px',
+                      marginBottom: '10px',
+                      color: 'red',
+                    }}>
                     {' '}
-                    Please remove white spaces
+                    Please remove white spaces, uppercase, special characters or
+                    numbers
                   </InputLabel>
                 ) : (
                   ''
                 )}
                 <Group>
                   <AdaptorInput
-                    optional
                     inputlabel="Schedule Pattern"
                     name="schedulePattern"
                     placeholder="CRON like schedule pattern"
