@@ -82,7 +82,7 @@ const AdaptorInput = props => {
           )}
         </div>
       ) : (
-        <TextField  style={{ width: '320px' }} {...inputProps} />
+        <TextField style={{ width: '320px' }} {...inputProps} />
       )}
       <ErrorText>{touched && (error || submitError) ? error : ''}</ErrorText>
     </InputWrapper>
