@@ -45,7 +45,12 @@ const AdaptorInput = props => {
       {props.inputtype === 'switch' ? (
         ''
       ) : (
-        <InputLabel style={{ marginLeft: '10px' }}>
+        <InputLabel
+          style={{
+            marginLeft: '10px',
+            fontWeight: props.optional ? 'normal' : 'bold',
+          }}>
+          {props.optional ? '' : '*'}
           {props.inputlabel}
         </InputLabel>
       )}
@@ -77,7 +82,7 @@ const AdaptorInput = props => {
           )}
         </div>
       ) : (
-        <TextField  style={{ width: '320px' }} {...inputProps} />
+        <TextField style={{ width: '320px' }} {...inputProps} />
       )}
       <ErrorText>{touched && (error || submitError) ? error : ''}</ErrorText>
     </InputWrapper>

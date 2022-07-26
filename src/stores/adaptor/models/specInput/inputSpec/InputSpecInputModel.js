@@ -4,9 +4,7 @@ import MinioConfigModel from './MinioConfigModel';
 export default class InputSpecInputModel extends BaseModel {
   boundedJob = Boolean;
 
-  headers = {
-    'content-type': '',
-  };
+  headers = '';
 
   minioConfig = MinioConfigModel;
 
@@ -14,9 +12,15 @@ export default class InputSpecInputModel extends BaseModel {
 
   requestType = '';
 
+  postBody = '';
+
+  requestGenerationScripts = '';
+
   type = '';
 
   url = '';
+
+  requestTimeout = Number;
 
   constructor(data) {
     super();

@@ -14,7 +14,7 @@ import DrawerComponent from './Drawer';
 
 const logo = require('./iudx.jpg');
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   navlinks: {
     display: 'flex',
     flexdirection: 'row',

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Button, InputLabel, Switch } from '@mui/material';
+import { Button, InputLabel, Switch, Select, MenuItem } from '@mui/material';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -49,13 +49,36 @@ const Flex = styled.div`
 const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
   const [scheduleJob, setScheduleJob] = useState(inputSpecInput.boundedJob);
   const [inputSpecData, setInputSpecData] = useState('');
-  const [bypassExecution, setBypassExecution] = React.useState(false);
+  const [bypassExecution, setBypassExecution] = useState(false);
+  const [requestType, setRequestType] = useState('');
+  const [headers, setHeaders] = useState('');
+  const [requestGenerationScripts, setRequestGenerationScripts] = useState('');
 
   useEffect(() => {
     const res = [];
     inputSpec.result.map(el => res.push(JSON.parse(el)));
     setInputSpecData(res);
+    setHeaders(
+      inputSpecInput.headers.length === 0
+        ? ''
+        : JSON.stringify(inputSpecInput.headers, null, 4),
+    );
+    setRequestGenerationScripts(
+      inputSpecInput.requestGenerationScripts.length === 0
+        ? ''
+        : JSON.stringify(inputSpecInput.requestGenerationScripts, null, 4),
+    );
   }, [inputSpec]);
+
+  const selectoptions = [
+    { key: 'GET', value: 'GET' },
+    { key: 'POST', value: 'POST' },
+  ];
+
+  const handleChange = value => {
+    setRequestType(value.target.value);
+    console.log(requestType);
+  };
 
   return (
     <div>
@@ -65,7 +88,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
         <Flex>
           <AdaptorForm
             onSubmit={values => {
-              const headers = {
+              const header = {
                 username: 'user',
                 password: 'user-password',
                 'Content-Type': 'application/json',
@@ -74,7 +97,13 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                 inputSpec: {
                   type: values.type,
                   url: values.url,
-                  requestType: values.requestType,
+                  requestType,
+                  headers: JSON.parse(headers),
+                  postBody: requestType === 'POST' ? values.postBody : '',
+                  requestTimeout: values.requestTimeout,
+                  requestGenerationScripts: JSON.parse(
+                    requestGenerationScripts,
+                  ),
                   pollingInterval: !scheduleJob ? values.pollingInterval : -1,
                   boundedJob: scheduleJob ? true : '',
                   minioConfig: !scheduleJob
@@ -92,7 +121,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                 ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
               );
               if (!bypassExecution) {
-                dispatch(AdaptorAction.requestInputSpec(requestBody, headers));
+                dispatch(AdaptorAction.requestInputSpec(requestBody, header));
               }
               dispatch(
                 AdaptorAction.saveInputSpec(
@@ -127,16 +156,89 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                   />
                 </Group>
                 <Group>
+                  <InputLabel style={{ marginLeft: '10px' }}>
+                    Headers
+                  </InputLabel>
+                  <Editor
+                    disabled={false}
+                    value={headers}
+                    highlight={value => highlight(value, languages.jsx)}
+                    padding={15}
+                    onValueChange={value => setHeaders(value)}
+                    style={{
+                      fontFamily: '"Fira code", "Fira Mono", monospace',
+                      fontSize: 14,
+                      overflow: 'auto',
+                      marginTop: '5px',
+                      flex: 'display',
+                      width: '320px',
+                      height: '150px',
+                      border: '1px solid',
+                      borderColor: 'black',
+                      borderRadius: '3px',
+                    }}
+                  />
+                </Group>
+                <Group style={{ marginTop: '15px' }}>
+                  <InputLabel style={{ marginLeft: '10px' }}>
+                    Request Generation Scripts
+                  </InputLabel>
+                  <Editor
+                    disabled={false}
+                    value={requestGenerationScripts}
+                    highlight={value => highlight(value, languages.jsx)}
+                    padding={15}
+                    onValueChange={value => setRequestGenerationScripts(value)}
+                    style={{
+                      fontFamily: '"Fira code", "Fira Mono", monospace',
+                      fontSize: 14,
+                      overflow: 'auto',
+                      marginTop: '5px',
+                      flex: 'display',
+                      width: '320px',
+                      height: '150px',
+                      border: '1px solid',
+                      borderColor: 'black',
+                      borderRadius: '3px',
+                    }}
+                  />
+                </Group>
+                <Group style={{ marginTop: '15px' }}>
+                  <InputLabel
+                    style={{ marginLeft: '10px', fontWeight: 'bold' }}>
+                    *Request Type
+                  </InputLabel>
+                  <Select
+                    style={{ width: '320px' }}
+                    defaultValue={inputSpecInput.requestType}
+                    onChange={handleChange}>
+                    {selectoptions.map(el => (
+                      <MenuItem key={el.key} value={el.value}>
+                        {el.value}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </Group>
+                {requestType === 'POST' ? (
+                  <Group style={{ marginTop: '15px' }}>
+                    <AdaptorInput
+                      optional
+                      inputlabel="Post Body"
+                      name="postBody"
+                      initialValue={inputSpecInput.postBody}
+                    />
+                  </Group>
+                ) : (
+                  ''
+                )}
+
+                <Group style={{ marginTop: '15px' }}>
                   <AdaptorInput
-                    inputlabel="Request Type"
-                    inputtype="select"
-                    selectoptions={[
-                      { key: 'GET', value: 'GET' },
-                      { key: 'POST', value: 'POST' },
-                    ]}
-                    name="requestType"
-                    placeholder="GET / POST"
-                    initialValue={inputSpecInput.requestType}
+                    optional
+                    inputlabel="Request Timeout"
+                    name="requestTimeout"
+                    placeholder="in seconds"
+                    initialValue={inputSpecInput.requestTimeout}
                   />
                 </Group>
                 <Group>
@@ -224,7 +326,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                     </FormWrapper>
                   </div>
                 ) : (
-                  <Group style={{ marginTop: '10px' }}>
+                  <Group>
                     <AdaptorInput
                       inputlabel="Polling Interval"
                       name="pollingInterval"
