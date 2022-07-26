@@ -97,7 +97,7 @@ function Adaptor({ name, last, status, id, dispatch, callbackMethod }) {
             stopAdaptor(id);
           }}
         />
-      ) : status === 'stopped' || status === 'cg-failed' ? (
+      ) : status === 'stopped' || status === 'cg-failed' || status === 'canceled' ? (
         <Buttons>
           <ImageButton
             Solid=""
