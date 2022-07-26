@@ -101,9 +101,10 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                   headers: JSON.parse(headers),
                   postBody: requestType === 'POST' ? values.postBody : '',
                   requestTimeout: values.requestTimeout,
-                  requestGenerationScripts: JSON.parse(
-                    requestGenerationScripts,
-                  ),
+                  requestGenerationScripts:
+                    requestGenerationScripts !== ''
+                      ? JSON.parse(requestGenerationScripts)
+                      : '',
                   pollingInterval: !scheduleJob ? values.pollingInterval : -1,
                   boundedJob: scheduleJob ? true : '',
                   minioConfig: !scheduleJob
@@ -129,8 +130,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                 ),
                 console.log(scheduleJob),
               );
-            }}
-          >
+            }}>
             {() => (
               <FormWrapper>
                 <Group>
