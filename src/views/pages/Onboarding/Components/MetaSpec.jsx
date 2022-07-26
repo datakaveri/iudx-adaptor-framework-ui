@@ -46,12 +46,17 @@ const MetaSpec2 = ({ dispatch, metaSpec }) => {
               if (values.name.indexOf(' ') >= 0) setSpaceError(true);
               else {
                 setSpaceError(false);
+                const reqBody = {
+                  name: values.name,
+                  schedulePattern:
+                    values.schedulePattern !== ''
+                      ? values.schedulePattern
+                      : undefined,
+                };
                 dispatch(
                   ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
                 );
-                dispatch(
-                  AdaptorAction.saveMetaSpec(new MetaSpecInputModel(values)),
-                );
+                dispatch(AdaptorAction.saveMetaSpec(reqBody));
                 console.log(values);
               }
             }}>
@@ -74,6 +79,7 @@ const MetaSpec2 = ({ dispatch, metaSpec }) => {
                 )}
                 <Group>
                   <AdaptorInput
+                    optional
                     inputlabel="Schedule Pattern"
                     name="schedulePattern"
                     placeholder="CRON like schedule pattern"

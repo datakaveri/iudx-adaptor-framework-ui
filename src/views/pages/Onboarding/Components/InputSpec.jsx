@@ -51,7 +51,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
   const [inputSpecData, setInputSpecData] = useState('');
   const [bypassExecution, setBypassExecution] = useState(false);
   const [requestType, setRequestType] = useState('');
-  const [headers, setHeaders] = useState('');
+  const [headers, setHeaders] = useState([]);
   const [requestGenerationScripts, setRequestGenerationScripts] = useState('');
 
   useEffect(() => {
@@ -99,16 +99,17 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                   url: values.url,
                   requestType,
                   headers: JSON.parse(headers),
-                  postBody: requestType === 'POST' ? values.postBody : '',
+                  postBody:
+                    requestType === 'POST' ? values.postBody : undefined,
                   requestTimeout: values.requestTimeout,
                   requestGenerationScripts:
                     requestGenerationScripts !== ''
                       ? JSON.parse(requestGenerationScripts)
-                      : '',
+                      : undefined,
                   pollingInterval: !scheduleJob ? values.pollingInterval : -1,
-                  boundedJob: scheduleJob ? true : '',
+                  boundedJob: scheduleJob ? true : undefined,
                   minioConfig: !scheduleJob
-                    ? ''
+                    ? undefined
                     : {
                         url: values.minioUrl,
                         bucket: values.minioBucket,
@@ -125,9 +126,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                 dispatch(AdaptorAction.requestInputSpec(requestBody, header));
               }
               dispatch(
-                AdaptorAction.saveInputSpec(
-                  new InputSpecInputModel(requestBody.inputSpec),
-                ),
+                AdaptorAction.saveInputSpec(requestBody.inputSpec),
                 console.log(scheduleJob),
               );
             }}>

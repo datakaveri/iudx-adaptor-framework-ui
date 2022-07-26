@@ -137,7 +137,10 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
 
   const specFile = {
     ...adaptorReducer.metaSpecInput,
-    failureRecoverySpec: adaptorReducer.failureRecoverySpecInput,
+    failureRecoverySpec:
+      adaptorReducer.failureRecoverySpecInput !== {}
+        ? adaptorReducer.failureRecoverySpecInput
+        : undefined,
     inputSpec: adaptorReducer.inputSpecInput,
     parseSpec: adaptorReducer.parseSpecInput,
     deduplicationSpec: adaptorReducer.deduplicationSpecInput,
@@ -242,8 +245,7 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
               color="inherit"
               disabled={activeStep === 0}
               onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
+              sx={{ mr: 1 }}>
               Back
             </Button>
             <Box sx={{ flex: '1 1 auto' }} />

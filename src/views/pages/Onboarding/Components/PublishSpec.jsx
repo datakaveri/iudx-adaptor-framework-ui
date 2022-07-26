@@ -46,8 +46,7 @@ const PublishSpec = ({ dispatch, publishSpecInput }) => (
             dispatch(
               AdaptorAction.savePublishSpec(new PublishSpecInputModel(values)),
             );
-          }}
-        >
+          }}>
           {() => (
             <FormWrapper>
               <Group>
@@ -60,33 +59,9 @@ const PublishSpec = ({ dispatch, publishSpecInput }) => (
 
               <Group>
                 <AdaptorInput
-                  inputlabel="URL"
-                  name="url"
-                  initialValue={publishSpecInput.url}
-                />
-              </Group>
-
-              <Group>
-                <AdaptorInput
-                  inputlabel="Port"
-                  name="port"
-                  initialValue={publishSpecInput.port}
-                />
-              </Group>
-
-              <Group>
-                <AdaptorInput
-                  inputlabel="Username"
-                  name="username"
-                  initialValue={publishSpecInput.username}
-                />
-              </Group>
-
-              <Group>
-                <AdaptorInput
-                  inputlabel="Password"
-                  name="password"
-                  initialValue={publishSpecInput.password}
+                  inputlabel="URI"
+                  name="uri"
+                  initialValue={publishSpecInput.uri}
                 />
               </Group>
 
