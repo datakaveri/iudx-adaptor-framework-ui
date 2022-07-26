@@ -1,7 +1,5 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { usePromiseTracker } from 'react-promise-tracker';
 
 import Loading from '../shared/components/Loading';
@@ -10,7 +8,7 @@ import Home from '../pages/Home';
 import Navbar from '../shared/components/Navbar';
 import MyAdaptorsPage from '../pages/MyAdaptors';
 
-const Router = ({ dispatch }) => {
+const Router = () => {
   const { promiseInProgress } = usePromiseTracker();
   const [loading, setLoading] = React.useState(false);
 
@@ -32,12 +30,4 @@ const Router = ({ dispatch }) => {
   );
 };
 
-Router.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = state => ({
-  dispatch: state.dispatch,
-});
-
-export default connect(mapStateToProps)(Router);
+export default Router;

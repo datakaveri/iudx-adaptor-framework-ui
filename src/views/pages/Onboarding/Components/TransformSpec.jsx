@@ -58,8 +58,6 @@ const TransformSpec = ({
 
   useEffect(() => {
     setTransformSpecData(transformSpec);
-    console.log('TRansform Spec');
-    console.log(transformSpecInput);
     setJsonSpec(
       transformSpecInput.jsonPathSpec.length === 0
         ? ''
