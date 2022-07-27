@@ -92,6 +92,7 @@ const MetaSpec2 = ({ dispatch, metaSpec }) => {
                 )}
                 <Group>
                   <AdaptorInput
+                    optional
                     inputlabel="Schedule Pattern"
                     name="schedulePattern"
                     placeholder="CRON like schedule pattern"
