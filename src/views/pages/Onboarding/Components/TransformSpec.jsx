@@ -69,7 +69,6 @@ const TransformSpec = ({
       javascript = transformSpecInput.joltSpec;
     else javascript = '';
     setJsonSpec(javascript);
-
   }, [transformSpec]);
 
   const handleChange = value => {
@@ -113,8 +112,7 @@ const TransformSpec = ({
               dispatch(
                 AdaptorAction.requestTransformSpec(requestBody, headers),
               );
-            }}
-          >
+            }}>
             {() => (
               <FormWrapper>
                 <Group>
@@ -129,8 +127,7 @@ const TransformSpec = ({
                   <Select
                     style={{ width: '300px' }}
                     defaultValue={transformSpecInput.type}
-                    onChange={handleChange}
-                  >
+                    onChange={handleChange}>
                     {selectOptions.map(el => (
                       <MenuItem key={el.key} value={el.value}>
                         {el.value}
@@ -184,6 +181,20 @@ const TransformSpec = ({
           </AdaptorForm>
           <Group style={{ marginLeft: '400px', marginTop: '20px' }}>
             <SwitchDiv>
+              <InputLabel>Input Data</InputLabel>
+            </SwitchDiv>
+            <Editor
+              disabled
+              value={
+                parseSpec.message === ''
+                  ? ''
+                  : JSON.stringify(JSON.parse(parseSpec.result[0]), null, 4)
+              }
+              highlight={value => highlight(value, languages.jsx)}
+              padding={20}
+              style={EditorStyle}
+            />
+            <SwitchDiv style={{ marginTop: '25px' }}>
               <InputLabel>JSON Response</InputLabel>
             </SwitchDiv>
             <Editor

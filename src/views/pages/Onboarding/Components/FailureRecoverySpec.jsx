@@ -44,8 +44,7 @@ const FailureRecoverySpec = ({ dispatch, failureRecoverySpecInput }) => (
               ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
             );
             dispatch(AdaptorAction.saveFailureRecoverySpec(values));
-          }}
-        >
+          }}>
           {() => (
             <FormWrapper>
               <Group>
@@ -54,8 +53,8 @@ const FailureRecoverySpec = ({ dispatch, failureRecoverySpecInput }) => (
                   inputlabel="Type"
                   inputtype="select"
                   selectoptions={[
-                    { key: 'Exponential Delay', value: 'exponentialDelay' },
-                    { key: 'Fixed Delay', value: 'fixedDelay' },
+                    { key: 'Exponential Delay', value: 'exponential-delay' },
+                    { key: 'Fixed Delay', value: 'fixed-delay' },
                   ]}
                   name="type"
                   initialValue={failureRecoverySpecInput.type}

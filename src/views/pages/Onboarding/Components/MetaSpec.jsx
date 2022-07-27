@@ -55,9 +55,14 @@ const MetaSpec2 = ({ dispatch, metaSpec }) => {
                 dispatch(
                   ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
                 );
-                dispatch(
-                  AdaptorAction.saveMetaSpec(new MetaSpecInputModel(values)),
-                );
+                const reqBody = {
+                  name: values.name,
+                  schedulePattern:
+                    values.schedulePattern !== ''
+                      ? values.schedulePattern
+                      : undefined,
+                };
+                dispatch(AdaptorAction.saveMetaSpec(reqBody));
                 console.log(values);
               }
             }}>
@@ -80,7 +85,6 @@ const MetaSpec2 = ({ dispatch, metaSpec }) => {
                     {' '}
                     Please remove white spaces, uppercase, special characters or
                     numbers
-
                   </InputLabel>
                 ) : (
                   ''
