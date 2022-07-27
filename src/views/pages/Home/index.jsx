@@ -19,8 +19,11 @@ const Video = styled.div`
   width: 70%;
   height: 100%;
 `;
-const Vid = styled.video`
+const ImgDiv = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 const Text = styled.div`
   width: 40%;
@@ -59,14 +62,10 @@ const Home = () => (
         <FlatButton type="button">Login /Register</FlatButton>
       </Text>
       <Video>
-        <Vid
-          loop
-          muted
-          autoPlay
-          oncanplay="this.play()"
-          onloadedmetadata="this.muted = true">
-          <source src="https://iudx-catalogue-assets.s3.ap-south-1.amazonaws.com/video/sandbox.mp4" />
-        </Vid>
+        <ImgDiv>
+          <img src="/Overview.png" alt="Overview" width="60%" />
+          <img src="/Components.png" alt="Components" width="60%" />
+        </ImgDiv>
       </Video>
     </Banner>
 
