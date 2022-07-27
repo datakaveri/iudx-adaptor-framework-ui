@@ -18,6 +18,7 @@ import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
 import ParseSpecInputModel from '../../../../stores/adaptor/models/specInput/parseSpec/ParseSpecInputModel';
 import InputSpecResponseModel from '../../../../stores/adaptor/models/inputSpecResponse/InputSpecResponseModel';
 import EditorStyle from '../../../shared/constants/EditorStyle';
+import Loader from '../../../shared/components/Loader';
 
 const Group = styled.div`
   display: flex;
@@ -43,6 +44,7 @@ const Flex = styled.div`
 const ParseSpec = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
   const [parseSpecData, setParseSpecData] = useState('');
   const [trickle, setTrickle] = useState('');
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     setParseSpecData(parseSpec);
@@ -55,12 +57,13 @@ const ParseSpec = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
 
   return (
     <div>
+      <Loader open={loader} message="Running Parse Spec" />
       <Title>Parse Spec</Title>
       <hr />
       <LeftMargin>
         <Flex>
           <AdaptorForm
-            onSubmit={values => {
+            onSubmit={async values => {
               const headers = {
                 username: 'user',
                 password: 'user-password',
@@ -77,11 +80,15 @@ const ParseSpec = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
                 parseSpec: spec,
               };
               console.log(requestBody);
+              dispatch(AdaptorAction.saveParseSpec(spec));
+              setLoader(true);
+              await dispatch(
+                AdaptorAction.requestParseSpec(requestBody, headers),
+              );
+              setLoader(false);
               dispatch(
                 ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
               );
-              dispatch(AdaptorAction.saveParseSpec(spec));
-              dispatch(AdaptorAction.requestParseSpec(requestBody, headers));
             }}>
             {() => (
               <FormWrapper>

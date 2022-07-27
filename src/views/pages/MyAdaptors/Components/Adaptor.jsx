@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -7,6 +7,7 @@ import moment from 'moment';
 import ImageButton from '../../../shared/components/ImageButton';
 import environment from '../../../../environments';
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
+import Loader from '../../../shared/components/Loader';
 
 const Buttons = styled.div`
   display: flex;
@@ -49,22 +50,35 @@ const Splitter = styled.div`
 `;
 
 function Adaptor({ name, last, status, id, dispatch, callbackMethod }) {
+  const [loader, setLoader] = useState(false);
+  const [message, setMessage] = useState('');
+
   const stopAdaptor = async jobId => {
+    setLoader(true);
+    setMessage('Stopping adaptor, please wait...');
     await dispatch(AdaptorAction.stopJob(jobId));
+    setLoader(false);
     callbackMethod();
   };
   const restartAdaptor = async jobId => {
+    setLoader(true);
+    setMessage('Starting adaptor, please wait...');
     await dispatch(AdaptorAction.startJob(jobId));
+    setLoader(false);
     callbackMethod();
   };
 
   const deleteAdaptor = async jobId => {
+    setLoader(true);
+    setMessage('Deleting adaptor, please wait...');
     await dispatch(AdaptorAction.deleteJob(jobId));
+    setLoader(false);
     callbackMethod();
   };
 
   return (
     <LabelsRow>
+      <Loader open={loader} message={message} />
       <LabelsContainer>
         <Labels>
           <b>{name}</b>

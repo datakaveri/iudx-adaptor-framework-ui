@@ -11,6 +11,7 @@ import AdaptorInput from '../../../shared/components/AdaptorInput';
 import ToastsAction from '../../../../stores/toasts/ToastsAction';
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
 import MetaSpecInputModel from '../../../../stores/adaptor/models/specInput/metaSpec/MetaSpecInputModel';
+import Loader from '../../../shared/components/Loader';
 
 const Group = styled.div`
   display: flex;
