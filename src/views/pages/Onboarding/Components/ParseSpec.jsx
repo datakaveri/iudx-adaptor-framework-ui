@@ -71,19 +71,8 @@ const ParseSpec = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
                 ...values,
                 trickle: trickle !== '' ? JSON.parse(trickle) : undefined,
               };
-              // const inputData = [];
-              // console.log(inputSpec);
-              // const parsedInputSpec = JSON.parse(inputSpec.result[0]);
-              // console.log('Parsed Input Spec');
-              // console.log(parsedInputSpec);
-              // parsedInputSpec.Data.map(el => inputData.push(el));
-              // console.log('Input Data');
-              // console.log(inputData);
+
               const requestBody = {
-                // inputData: {
-                //   outerkey: 'outerkeyval',
-                //   data: inputData,
-                // },
                 inputData: inputSpec,
                 parseSpec: spec,
               };
@@ -93,8 +82,7 @@ const ParseSpec = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
               );
               dispatch(AdaptorAction.saveParseSpec(spec));
               dispatch(AdaptorAction.requestParseSpec(requestBody, headers));
-            }}
-          >
+            }}>
             {() => (
               <FormWrapper>
                 <Group>
@@ -192,6 +180,24 @@ const ParseSpec = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
           </AdaptorForm>
           <Group style={{ marginLeft: '400px', marginTop: '20px' }}>
             <SwitchDiv>
+              <InputLabel>Input Data</InputLabel>
+            </SwitchDiv>
+            <Editor
+              disabled
+              value={
+                inputSpec.message === ''
+                  ? ''
+                  : JSON.stringify(
+                      JSON.parse(inputSpec.result[0]).Data,
+                      null,
+                      4,
+                    )
+              }
+              highlight={value => highlight(value, languages.jsx)}
+              padding={20}
+              style={EditorStyle}
+            />
+            <SwitchDiv style={{ marginTop: '25px' }}>
               <InputLabel>JSON Response</InputLabel>
             </SwitchDiv>
             <Editor
