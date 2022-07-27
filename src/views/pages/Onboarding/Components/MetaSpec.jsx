@@ -47,52 +47,10 @@ const MetaSpec2 = ({ dispatch, metaSpec }) => {
               const pattern = /^[a-z ]+$/;
               if (values.name.indexOf(' ') >= 0) setSpaceError(true);
 
-<<<<<<< HEAD
               if (!pattern.test(values.name)) {
                 setSpaceError(true);
               } else {
                 setSpaceError(false);
-=======
-  return(
-  <div>
-    <Title>Meta Spec</Title>
-    <hr />
-    <div style={{ marginLeft: '80px' }}>
-      <div style={{ display: 'flex' }}>
-        <AdaptorForm
-          onSubmit={values => {
-            const pattern = /^[a-z ]+$/;
-            if (values.name.indexOf(" ")>=0)
-            setSpaceError(true)
-
-            if (!pattern.test(values.name)){
-            setSpaceError(true)}
-              
-            else{
-            setSpaceError(false)
-
-            dispatch(
-              ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
-            );
-            dispatch(
-              AdaptorAction.saveMetaSpec(new MetaSpecInputModel(values)),
-            );
-            console.log(values)}
-          }}>
-          {() => (
-            <FormWrapper>
-              <Group>
-                <AdaptorInput
-                  inputlabel="Name"
-                  name="name"
-                  initialValue={metaSpec.name}
-                  
-                />
-              </Group>
-              {spaceError ? (
-                <InputLabel style={{marginLeft:"10px",marginBottom:"10px",color:"red"}}> Please remove white spaces, uppercase, special characters or numbers</InputLabel>
-              ):""
->>>>>>> f2757a7 (updates to validation in metaspec)
 
                 dispatch(
                   ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
