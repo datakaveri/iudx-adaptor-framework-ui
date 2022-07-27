@@ -74,8 +74,7 @@ function Adaptor({ name, last, status, id, dispatch, callbackMethod }) {
           <a
             href={environment.GRAFANA_DASHBOARD_URL.replace('JOBNAME', name)}
             target="_blank"
-            rel="noreferrer"
-          >
+            rel="noreferrer">
             Open
           </a>
         </Labels>
@@ -97,7 +96,9 @@ function Adaptor({ name, last, status, id, dispatch, callbackMethod }) {
             stopAdaptor(id);
           }}
         />
-      ) : status === 'stopped' || status === 'cg-failed' || status === 'canceled' ? (
+      ) : status === 'stopped' ||
+        status === 'cg-failed' ||
+        status === 'canceled' ? (
         <Buttons>
           <ImageButton
             Solid=""
@@ -126,18 +127,33 @@ function Adaptor({ name, last, status, id, dispatch, callbackMethod }) {
           />
         </Buttons>
       ) : status === 'cg-completed' ? (
-        <ImageButton
-          Solid=""
-          Text="Start"
-          color="#009E5F"
-          icon="refresh.png"
-          hoverIcon="refreshWhite.png"
-          hoverColor="#009E5F"
-          hoverTextColor="white"
-          onClicked={() => {
-            restartAdaptor(id);
-          }}
-        />
+        <Buttons>
+          <ImageButton
+            Solid=""
+            Text="Start"
+            color="#009E5F"
+            icon="refresh.png"
+            hoverIcon="refreshWhite.png"
+            hoverColor="#009E5F"
+            hoverTextColor="white"
+            onClicked={() => {
+              restartAdaptor(id);
+            }}
+          />
+          <Splitter />
+          <ImageButton
+            Solid="Solid"
+            Text="Delete"
+            color="#EA4335"
+            icon="delete.png"
+            hoverIcon="delete.png"
+            hoverColor="#9b241a"
+            hoverTextColor="white"
+            onClicked={() => {
+              deleteAdaptor(id);
+            }}
+          />
+        </Buttons>
       ) : (
         ''
       )}
