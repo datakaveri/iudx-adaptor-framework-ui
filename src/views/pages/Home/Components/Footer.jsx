@@ -31,7 +31,7 @@ Div.defaultProps = {
 };
 
 const Span = styled.span`
-  font-size: 1.4rem;
+  font-size: 1rem;
   color: grey;
   text-decoration: none;
 `;

@@ -19,12 +19,13 @@ const Image = styled.div`
   width: 70%;
   height: 100%;
   display: flex;
+  justify-content: space-around;
   flex-direction: column;
   align-items: center;
 `;
 
 const Img = styled.img`
-  width: 70%;
+  width: 55%;
 `;
 
 const Text = styled.div`
