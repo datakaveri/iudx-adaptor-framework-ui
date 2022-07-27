@@ -69,6 +69,7 @@ const TransformSpec = ({
       javascript = transformSpecInput.joltSpec;
     else javascript = '';
     setJsonSpec(javascript);
+
   }, [transformSpec]);
 
   const handleChange = value => {
@@ -112,7 +113,8 @@ const TransformSpec = ({
               dispatch(
                 AdaptorAction.requestTransformSpec(requestBody, headers),
               );
-            }}>
+            }}
+          >
             {() => (
               <FormWrapper>
                 <Group>
@@ -127,7 +129,8 @@ const TransformSpec = ({
                   <Select
                     style={{ width: '300px' }}
                     defaultValue={transformSpecInput.type}
-                    onChange={handleChange}>
+                    onChange={handleChange}
+                  >
                     {selectOptions.map(el => (
                       <MenuItem key={el.key} value={el.value}>
                         {el.value}

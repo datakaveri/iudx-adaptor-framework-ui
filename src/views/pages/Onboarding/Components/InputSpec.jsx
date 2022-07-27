@@ -52,6 +52,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
   const [bypassExecution, setBypassExecution] = useState(false);
   const [requestType, setRequestType] = useState('');
   const [headers, setHeaders] = useState([]);
+
   const [requestGenerationScripts, setRequestGenerationScripts] = useState('');
 
   useEffect(() => {
@@ -101,6 +102,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                   headers: JSON.parse(headers),
                   postBody:
                     requestType === 'POST' ? values.postBody : undefined,
+
                   requestTimeout: values.requestTimeout,
                   requestGenerationScripts:
                     requestGenerationScripts !== ''

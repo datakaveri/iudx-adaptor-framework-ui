@@ -93,7 +93,8 @@ const ParseSpec = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
               );
               dispatch(AdaptorAction.saveParseSpec(spec));
               dispatch(AdaptorAction.requestParseSpec(requestBody, headers));
-            }}>
+            }}
+          >
             {() => (
               <FormWrapper>
                 <Group>

@@ -80,6 +80,7 @@ const MetaSpec2 = ({ dispatch, metaSpec }) => {
                     {' '}
                     Please remove white spaces, uppercase, special characters or
                     numbers
+
                   </InputLabel>
                 ) : (
                   ''
