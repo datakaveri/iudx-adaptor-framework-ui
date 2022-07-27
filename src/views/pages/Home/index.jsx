@@ -15,16 +15,18 @@ const Banner = styled.div`
   align-items: center;
   justify-content: space-between;
 `;
-const Video = styled.div`
+const Image = styled.div`
   width: 70%;
   height: 100%;
-`;
-const ImgDiv = styled.div`
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
+
+const Img = styled.img`
+  width: 70%;
+`;
+
 const Text = styled.div`
   width: 40%;
 `;
@@ -61,12 +63,10 @@ const Home = () => (
         </p>
         <FlatButton type="button">Login /Register</FlatButton>
       </Text>
-      <Video>
-        <ImgDiv>
-          <img src="/Overview.png" alt="Overview" width="60%" />
-          <img src="/Components.png" alt="Components" width="60%" />
-        </ImgDiv>
-      </Video>
+      <Image>
+          <Img src="/Overview.png" alt="Overview" />
+          <Img src="/Components.png" alt="Components" />
+      </Image>
     </Banner>
 
     <Footer />
