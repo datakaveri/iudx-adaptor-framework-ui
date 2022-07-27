@@ -58,11 +58,18 @@ const TransformSpec = ({
 
   useEffect(() => {
     setTransformSpecData(transformSpec);
-    setJsonSpec(
-      transformSpecInput.jsonPathSpec.length === 0
-        ? ''
-        : JSON.stringify(transformSpecInput.jsonPathSpec, null, 4),
-    );
+    let javascript = '';
+    console.log('TransformSpec Input');
+    console.log(transformSpecInput);
+    if (transformSpecInput.type === 'jsPath')
+      javascript = transformSpecInput.jsonPathSpec;
+    else if (transformSpecInput.type === 'js')
+      javascript = transformSpecInput.script;
+    else if (transformSpecInput.type === 'jolt')
+      javascript = transformSpecInput.joltSpec;
+    else javascript = '';
+    setJsonSpec(javascript);
+
   }, [transformSpec]);
 
   const handleChange = value => {
@@ -79,8 +86,10 @@ const TransformSpec = ({
             onSubmit={values => {
               const tfSpec = {
                 type: jtitle,
-                template: jtitle === 'jsPath' ? values.template : '',
-                jsonPathSpec: JSON.parse(jsonSpec),
+                template: jtitle === 'jsPath' ? values.template : undefined,
+                joltSpec: jtitle === 'jolt' ? jsonSpec : undefined,
+                script: jtitle === 'js' ? jsonSpec : undefined,
+                jsonPathSpec: jtitle === 'jsPath' ? jsonSpec : undefined,
               };
               const requestBody = {
                 inputData: parseSpec.result,

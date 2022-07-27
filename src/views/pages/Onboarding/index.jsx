@@ -137,7 +137,10 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
 
   const specFile = {
     ...adaptorReducer.metaSpecInput,
-    failureRecoverySpec: adaptorReducer.failureRecoverySpecInput,
+    failureRecoverySpec:
+      adaptorReducer.failureRecoverySpecInput !== {}
+        ? adaptorReducer.failureRecoverySpecInput
+        : undefined,
     inputSpec: adaptorReducer.inputSpecInput,
     parseSpec: adaptorReducer.parseSpecInput,
     deduplicationSpec: adaptorReducer.deduplicationSpecInput,

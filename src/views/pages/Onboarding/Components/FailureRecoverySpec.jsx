@@ -50,6 +50,7 @@ const FailureRecoverySpec = ({ dispatch, failureRecoverySpecInput }) => (
             <FormWrapper>
               <Group>
                 <AdaptorInput
+                  optional
                   inputlabel="Type"
                   inputtype="select"
                   selectoptions={[
@@ -63,6 +64,7 @@ const FailureRecoverySpec = ({ dispatch, failureRecoverySpecInput }) => (
 
               <Group>
                 <AdaptorInput
+                  optional
                   inputlabel="Initial Backoff"
                   name="initialBackoff"
                   initialValue={failureRecoverySpecInput.initialBackoff}
@@ -71,6 +73,7 @@ const FailureRecoverySpec = ({ dispatch, failureRecoverySpecInput }) => (
 
               <Group>
                 <AdaptorInput
+                  optional
                   inputlabel="Max Backoff"
                   name="maxBackoff"
                   initialValue={failureRecoverySpecInput.maxBackoff}
@@ -79,6 +82,7 @@ const FailureRecoverySpec = ({ dispatch, failureRecoverySpecInput }) => (
 
               <Group>
                 <AdaptorInput
+                  optional
                   inputlabel="Backoff Multiplier"
                   name="backoffMultiplier"
                   initialValue={failureRecoverySpecInput.backoffMultiplier}
@@ -87,6 +91,7 @@ const FailureRecoverySpec = ({ dispatch, failureRecoverySpecInput }) => (
 
               <Group>
                 <AdaptorInput
+                  optional
                   inputlabel="Reset Backoff Threshold"
                   name="resetBackoffThreshold"
                   initialValue={failureRecoverySpecInput.resetBackoffThreshold}
@@ -95,6 +100,7 @@ const FailureRecoverySpec = ({ dispatch, failureRecoverySpecInput }) => (
 
               <Group>
                 <AdaptorInput
+                  optional
                   inputlabel="Jitter Factor"
                   name="jitterFactor"
                   initialValue={failureRecoverySpecInput.jitterFactor}

@@ -69,23 +69,29 @@ const ParseSpec = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
 
               const spec = {
                 ...values,
-                trickle: JSON.parse(trickle),
+                trickle: trickle !== '' ? JSON.parse(trickle) : undefined,
               };
-              const inputData = [];
-              inputSpec.result.map(el => inputData.push(JSON.parse(el)));
+              // const inputData = [];
+              // console.log(inputSpec);
+              // const parsedInputSpec = JSON.parse(inputSpec.result[0]);
+              // console.log('Parsed Input Spec');
+              // console.log(parsedInputSpec);
+              // parsedInputSpec.Data.map(el => inputData.push(el));
+              // console.log('Input Data');
+              // console.log(inputData);
               const requestBody = {
-                inputData: {
-                  outerkey: 'outerkeyval',
-                  data: inputData,
-                },
+                // inputData: {
+                //   outerkey: 'outerkeyval',
+                //   data: inputData,
+                // },
+                inputData: inputSpec,
                 parseSpec: spec,
               };
+              console.log(requestBody);
               dispatch(
                 ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
               );
-              dispatch(
-                AdaptorAction.saveParseSpec(new ParseSpecInputModel(spec)),
-              );
+              dispatch(AdaptorAction.saveParseSpec(spec));
               dispatch(AdaptorAction.requestParseSpec(requestBody, headers));
             }}
           >
