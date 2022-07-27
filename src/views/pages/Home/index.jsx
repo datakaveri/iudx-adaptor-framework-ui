@@ -15,13 +15,19 @@ const Banner = styled.div`
   align-items: center;
   justify-content: space-between;
 `;
-const Video = styled.div`
+const Image = styled.div`
   width: 70%;
   height: 100%;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
 `;
-const Vid = styled.video`
-  width: 100%;
+
+const Img = styled.img`
+  width: 55%;
 `;
+
 const Text = styled.div`
   width: 40%;
 `;
@@ -58,16 +64,10 @@ const Home = () => (
         </p>
         <FlatButton type="button">Login /Register</FlatButton>
       </Text>
-      <Video>
-        <Vid
-          loop
-          muted
-          autoPlay
-          oncanplay="this.play()"
-          onloadedmetadata="this.muted = true">
-          <source src="https://iudx-catalogue-assets.s3.ap-south-1.amazonaws.com/video/sandbox.mp4" />
-        </Vid>
-      </Video>
+      <Image>
+          <Img src="/Overview.png" alt="Overview" />
+          <Img src="/Components.png" alt="Components" />
+      </Image>
     </Banner>
 
     <Footer />
