@@ -65,8 +65,8 @@ const FailureRecoverySpec = ({ dispatch, failureRecoverySpecInput }) => (
                 <AdaptorInput
                   optional
                   inputlabel="Initial Backoff"
-                  name="initialBackoff"
-                  initialValue={failureRecoverySpecInput.initialBackoff}
+                  name="initial-backoff"
+                  initialValue={failureRecoverySpecInput['initial-backoff']}
                 />
               </Group>
 
@@ -74,8 +74,8 @@ const FailureRecoverySpec = ({ dispatch, failureRecoverySpecInput }) => (
                 <AdaptorInput
                   optional
                   inputlabel="Max Backoff"
-                  name="maxBackoff"
-                  initialValue={failureRecoverySpecInput.maxBackoff}
+                  name="max-backoff"
+                  initialValue={failureRecoverySpecInput['max-backoff']}
                 />
               </Group>
 
@@ -83,8 +83,8 @@ const FailureRecoverySpec = ({ dispatch, failureRecoverySpecInput }) => (
                 <AdaptorInput
                   optional
                   inputlabel="Backoff Multiplier"
-                  name="backoffMultiplier"
-                  initialValue={failureRecoverySpecInput.backoffMultiplier}
+                  name="backoff-multiplier"
+                  initialValue={failureRecoverySpecInput['backoff-multiplier']}
                 />
               </Group>
 
@@ -92,8 +92,10 @@ const FailureRecoverySpec = ({ dispatch, failureRecoverySpecInput }) => (
                 <AdaptorInput
                   optional
                   inputlabel="Reset Backoff Threshold"
-                  name="resetBackoffThreshold"
-                  initialValue={failureRecoverySpecInput.resetBackoffThreshold}
+                  name="reset-backoff-threshold"
+                  initialValue={
+                    failureRecoverySpecInput['reset-backoff-threshold']
+                  }
                 />
               </Group>
 
@@ -101,8 +103,8 @@ const FailureRecoverySpec = ({ dispatch, failureRecoverySpecInput }) => (
                 <AdaptorInput
                   optional
                   inputlabel="Jitter Factor"
-                  name="jitterFactor"
-                  initialValue={failureRecoverySpecInput.jitterFactor}
+                  name="jitter-factor"
+                  initialValue={failureRecoverySpecInput['jitter-factor']}
                 />
               </Group>
 

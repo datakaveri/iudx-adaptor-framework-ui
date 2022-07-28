@@ -10,13 +10,16 @@ const Flex = styled.div`
   align-items: center;
 `;
 
+const LoaderMessage = styled.h5`
+  font-family: 'Inter';
+`;
 const Loader = ({ open, message }) => (
   <Backdrop
     open={open}
     sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}>
     <Flex>
       <CircularProgress color="inherit" />
-      <p>{message}</p>
+      <LoaderMessage>{message}</LoaderMessage>
     </Flex>
   </Backdrop>
 );
