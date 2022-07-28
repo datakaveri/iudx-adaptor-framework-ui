@@ -9,7 +9,6 @@ export default function BTN({ Solid, Text, onClick, disabled }) {
     color: ${props => (props.solid === 'Solid' ? 'white' : 'rgb(31,31,31)')};
     cursor: ${disabled ? 'not-allowed' : 'grab'};
     border-radius: 5px;
-    font-family: 'Inter';
     border-color: rgb(31, 31, 31);
     margin-right: 20px;
     height: 48px;
@@ -32,8 +31,7 @@ export default function BTN({ Solid, Text, onClick, disabled }) {
       disabled={disabled}
       solid={Solid}
       onClick={onClick}
-      type="submit"
-    >
+      type="submit">
       {Text}
     </ColoredButton>
   );
@@ -62,14 +60,12 @@ export const Line = styled.hr`
 `;
 
 export const Title = styled.h1`
-  /* font-family: 'Inter'; */
   font-size: 32px;
   padding-left: 80px;
   color: black;
 `;
 
 export const Type = styled.h3`
-  font-family: 'Inter';
   font-size: 14px;
   padding-left: 80px;
   padding-top: 8px;
