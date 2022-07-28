@@ -18,6 +18,7 @@ import TransformSpecInputModel from '../../../../stores/adaptor/models/specInput
 import TransformSpecResponseModel from '../../../../stores/adaptor/models/transformSpecResponse/TransformSpecResponseModel';
 import ParseSpecResponseModel from '../../../../stores/adaptor/models/parseSpecResponse/ParseSpecResponseModel';
 import EditorStyle from '../../../shared/constants/EditorStyle';
+import Loader from '../../../shared/components/Loader';
 
 const Group = styled.div`
   display: flex;
@@ -55,6 +56,7 @@ const TransformSpec = ({
   const [transformSpecData, setTransformSpecData] = useState('');
   const [jsonSpec, setJsonSpec] = useState('');
   const [jtitle, setJtitle] = useState('');
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     setTransformSpecData(transformSpec);
@@ -77,12 +79,13 @@ const TransformSpec = ({
 
   return (
     <div>
+      <Loader open={loader} message="Running Transform Spec" />
       <Title>Transform Spec</Title>
       <hr />
       <LeftMargin>
         <Flex>
           <AdaptorForm
-            onSubmit={values => {
+            onSubmit={async values => {
               const tfSpec = {
                 type: jtitle,
                 template: jtitle === 'jsPath' ? values.template : undefined,
@@ -104,13 +107,14 @@ const TransformSpec = ({
                 password: 'user-password',
                 'Content-Type': 'application/json',
               };
+              dispatch(AdaptorAction.saveTransformSpec(tfSpec));
+              setLoader(true);
+              await dispatch(
+                AdaptorAction.requestTransformSpec(requestBody, headers),
+              );
+              setLoader(false);
               dispatch(
                 ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
-              );
-              console.log();
-              dispatch(AdaptorAction.saveTransformSpec(tfSpec));
-              dispatch(
-                AdaptorAction.requestTransformSpec(requestBody, headers),
               );
             }}>
             {() => (

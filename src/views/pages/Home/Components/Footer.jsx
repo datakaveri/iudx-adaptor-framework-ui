@@ -31,20 +31,27 @@ Div.defaultProps = {
 };
 
 const Span = styled.span`
-  font-size: 1.4rem;
-  color: 'grey';
-  width: 50px;
+  font-size: 1rem;
+  color: grey;
+  text-decoration: none;
 `;
+
 const Line = styled.hr`
-  border-top: 1px solid #a8a8a8;
+  border-top: 1px solid #dddddd;
   border-bottom: transparent;
+`;
+
+const Link = styled.a`
+  :link {
+    text-decoration: none;
+  }
 `;
 const FlexDiv = styled.div`
   font-size: '1px';
   display: flex;
   width: 100%;
   align-items: center;
-  align-content: ${props => props.align};
+  justify-content: ${props => props.align};
   padding: ${props => props.Padding};
   padding-left: ${props => props.PaddingHorizontal};
   padding-right: ${props => props.PaddingHorizontal};
@@ -52,7 +59,7 @@ const FlexDiv = styled.div`
   padding-bottom: ${props => props.PaddingVertical};
 `;
 FlexDiv.propTypes = {
-  align: PropTypes.string,
+  justifyContent: PropTypes.string,
   PaddingHorizontal: PropTypes.string,
   PaddingVertical: PropTypes.string,
 };
@@ -66,10 +73,7 @@ export default function Footer() {
   return (
     <footer>
       <Line />
-      <FlexDiv
-        PaddingHorizontal="6rem"
-        PaddingVertical="3rem"
-        align="space-between">
+      <FlexDiv PaddingHorizontal="6rem" PaddingVertical="3rem">
         <Div width="25%" Display="inline-block">
           <a href="#/">
             <Image
@@ -77,18 +81,18 @@ export default function Footer() {
               iconSize="9.4rem"
             />
           </a>
-          <div>
-            <a href="https://goo.gl/maps/MyKzgG2gzK1JsENz7">
+          <Div Width="50%">
+            <Link href="https://goo.gl/maps/MyKzgG2gzK1JsENz7">
               <Image src="location.png" iconSize=" 1.2rem" marginBottom="0px" />
               <Span>
                 Indian Institute of Science, Entrepreneurship Centre, Ground
                 Floor, Bengaluru, Karnataka 560012
               </Span>
-            </a>
-          </div>
+            </Link>
+          </Div>
         </Div>
         <Div width="100%">
-          <FlexDiv align="start">
+          <FlexDiv justifyContent="start">
             <a href="https://smartcities.gov.in/">
               <Image
                 src="https://iudx-catalogue-assets.s3.ap-south-1.amazonaws.com/smart-city.png"

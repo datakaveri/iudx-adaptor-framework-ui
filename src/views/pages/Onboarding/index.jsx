@@ -26,6 +26,7 @@ import AdaptorAction from '../../../stores/adaptor/AdaptorAction';
 import EditorStyle from '../../shared/constants/EditorStyle';
 import EditorStyleLarge from '../../shared/constants/EditorStyleLarge';
 import ToastsAction from '../../../stores/toasts/ToastsAction';
+import Loader from '../../shared/components/Loader';
 
 const steps = [
   'Meta Spec',
@@ -72,6 +73,7 @@ const Center = styled.div`
 function OnboardingPage({ dispatch, adaptorReducer }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
+  const [loader, setLoader] = React.useState(false);
 
   const isStepOptional = step => step === 5;
 
@@ -148,13 +150,16 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
     publishSpec: adaptorReducer.publishSpecInput,
   };
 
-  const onboardingFunction = () => {
+  const onboardingFunction = async () => {
     const headers = {
       username: 'testuser',
       password: 'testuserpassword',
       'Content-Type': 'application/json',
     };
-    dispatch(AdaptorAction.submitJob(specFile, headers));
+
+    setLoader(true);
+    await dispatch(AdaptorAction.submitJob(specFile, headers));
+    setLoader(false);
     dispatch(
       ToastsAction.add('Adaptor Created Successfully!', 'SUCCESS', 'success'),
     );
@@ -162,6 +167,10 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
 
   return (
     <Page>
+      <Loader
+        open={loader}
+        message="Creating new adaptor. This might take a while..."
+      />
       <Header>
         <Stepper activeStep={activeStep}>
           {steps.map((label, index) => {
@@ -245,8 +254,7 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
               color="inherit"
               disabled={activeStep === 0}
               onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
+              sx={{ mr: 1 }}>
               Back
             </Button>
             <Box sx={{ flex: '1 1 auto' }} />

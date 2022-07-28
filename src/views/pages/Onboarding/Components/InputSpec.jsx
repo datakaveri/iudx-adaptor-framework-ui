@@ -22,6 +22,7 @@ import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
 import ToastsAction from '../../../../stores/toasts/ToastsAction';
 import InputSpecInputModel from '../../../../stores/adaptor/models/specInput/inputSpec/InputSpecInputModel';
 import EditorStyle from '../../../shared/constants/EditorStyle';
+import Loader from '../../../shared/components/Loader';
 
 require('prismjs/components/prism-jsx');
 
@@ -52,6 +53,7 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
   const [bypassExecution, setBypassExecution] = useState(false);
   const [requestType, setRequestType] = useState('');
   const [headers, setHeaders] = useState([]);
+  const [loader, setLoader] = useState(false);
 
   const [requestGenerationScripts, setRequestGenerationScripts] = useState('');
 
@@ -83,12 +85,13 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
 
   return (
     <div>
+      <Loader open={loader} message="Running Input Spec" />
       <Title>Input Spec</Title>
       <hr />
       <LeftMargin>
         <Flex>
           <AdaptorForm
-            onSubmit={values => {
+            onSubmit={async values => {
               const header = {
                 username: 'user',
                 password: 'user-password',
@@ -121,15 +124,16 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
                       },
                 },
               };
-              dispatch(
-                ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
-              );
+              dispatch(AdaptorAction.saveInputSpec(requestBody.inputSpec));
               if (!bypassExecution) {
-                dispatch(AdaptorAction.requestInputSpec(requestBody, header));
+                setLoader(true);
+                await dispatch(
+                  AdaptorAction.requestInputSpec(requestBody, header),
+                );
+                setLoader(false);
               }
               dispatch(
-                AdaptorAction.saveInputSpec(requestBody.inputSpec),
-                console.log(scheduleJob),
+                ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
               );
             }}>
             {() => (
