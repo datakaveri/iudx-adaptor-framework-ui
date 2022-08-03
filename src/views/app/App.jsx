@@ -1,7 +1,8 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import styled from 'styled-components';
+import Cookies from 'js-cookie';
 
 import configStore from '../../stores/configStore';
 import Loading from '../shared/components/Loading';
@@ -15,6 +16,17 @@ const App = () => {
   const initialState = {};
   const store = configStore(initialState);
   const [auth, setAuth] = useState(false);
+
+  const readCookie = () => {
+    const user = Cookies.get('user');
+    if (user) {
+      setAuth(user);
+    }
+  };
+
+  useEffect(() => {
+    readCookie();
+  }, []);
 
   return (
     <Provider store={store}>

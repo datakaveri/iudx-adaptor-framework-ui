@@ -8,7 +8,10 @@ import Container from '@mui/material/Container';
 import styled from 'styled-components';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Cookies from 'js-cookie';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import AuthApi from '../../../utilities/AuthApi';
+import ToastsAction from '../../../stores/toasts/ToastsAction';
 
 const theme = createTheme();
 
@@ -20,21 +23,28 @@ const Logo = styled.img`
   alt: iudx;
 `;
 
-export default function Login() {
+const Login = ({ dispatch }) => {
   const Auth = useContext(AuthApi);
-  // const handleClick = () => {
-  //   Auth.setAuth(true);
-  //   Cookies.set('user', 'loginTrue');
-  // };
 
   const handleSubmit = event => {
     event.preventDefault();
-    Auth.setAuth(true);
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('username'),
+    const creds = {
+      username: data.get('username'),
       password: data.get('password'),
-    });
+    };
+
+    if (
+      creds.username === 'testuser' ||
+      creds.password === 'testuserpassword'
+    ) {
+      Auth.setAuth(true);
+      Cookies.set('user', 'loginTrue');
+    } else {
+      dispatch(
+        ToastsAction.add('Invalid username / password', 'SUCCESS', 'success'),
+      );
+    }
   };
 
   return (
@@ -90,4 +100,16 @@ export default function Login() {
       </Container>
     </ThemeProvider>
   );
-}
+};
+
+Login.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -65,9 +65,7 @@ function Navbar() {
             <NavLink to="/myadaptors" className={classes.link}>
               My Adaptors
             </NavLink>
-            {/* <Button variant="outlined" size="small">
-              Login/Register
-            </Button> */}
+
             {Auth.auth ? (
               <LogoutButton />
             ) : (
