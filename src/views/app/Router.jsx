@@ -1,5 +1,5 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { usePromiseTracker } from 'react-promise-tracker';
 
 import Loading from '../shared/components/Loading';
@@ -7,10 +7,13 @@ import OnboardingPage from '../pages/Onboarding';
 import Home from '../pages/Home';
 import Navbar from '../shared/components/Navbar';
 import MyAdaptorsPage from '../pages/MyAdaptors';
+import AuthApi from '../../utilities/AuthApi';
+import Login from '../pages/Login/index';
 
 const Router = () => {
   const { promiseInProgress } = usePromiseTracker();
   const [loading, setLoading] = React.useState(false);
+  const Auth = useContext(AuthApi);
 
   return (
     <div>
@@ -21,8 +24,22 @@ const Router = () => {
         {!loading && (
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/onboarding" element={<OnboardingPage />} />
-            <Route path="/myadaptors" element={<MyAdaptorsPage />} />
+            <Route
+              path="/onboarding"
+              element={
+                Auth.auth ? <OnboardingPage /> : <Navigate to="/login" />
+              }
+            />
+            <Route
+              path="/myadaptors"
+              element={
+                Auth.auth ? <MyAdaptorsPage /> : <Navigate to="/login" />
+              }
+            />
+            <Route
+              path="/login"
+              element={Auth.auth ? <Navigate to="/" /> : <Login />}
+            />
           </Routes>
         )}
       </main>
