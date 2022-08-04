@@ -1,6 +1,6 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import HttpErrorResponseModel from '../models/HttpErrorResponseModel';
-import environment from '../environments';
 
 const RequestMethod = {
   Get: 'GET',
@@ -66,6 +66,12 @@ export default class HttpUtility {
   }
 
   static async _request(restRequest, config) {
+    const credentials = {
+      username: Cookies.get('user'),
+      password: Cookies.get('password'),
+    };
+    console.log('HTTP Utility credentials');
+    console.log(credentials);
     if (!restRequest.url) {
       console.error(
         `Received ${restRequest.url} which is invalid for a endpoint url`,
@@ -81,8 +87,8 @@ export default class HttpUtility {
         headers: {
           'Content-Type': 'application/json',
           ...config?.headers,
-          username: environment.BACKEND_API_USERNAME,
-          password: environment.BACKEND_API_PASSWORD,
+          username: credentials.username,
+          password: credentials.password,
           ...config?.params,
         },
       };

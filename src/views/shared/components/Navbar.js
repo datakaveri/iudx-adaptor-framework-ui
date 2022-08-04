@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
-  Button,
   AppBar,
   Toolbar,
   CssBaseline,
@@ -11,6 +10,9 @@ import {
 import { makeStyles } from '@mui/styles';
 import { NavLink } from 'react-router-dom';
 import DrawerComponent from './Drawer';
+import AuthApi from '../../../utilities/AuthApi';
+import LoginButton from './LoginButton';
+import LogoutButton from './LogoutButton';
 
 const logo = require('./iudx.jpg');
 
@@ -42,6 +44,8 @@ function Navbar() {
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const Auth = useContext(AuthApi);
+
   return (
     <AppBar position="static" color="grey" elevation={0.3}>
       <CssBaseline />
@@ -61,9 +65,8 @@ function Navbar() {
             <NavLink to="/myadaptors" className={classes.link}>
               My Adaptors
             </NavLink>
-            <Button variant="outlined" size="small">
-              Login/Register
-            </Button>
+
+            {Auth.auth ? <LogoutButton /> : <LoginButton />}
           </div>
         )}
       </Toolbar>
