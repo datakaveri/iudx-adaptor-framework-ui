@@ -34,18 +34,9 @@ const Login = ({ dispatch }) => {
       password: data.get('password'),
     };
 
-    if (
-      credentials.username === 'testuser' ||
-      credentials.password === 'testuserpassword'
-    ) {
-      Auth.setAuth(true);
-      Cookies.set('user', credentials.username);
-      Cookies.set('password', credentials.password);
-    } else {
-      dispatch(
-        ToastsAction.add('Invalid username / password', 'SUCCESS', 'success'),
-      );
-    }
+    Auth.setAuth(true);
+    Cookies.set('user', credentials.username);
+    Cookies.set('password', credentials.password);
   };
 
   return (
