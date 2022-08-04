@@ -29,17 +29,18 @@ const Login = ({ dispatch }) => {
   const handleSubmit = event => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const creds = {
+    const credentials = {
       username: data.get('username'),
       password: data.get('password'),
     };
 
     if (
-      creds.username === 'testuser' ||
-      creds.password === 'testuserpassword'
+      credentials.username === 'testuser' ||
+      credentials.password === 'testuserpassword'
     ) {
       Auth.setAuth(true);
-      Cookies.set('user', 'loginTrue');
+      Cookies.set('user', credentials.username);
+      Cookies.set('password', credentials.password);
     } else {
       dispatch(
         ToastsAction.add('Invalid username / password', 'SUCCESS', 'success'),

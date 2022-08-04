@@ -95,11 +95,7 @@ const TransformSpec = ({
               };
               const requestBody = {
                 inputData: parseSpec.result,
-                // inputData: {
-                //   deviceId: 'abc-123',
-                //   k1: 'a',
-                //   time: '2021-04-01T12:00:01+05:30',
-                // },
+
                 transformSpec: tfSpec,
               };
               const headers = {

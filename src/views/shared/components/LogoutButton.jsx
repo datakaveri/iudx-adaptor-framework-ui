@@ -8,6 +8,7 @@ const LogoutButton = () => {
   const handleClick = () => {
     Auth.setAuth(false);
     Cookies.remove('user');
+    Cookies.remove('password');
   };
 
   return (
