@@ -8,10 +8,8 @@ import Container from '@mui/material/Container';
 import styled from 'styled-components';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Cookies from 'js-cookie';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+
 import AuthApi from '../../../utilities/AuthApi';
-import ToastsAction from '../../../stores/toasts/ToastsAction';
 
 const theme = createTheme();
 
@@ -23,7 +21,7 @@ const Logo = styled.img`
   alt: iudx;
 `;
 
-const Login = ({ dispatch }) => {
+const Login = () => {
   const Auth = useContext(AuthApi);
 
   const handleSubmit = event => {
@@ -94,14 +92,4 @@ const Login = ({ dispatch }) => {
   );
 };
 
-Login.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = () => ({});
-
-const mapDispatchToProps = dispatch => ({
-  dispatch,
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;

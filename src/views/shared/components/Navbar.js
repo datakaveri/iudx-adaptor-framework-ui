@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import {
-  Button,
   AppBar,
   Toolbar,
   CssBaseline,
@@ -12,6 +11,7 @@ import { makeStyles } from '@mui/styles';
 import { NavLink } from 'react-router-dom';
 import DrawerComponent from './Drawer';
 import AuthApi from '../../../utilities/AuthApi';
+import LoginButton from './LoginButton';
 import LogoutButton from './LogoutButton';
 
 const logo = require('./iudx.jpg');
@@ -66,13 +66,7 @@ function Navbar() {
               My Adaptors
             </NavLink>
 
-            {Auth.auth ? (
-              <LogoutButton />
-            ) : (
-              <NavLink to="/login" className={classes.link}>
-                Login
-              </NavLink>
-            )}
+            {Auth.auth ? <LogoutButton /> : <LoginButton />}
           </div>
         )}
       </Toolbar>

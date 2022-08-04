@@ -1,18 +1,18 @@
 import React from 'react';
 import { Button } from '@mui/material';
-import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const LoginButton = () => {
+  const navigate = useNavigate();
+
   const handleClick = () => {
-    console.log('CLICKED LOGIN');
+    navigate('/login');
   };
 
   return (
-    <NavLink>
-      <Button onClick={handleClick} variant="outlined" size="small">
-        Login
-      </Button>
-    </NavLink>
+    <Button onClick={handleClick} variant="outlined" size="small">
+      Login
+    </Button>
   );
 };
 

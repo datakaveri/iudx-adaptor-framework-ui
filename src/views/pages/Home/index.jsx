@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Helmet } from 'react-helmet';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import Footer from './Components/Footer';
+import AuthApi from '../../../utilities/AuthApi';
 
 const Banner = styled.div`
   position: relative;
@@ -42,36 +45,78 @@ const FlatButton = styled.button`
   padding: 20px 60px;
   color: white;
   border: 2px solid;
+  cursor: pointer;
 
   &:hover {
     background: #002a55;
   }
 `;
 
-const Home = () => (
-  <div>
-    <Helmet>
-      <title>IUDX Adaptor Framework</title>
-    </Helmet>
+const Home = () => {
+  const navigate = useNavigate();
+  const Auth = useContext(AuthApi);
 
-    <Banner>
-      <Text>
-        <h2>Try out IUDX datasets in our Sandbox</h2>
-        <p>
-          IUDX offers a no-setup, customizable, Jupyter Notebooks environment.
-          Access free GPUs and a huge repository of community published data &
-          code.
-        </p>
-        <FlatButton type="button">Login /Register</FlatButton>
-      </Text>
-      <Image>
+  const logoutMethod = () => {
+    Auth.setAuth(false);
+    Cookies.remove('user');
+    Cookies.remove('password');
+  };
+
+  return (
+    <div>
+      <Helmet>
+        <title>IUDX Adaptor Framework</title>
+      </Helmet>
+
+      <Banner>
+        <Text>
+          <h2>IUDX Adaptor Framework</h2>
+          <p>
+            A generic and pluggable data ingestion utility based on Apache
+            Flink.
+          </p>
+          <h2>Features</h2>
+          <p>
+            <ul>
+              <li>Based on Apache Flink</li>
+              <li>Configuration file based specification of the pipeline</li>
+              <li>Pluggable for extending capabilities</li>
+              <li>
+                JSON Path based parsing and key extraction for watermarking
+              </li>
+              <li>Jolt based Json-Json transformation</li>
+              <li>Quartz based job scheduling</li>
+
+              <li>
+                Vert x based Api server with config based pipeline JAR
+                generation, user and adaptor job management and monitoring
+              </li>
+              <li>Docker development and deployment</li>
+            </ul>
+          </p>
+          {Auth.auth ? (
+            <FlatButton onClick={logoutMethod} type="button">
+              Logout
+            </FlatButton>
+          ) : (
+            <FlatButton
+              onClick={() => {
+                navigate('/login');
+              }}
+              type="button">
+              Login
+            </FlatButton>
+          )}
+        </Text>
+        <Image>
           <Img src="/Overview.png" alt="Overview" />
           <Img src="/Components.png" alt="Components" />
-      </Image>
-    </Banner>
+        </Image>
+      </Banner>
 
-    <Footer />
-  </div>
-);
+      <Footer />
+    </div>
+  );
+};
 
 export default Home;

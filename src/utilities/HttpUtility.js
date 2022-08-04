@@ -1,7 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import HttpErrorResponseModel from '../models/HttpErrorResponseModel';
-import environment from '../environments';
 
 const RequestMethod = {
   Get: 'GET',
