@@ -219,12 +219,15 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
         open={loader}
         message="Creating new adaptor. This might take a while..."
       />
-      <Dialog disableEscapeKeyDown open={openMenu} onClose={(e, reason) => {
-        if(reason === "backdropClick") {
-          return;
-        }
-        handleCloseMenu();
-      }}>
+      <Dialog
+        disableEscapeKeyDown
+        open={openMenu}
+        onClose={(e, reason) => {
+          if (reason === 'backdropClick') {
+            return;
+          }
+          handleCloseMenu();
+        }}>
         <DialogTitle>Select an option</DialogTitle>
         <DialogContent>
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
@@ -234,7 +237,7 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
                 id="demo-dialog-select"
                 value={menuOption}
                 onChange={handleChangeMenu}>
-                <MenuItem value="adaptor">Adaptor</MenuItem>
+                <MenuItem value="etl">ETL</MenuItem>
                 <MenuItem value="rules">Rules Engine</MenuItem>
               </Select>
             </FormControl>
@@ -248,7 +251,7 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
       <MenuApi.Provider value={{ menuOption, setMenuOption }}>
         <Header>
           <Stepper activeStep={activeStep}>
-            {menuOption === 'adaptor'
+            {menuOption === 'etl'
               ? steps.map((label, index) => {
                   const stepProps = {};
                   const labelProps = {};
@@ -289,12 +292,12 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
                 })}
           </Stepper>
 
-          {menuOption === 'adaptor' ? (
+          {menuOption === 'etl' ? (
             <Typography>{getStepContent(activeStep)}</Typography>
           ) : (
             <Typography>{getStepContentRules(activeStep)}</Typography>
           )}
-          {menuOption === 'adaptor' ? (
+          {menuOption === 'etl' ? (
             activeStep === steps.length ? (
               <React.Fragment>
                 <Container>
@@ -360,6 +363,8 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
             ) : (
               <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                 <Button
+                  variant="contained"
+                  size="large"
                   color="inherit"
                   disabled={activeStep === 0}
                   onClick={handleBack}
@@ -368,12 +373,17 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
                 </Button>
                 <Box sx={{ flex: '1 1 auto' }} />
                 {isStepOptional(activeStep) && (
-                  <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    color="inherit"
+                    onClick={handleSkip}
+                    sx={{ mr: 1 }}>
                     Skip
                   </Button>
                 )}
 
-                <Button onClick={handleNext}>
+                <Button variant="contained" size="large" onClick={handleNext}>
                   {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                 </Button>
               </Box>
@@ -383,7 +393,9 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
           ) : (
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Button
+                variant="contained"
                 color="inherit"
+                size="large"
                 disabled={activeStep === 0}
                 onClick={handleBack}
                 sx={{ mr: 1 }}>
@@ -396,7 +408,7 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
                 </Button>
               )}
 
-              <Button onClick={handleNext}>
+              <Button variant="contained" size="large" onClick={handleNext}>
                 {activeStep === rulesSteps.length - 1 ? 'Finish' : 'Next'}
               </Button>
             </Box>
