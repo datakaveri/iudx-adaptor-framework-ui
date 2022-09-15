@@ -200,8 +200,6 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
 
   const onboardingFunction = async () => {
     const headers = {
-      username: 'testuser',
-      password: 'testuserpassword',
       'Content-Type': 'application/json',
     };
 

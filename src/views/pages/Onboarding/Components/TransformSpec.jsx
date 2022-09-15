@@ -99,8 +99,6 @@ const TransformSpec = ({
                 transformSpec: tfSpec,
               };
               const headers = {
-                username: 'user',
-                password: 'user-password',
                 'Content-Type': 'application/json',
               };
               dispatch(AdaptorAction.saveTransformSpec(tfSpec));

@@ -93,8 +93,6 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
           <AdaptorForm
             onSubmit={async values => {
               const header = {
-                username: 'user',
-                password: 'user-password',
                 'Content-Type': 'application/json',
               };
               const requestBody = {
