@@ -219,7 +219,12 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
         open={loader}
         message="Creating new adaptor. This might take a while..."
       />
-      <Dialog disableEscapeKeyDown open={openMenu} onClose={handleCloseMenu}>
+      <Dialog disableEscapeKeyDown open={openMenu} onClose={(e, reason) => {
+        if(reason === "backdropClick") {
+          return;
+        }
+        handleCloseMenu();
+      }}>
         <DialogTitle>Select an option</DialogTitle>
         <DialogContent>
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
