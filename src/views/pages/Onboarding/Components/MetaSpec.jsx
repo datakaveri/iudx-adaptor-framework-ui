@@ -91,7 +91,7 @@ const MetaSpec = ({ dispatch, metaSpec }) => {
                 ) : (
                   ''
                 )}
-                {Menu.menuOption === 'adaptor' ? (
+                {Menu.menuOption === 'etl' ? (
                   <Group>
                     <AdaptorInput
                       optional

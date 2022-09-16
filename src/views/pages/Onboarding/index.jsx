@@ -3,21 +3,7 @@
 /* eslint-disable react/require-default-props */
 import * as React from 'react';
 
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import Button from '@mui/material/Button';
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from '@mui/material';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import StepButton from '@mui/material/StepButton';
-import Typography from '@mui/material/Typography';
+import { Box, Button } from '@mui/material';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -26,21 +12,17 @@ import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
 
 import { Title } from '../../shared/components/SpecComponents';
-import PublishSpec from './Components/PublishSpec';
-import InputSpec from './Components/InputSpec';
-import InputSpecRules from './Components/InputSpecRules';
-import ParseSpec from './Components/ParseSpec';
-import MetaSpec2 from './Components/MetaSpec';
-import DeduplicationSpec from './Components/DeduplicationSpec';
-import TransformSpec from './Components/TransformSpec';
-import FailureRecoverySpec from './Components/FailureRecoverySpec';
-import RuleSourceSpec from './Components/RuleSourceSpec';
 import AdaptorAction from '../../../stores/adaptor/AdaptorAction';
 import EditorStyle from '../../shared/constants/EditorStyle';
 import EditorStyleLarge from '../../shared/constants/EditorStyleLarge';
 import ToastsAction from '../../../stores/toasts/ToastsAction';
 import Loader from '../../shared/components/Loader';
 import MenuApi from '../../../utilities/MenuApi';
+import MenuDialogBox from './Components/UI/MenuDialogBox';
+import StepperComponent from './Components/UI/StepperComponent';
+import StepperContentComponent from './Components/UI/StepperContentComponent';
+import ETLBottomRow from './Components/UI/ETLBottomRow';
+import RulesBottomRow from './Components/UI/RulesBottomRow';
 
 const steps = [
   'Meta Spec',
@@ -55,7 +37,7 @@ const steps = [
 const rulesSteps = [
   'Meta Spec',
   'Input Spec',
-  'Rule Source Spec',
+  'Failure Recovery Spec',
   'Publish Spec',
 ];
 
@@ -98,89 +80,6 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
   const [openMenu, setOpenMenu] = React.useState(true);
   const [menuOption, setMenuOption] = React.useState('');
 
-  const isStepOptional = step => step === 5;
-
-  const isStepSkipped = step => skipped.has(step);
-
-  const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
-
-    setActiveStep(prevActiveStep => prevActiveStep + 1);
-    setSkipped(newSkipped);
-  };
-
-  const handleBack = () => {
-    setActiveStep(prevActiveStep => prevActiveStep - 1);
-  };
-
-  const handleStep = step => () => {
-    if (step < activeStep) setActiveStep(step);
-  };
-
-  const handleCloseMenu = () => {
-    setOpenMenu(false);
-    console.log('Closed dialog');
-    console.log(menuOption);
-  };
-
-  const handleChangeMenu = event => {
-    setMenuOption(event.target.value);
-  };
-
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep(prevActiveStep => prevActiveStep + 1);
-    setSkipped(prevSkipped => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
-
-  function getStepContent(step) {
-    switch (step) {
-      case 0:
-        return <MetaSpec2 />;
-      case 1:
-        return <InputSpec />;
-      case 2:
-        return <ParseSpec />;
-      case 3:
-        return <DeduplicationSpec />;
-      case 4:
-        return <TransformSpec />;
-      case 5:
-        return <FailureRecoverySpec />;
-      case 6:
-        return <PublishSpec />;
-
-      default:
-        return '';
-    }
-  }
-
-  function getStepContentRules(step) {
-    switch (step) {
-      case 0:
-        return <MetaSpec2 />;
-      case 1:
-        return <InputSpecRules />;
-      case 2:
-        return <RuleSourceSpec />;
-      case 3:
-        return <PublishSpec />;
-      default:
-        return '';
-    }
-  }
-
   const handleReset = () => {
     setActiveStep(0);
   };
@@ -217,84 +116,28 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
         open={loader}
         message="Creating new adaptor. This might take a while..."
       />
-      <Dialog
-        disableEscapeKeyDown
-        open={openMenu}
-        onClose={(e, reason) => {
-          if (reason === 'backdropClick') {
-            return;
-          }
-          handleCloseMenu();
-        }}>
-        <DialogTitle>Select an option</DialogTitle>
-        <DialogContent>
-          <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-            <FormControl sx={{ m: 1, minWidth: 200 }}>
-              <Select
-                labelId="demo-dialog-select-label"
-                id="demo-dialog-select"
-                value={menuOption}
-                onChange={handleChangeMenu}>
-                <MenuItem value="etl">ETL</MenuItem>
-                <MenuItem value="rules">Rules Engine</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseMenu}>OK</Button>
-        </DialogActions>
-      </Dialog>
+
+      <MenuDialogBox
+        openMenu={openMenu}
+        menuOption={menuOption}
+        setOpenMenu={setOpenMenu}
+        setMenuOption={setMenuOption}
+      />
 
       <MenuApi.Provider value={{ menuOption, setMenuOption }}>
         <Header>
-          <Stepper activeStep={activeStep}>
-            {menuOption === 'etl'
-              ? steps.map((label, index) => {
-                  const stepProps = {};
-                  const labelProps = {};
-                  if (isStepOptional(index)) {
-                    labelProps.optional = (
-                      <Typography variant="caption">Optional</Typography>
-                    );
-                  }
-                  if (isStepSkipped(index)) {
-                    stepProps.completed = false;
-                  }
-                  return (
-                    <Step key={label} {...stepProps}>
-                      <StepButton {...labelProps} onClick={handleStep(index)}>
-                        {label}
-                      </StepButton>
-                    </Step>
-                  );
-                })
-              : rulesSteps.map((label, index) => {
-                  const stepProps = {};
-                  const labelProps = {};
-                  if (isStepOptional(index)) {
-                    labelProps.optional = (
-                      <Typography variant="caption">Optional</Typography>
-                    );
-                  }
-                  if (isStepSkipped(index)) {
-                    stepProps.completed = false;
-                  }
-                  return (
-                    <Step key={label} {...stepProps}>
-                      <StepButton {...labelProps} onClick={handleStep(index)}>
-                        {label}
-                      </StepButton>
-                    </Step>
-                  );
-                })}
-          </Stepper>
+          <StepperComponent
+            menuOption={menuOption}
+            skipped={skipped}
+            activeStep={activeStep}
+            setActiveStep={setActiveStep}
+          />
 
-          {menuOption === 'etl' ? (
-            <Typography>{getStepContent(activeStep)}</Typography>
-          ) : (
-            <Typography>{getStepContentRules(activeStep)}</Typography>
-          )}
+          <StepperContentComponent
+            menuOption={menuOption}
+            activeStep={activeStep}
+          />
+
           {menuOption === 'etl' ? (
             activeStep === steps.length ? (
               <React.Fragment>
@@ -359,57 +202,22 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
                 </Box>
               </React.Fragment>
             ) : (
-              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                <Button
-                  variant="contained"
-                  size="large"
-                  color="inherit"
-                  disabled={activeStep === 0}
-                  onClick={handleBack}
-                  sx={{ mr: 1 }}>
-                  Back
-                </Button>
-                <Box sx={{ flex: '1 1 auto' }} />
-                {isStepOptional(activeStep) && (
-                  <Button
-                    variant="contained"
-                    size="large"
-                    color="inherit"
-                    onClick={handleSkip}
-                    sx={{ mr: 1 }}>
-                    Skip
-                  </Button>
-                )}
-
-                <Button variant="contained" size="large" onClick={handleNext}>
-                  {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                </Button>
-              </Box>
+              <ETLBottomRow
+                activeStep={activeStep}
+                setActiveStep={setActiveStep}
+                skipped={skipped}
+                setSkipped={setSkipped}
+              />
             )
           ) : activeStep === rulesSteps.length ? (
             <p>Completed Rules spec</p>
           ) : (
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Button
-                variant="contained"
-                color="inherit"
-                size="large"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                sx={{ mr: 1 }}>
-                Back
-              </Button>
-              <Box sx={{ flex: '1 1 auto' }} />
-              {isStepOptional(activeStep) && (
-                <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                  Skip
-                </Button>
-              )}
-
-              <Button variant="contained" size="large" onClick={handleNext}>
-                {activeStep === rulesSteps.length - 1 ? 'Finish' : 'Next'}
-              </Button>
-            </Box>
+            <RulesBottomRow
+              activeStep={activeStep}
+              setActiveStep={setActiveStep}
+              skipped={skipped}
+              setSkipped={setSkipped}
+            />
           )}
         </Header>
       </MenuApi.Provider>
