@@ -9,6 +9,7 @@ import Navbar from '../shared/components/Navbar';
 import MyAdaptorsPage from '../pages/MyAdaptors';
 import AuthApi from '../../utilities/AuthApi';
 import Login from '../pages/Login/index';
+import Rules from '../pages/Rules';
 
 const Router = () => {
   const { promiseInProgress } = usePromiseTracker();
@@ -40,6 +41,8 @@ const Router = () => {
               path="/login"
               element={Auth.auth ? <Navigate to="/" /> : <Login />}
             />
+
+            <Route path="/rules" element={<Rules />} />
           </Routes>
         )}
       </main>

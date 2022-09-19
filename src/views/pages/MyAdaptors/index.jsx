@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 import Adaptor from './Components/Adaptor';
-import { Line } from '../../shared/components/SpecComponents';
+import { Line, Title } from '../../shared/components/SpecComponents';
 import ImageButton from '../../shared/components/ImageButton';
 import { selectAdaptors } from '../../../selectors/adaptor/AdaptorSelector';
 import AdaptorAction from '../../../stores/adaptor/AdaptorAction';
@@ -41,6 +41,7 @@ const Tab = styled.div`
   margin: 0px;
   width: 25%;
   text-align: start;
+  font-weight: bold;
 `;
 
 const Splitter = styled.div`
@@ -87,7 +88,7 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
       <Navbar>
         <NavbarContent>
           <Buttons>
-            <h1>My Adaptors</h1>
+            <Title>My Adaptors</Title>
             <Splitter />
             <ImageButton
               Solid="Solid"
@@ -114,25 +115,15 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
         </NavbarContent>
 
         <TabsBar>
-          <Tab>
-            <b>Name</b>
-          </Tab>
+          <Tab>Name</Tab>
 
-          <Tab>
-            <b>Type</b>
-          </Tab>
+          <Tab>Type</Tab>
 
-          <Tab>
-            <b>Last Used</b>
-          </Tab>
+          <Tab>Last Used</Tab>
 
-          <Tab>
-            <b>Logs</b>
-          </Tab>
+          <Tab>Logs</Tab>
 
-          <Tab>
-            <b>Status</b>
-          </Tab>
+          <Tab>Status</Tab>
         </TabsBar>
         <div />
         <Line />
