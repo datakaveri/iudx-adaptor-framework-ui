@@ -10,6 +10,7 @@ import AdaptorInput from '../../../shared/components/AdaptorInput';
 
 import MetaSpecInputModel from '../../../../stores/adaptor/models/specInput/metaSpec/MetaSpecInputModel';
 import MenuApi from '../../../../utilities/MenuApi';
+import RulesEngineAction from '../../../../stores/rulesEngine/RulesEngineAction';
 
 const Group = styled.div`
   display: flex;
@@ -43,7 +44,19 @@ const InputSpecRules = ({ dispatch, metaSpec }) => {
         <Flex>
           <AdaptorForm
             onSubmit={values => {
-              console.log(values);
+              const reqBody = {
+                type: values.type,
+                uri: values.uri,
+                queueName: values.queueName,
+                parseSpec: {
+                  type: values.parseSpecType,
+                  messageContainer: values.parseSpecMessageContainer,
+                  timestampPath: values.parseSpecTimestampPath,
+                  staticKey: values.parseSpecStaticKey,
+                },
+              };
+
+              dispatch(RulesEngineAction.saveInputSpec(reqBody));
             }}>
             {() => (
               <FormWrapper>

@@ -8,6 +8,7 @@ import AdaptorForm from '../../../shared/components/AdaptorForm';
 import AdaptorInput from '../../../shared/components/AdaptorInput';
 
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
+import RulesEngineAction from '../../../../stores/rulesEngine/RulesEngineAction';
 import ToastsAction from '../../../../stores/toasts/ToastsAction';
 import PublishSpecInputModel from '../../../../stores/adaptor/models/specInput/publishSpec/PublishSpecInputModel';
 import MenuApi from '../../../../utilities/MenuApi';
@@ -47,11 +48,16 @@ const PublishSpec = ({ dispatch, publishSpecInput }) => {
               dispatch(
                 ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
               );
-              dispatch(
-                AdaptorAction.savePublishSpec(
-                  new PublishSpecInputModel(values),
-                ),
-              );
+
+              if (Menu.menuOption === 'etl') {
+                dispatch(
+                  AdaptorAction.savePublishSpec(
+                    new PublishSpecInputModel(values),
+                  ),
+                );
+              } else if (Menu.menuOption === 'rules') {
+                dispatch(RulesEngineAction.savePublishSpec(values));
+              }
             }}>
             {() => (
               <FormWrapper>
@@ -71,7 +77,7 @@ const PublishSpec = ({ dispatch, publishSpecInput }) => {
                   />
                 </Group>
 
-                {Menu.menuOption === 'adaptor' ? (
+                {Menu.menuOption === 'etl' ? (
                   <>
                     <Group>
                       <AdaptorInput

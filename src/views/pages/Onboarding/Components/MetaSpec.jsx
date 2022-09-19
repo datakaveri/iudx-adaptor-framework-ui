@@ -11,6 +11,8 @@ import AdaptorInput from '../../../shared/components/AdaptorInput';
 import ToastsAction from '../../../../stores/toasts/ToastsAction';
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
 import MetaSpecInputModel from '../../../../stores/adaptor/models/specInput/metaSpec/MetaSpecInputModel';
+import RulesEngineAction from '../../../../stores/rulesEngine/RulesEngineAction';
+
 import MenuApi from '../../../../utilities/MenuApi';
 
 const Group = styled.div`
@@ -57,15 +59,23 @@ const MetaSpec = ({ dispatch, metaSpec }) => {
                 dispatch(
                   ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
                 );
-                const reqBody = {
-                  name: values.name,
-                  schedulePattern:
-                    values.schedulePattern !== ''
-                      ? values.schedulePattern
-                      : undefined,
-                };
-                dispatch(AdaptorAction.saveMetaSpec(reqBody));
-                console.log(values);
+
+                if (Menu.menuOption === 'etl') {
+                  const reqBody = {
+                    name: values.name,
+                    schedulePattern:
+                      values.schedulePattern !== ''
+                        ? values.schedulePattern
+                        : undefined,
+                  };
+                  dispatch(AdaptorAction.saveMetaSpec(reqBody));
+                } else if (Menu.menuOption === 'rules') {
+                  const reqBody = {
+                    name: values.name,
+                    adaptorType: 'RULES',
+                  };
+                  dispatch(RulesEngineAction.saveMetaSpec(reqBody));
+                }
               }
             }}>
             {() => (

@@ -69,7 +69,12 @@ const AddRuleDialog = ({ openDialog, setOpenDialog }) => {
 
   return (
     <Dialog
-      sx={{ '& .MuiDialog-paper': { width: '50%', maxHeight: 500 } }}
+      PaperProps={{
+        sx: {
+          height: '570px',
+          width: '50%',
+        },
+      }}
       open={openDialog}
       onClose={(e, reason) => {
         if (reason === 'backdropClick') {
