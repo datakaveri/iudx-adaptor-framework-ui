@@ -1,4 +1,3 @@
-/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import { Stepper, Step, StepButton, Typography } from '@mui/material';
 import { PropTypes } from 'prop-types';
@@ -80,10 +79,10 @@ const StepperComponent = ({
 };
 
 StepperComponent.propTypes = {
-  menuOption: PropTypes.any.isRequired,
-  skipped: PropTypes.any.isRequired,
-  activeStep: PropTypes.any.isRequired,
-  setActiveStep: PropTypes.any.isRequired,
+  menuOption: PropTypes.string.isRequired,
+  skipped: PropTypes.bool.isRequired,
+  activeStep: PropTypes.number.isRequired,
+  setActiveStep: PropTypes.func.isRequired,
 };
 
 export default StepperComponent;

@@ -1,4 +1,3 @@
-/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { Typography } from '@mui/material';
@@ -57,8 +56,8 @@ const StepperContentComponent = ({ menuOption, activeStep }) => {
 };
 
 StepperContentComponent.propTypes = {
-  menuOption: PropTypes.any.isRequired,
-  activeStep: PropTypes.any.isRequired,
+  menuOption: PropTypes.string.isRequired,
+  activeStep: PropTypes.number.isRequired,
 };
 
 export default StepperContentComponent;

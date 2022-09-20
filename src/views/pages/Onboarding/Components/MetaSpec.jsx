@@ -36,7 +36,7 @@ const Flex = styled.div`
   display: 'flex';
 `;
 
-const MetaSpec = ({ dispatch, metaSpec }) => {
+const MetaSpec = ({ dispatch, metaSpec, metaSpecRules }) => {
   const [spaceError, setSpaceError] = useState(false);
   const Menu = useContext(MenuApi);
 
@@ -84,7 +84,11 @@ const MetaSpec = ({ dispatch, metaSpec }) => {
                   <AdaptorInput
                     inputlabel="Name"
                     name="name"
-                    initialValue={metaSpec.name}
+                    initialValue={
+                      Menu.menuOption === 'etl'
+                        ? metaSpec.name
+                        : metaSpecRules.name
+                    }
                   />
                 </Group>
                 {spaceError ? (
@@ -129,10 +133,12 @@ const MetaSpec = ({ dispatch, metaSpec }) => {
 MetaSpec.propTypes = {
   dispatch: PropTypes.func.isRequired,
   metaSpec: PropTypes.instanceOf(MetaSpecInputModel).isRequired,
+  metaSpecRules: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
   metaSpec: new MetaSpecInputModel(state.adaptorReducer.metaSpecInput),
+  metaSpecRules: state.rulesEngine.metaSpecInput,
 });
 
 const mapDispatchToProps = dispatch => ({

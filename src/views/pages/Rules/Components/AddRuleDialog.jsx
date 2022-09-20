@@ -1,4 +1,3 @@
-/* eslint-disable react/forbid-prop-types */
 import {
   Dialog,
   DialogContent,
@@ -64,7 +63,6 @@ const FormWrapper = styled.div`
 const AddRuleDialog = ({ openDialog, setOpenDialog }) => {
   const handleCloseMenu = () => {
     setOpenDialog(false);
-    console.log('Closed dialog');
   };
 
   return (
@@ -142,8 +140,8 @@ const AddRuleDialog = ({ openDialog, setOpenDialog }) => {
 };
 
 AddRuleDialog.propTypes = {
-  openDialog: PropTypes.any.isRequired,
-  setOpenDialog: PropTypes.any.isRequired,
+  openDialog: PropTypes.bool.isRequired,
+  setOpenDialog: PropTypes.func.isRequired,
 };
 
 export default AddRuleDialog;

@@ -1,4 +1,3 @@
-/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -21,8 +20,6 @@ const MenuDialogBox = ({
 }) => {
   const handleCloseMenu = () => {
     setOpenMenu(false);
-    console.log('Closed dialog');
-    console.log(menuOption);
   };
 
   const handleChangeMenu = event => {
@@ -62,10 +59,10 @@ const MenuDialogBox = ({
 };
 
 MenuDialogBox.propTypes = {
-  openMenu: PropTypes.any.isRequired,
-  setOpenMenu: PropTypes.any.isRequired,
-  menuOption: PropTypes.any.isRequired,
-  setMenuOption: PropTypes.any.isRequired,
+  openMenu: PropTypes.bool.isRequired,
+  setOpenMenu: PropTypes.func.isRequired,
+  menuOption: PropTypes.string.isRequired,
+  setMenuOption: PropTypes.func.isRequired,
 };
 
 export default MenuDialogBox;
