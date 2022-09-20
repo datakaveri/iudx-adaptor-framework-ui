@@ -8,7 +8,6 @@ import Loader from '../../../shared/components/Loader';
 import RulesEngineAction from '../../../../stores/rulesEngine/RulesEngineAction';
 import ImageButton from '../../../shared/components/ImageButton';
 
-
 const LabelsRow = styled.div`
   display: flex;
   flex-direction: row;
@@ -47,6 +46,7 @@ function Rule({
     setLoader(true);
     setMessage('Deleting rule, please wait...');
     await dispatch(RulesEngineAction.deleteRule(adaptorId, id));
+    await dispatch(RulesEngineAction.getRules(adaptorId));
     setLoader(false);
   };
 
@@ -68,15 +68,15 @@ function Rule({
         </Labels>
         <Labels>{moment(createdAt).format('lll')}</Labels>
         <ImageButton
-            Solid="Solid"
-            Text="Delete"
-            color="#EA4335"
-            icon="delete.png"
-            hoverIcon="delete.png"
-            hoverColor="#9b241a"
-            hoverTextColor="white"
-            onClicked={deleteRule}
-          />        
+          Solid="Solid"
+          Text="Delete"
+          color="#EA4335"
+          icon="delete.png"
+          hoverIcon="delete.png"
+          hoverColor="#9b241a"
+          hoverTextColor="white"
+          onClicked={deleteRule}
+        />
       </LabelsContainer>
     </LabelsRow>
   );
