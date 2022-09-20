@@ -1,5 +1,6 @@
 const dev = {
-  BACKEND_URL: 'http://13.232.120.105:30003',
+  // BACKEND_URL: 'http://13.232.120.105:30003',
+  BACKEND_URL: 'http://localhost:8080',
   BACKEND_API_USERNAME: 'testuser',
   BACKEND_API_PASSWORD: 'testuserpassword',
   GRAFANA_DASHBOARD_URL:
@@ -7,7 +8,8 @@ const dev = {
 };
 
 const prod = {
-  BACKEND_URL: 'http://13.232.120.105:30003',
+  // BACKEND_URL: 'http://13.232.120.105:30003',
+  BACKEND_URL: 'http://localhost:8080',
   BACKEND_API_USERNAME: 'testuser',
   BACKEND_API_PASSWORD: 'testuserpassword',
   GRAFANA_DASHBOARD_URL:

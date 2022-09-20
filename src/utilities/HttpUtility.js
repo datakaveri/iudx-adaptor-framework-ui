@@ -70,8 +70,6 @@ export default class HttpUtility {
       username: Cookies.get('user'),
       password: Cookies.get('password'),
     };
-    console.log('HTTP Utility credentials');
-    console.log(credentials);
     if (!restRequest.url) {
       console.error(
         `Received ${restRequest.url} which is invalid for a endpoint url`,

@@ -1,4 +1,3 @@
-/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import { Box, Button } from '@mui/material';
 import { PropTypes } from 'prop-types';
@@ -69,10 +68,10 @@ const RulesBottomRow = ({ activeStep, setActiveStep, skipped, setSkipped }) => {
 };
 
 RulesBottomRow.propTypes = {
-  activeStep: PropTypes.any.isRequired,
-  setActiveStep: PropTypes.any.isRequired,
-  skipped: PropTypes.any.isRequired,
-  setSkipped: PropTypes.any.isRequired,
+  activeStep: PropTypes.number.isRequired,
+  setActiveStep: PropTypes.func.isRequired,
+  skipped: PropTypes.bool.isRequired,
+  setSkipped: PropTypes.func.isRequired,
 };
 
 export default RulesBottomRow;

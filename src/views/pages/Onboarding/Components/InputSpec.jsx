@@ -80,7 +80,6 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
 
   const handleChange = value => {
     setRequestType(value.target.value);
-    console.log(requestType);
   };
 
   return (

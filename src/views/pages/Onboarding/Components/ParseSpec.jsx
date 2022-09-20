@@ -77,7 +77,6 @@ const ParseSpec = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
                 inputData: inputSpec,
                 parseSpec: spec,
               };
-              console.log(requestBody);
               dispatch(AdaptorAction.saveParseSpec(spec));
               setLoader(true);
               await dispatch(

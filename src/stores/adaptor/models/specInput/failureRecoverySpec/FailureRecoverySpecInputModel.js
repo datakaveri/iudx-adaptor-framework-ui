@@ -3,15 +3,15 @@ import { BaseModel } from 'sjs-base-model';
 export default class FailureRecoverySpecInputModel extends BaseModel {
   type = '';
 
-  initialBackoff = Number;
+  'initial-backoff' = Number;
 
-  maxBackoff = Number;
+  'max-backoff' = Number;
 
-  backoffMultiplier = Number;
+  'backoff-multiplier' = Number;
 
-  resetBackoffThreshold = Number;
+  'reset-backoff-threshold' = Number;
 
-  jitterFactor = Number;
+  'jitter-factor' = Number;
 
   attempts = Number;
 

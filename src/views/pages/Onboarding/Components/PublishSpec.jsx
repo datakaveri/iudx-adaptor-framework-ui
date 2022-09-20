@@ -11,6 +11,7 @@ import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
 import RulesEngineAction from '../../../../stores/rulesEngine/RulesEngineAction';
 import ToastsAction from '../../../../stores/toasts/ToastsAction';
 import PublishSpecInputModel from '../../../../stores/adaptor/models/specInput/publishSpec/PublishSpecInputModel';
+import RulesPublishSpecInput from '../../../../stores/rulesEngine/models/specInput/publishSpec/PublishSpec';
 import MenuApi from '../../../../utilities/MenuApi';
 
 const Group = styled.div`
@@ -34,7 +35,7 @@ const Flex = styled.div`
   display: flex;
 `;
 
-const PublishSpec = ({ dispatch, publishSpecInput }) => {
+const PublishSpec = ({ dispatch, publishSpecInput, publishSpecInputRules }) => {
   const Menu = useContext(MenuApi);
 
   return (
@@ -65,7 +66,11 @@ const PublishSpec = ({ dispatch, publishSpecInput }) => {
                   <AdaptorInput
                     inputlabel="Type"
                     name="type"
-                    initialValue={publishSpecInput.type}
+                    initialValue={
+                      Menu.menuOption === 'etl'
+                        ? publishSpecInput.type
+                        : publishSpecInputRules.type
+                    }
                   />
                 </Group>
 
@@ -73,7 +78,11 @@ const PublishSpec = ({ dispatch, publishSpecInput }) => {
                   <AdaptorInput
                     inputlabel="URI"
                     name="uri"
-                    initialValue={publishSpecInput.uri}
+                    initialValue={
+                      Menu.menuOption === 'etl'
+                        ? publishSpecInput.uri
+                        : publishSpecInputRules.uri
+                    }
                   />
                 </Group>
 
@@ -114,11 +123,15 @@ const PublishSpec = ({ dispatch, publishSpecInput }) => {
 PublishSpec.propTypes = {
   dispatch: PropTypes.func.isRequired,
   publishSpecInput: PropTypes.instanceOf(PublishSpecInputModel).isRequired,
+  publishSpecInputRules: PropTypes.instanceOf(RulesPublishSpecInput).isRequired,
 };
 
 const mapStateToProps = state => ({
   publishSpecInput: new PublishSpecInputModel(
     state.adaptorReducer.publishSpecInput,
+  ),
+  publishSpecInputRules: new RulesPublishSpecInput(
+    state.rulesEngine.publishSpecInput,
   ),
 });
 

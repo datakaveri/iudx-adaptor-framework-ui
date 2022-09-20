@@ -5,12 +5,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Title } from '../../../shared/components/SpecComponents';
 
+import ToastsAction from '../../../../stores/toasts/ToastsAction';
+
 import AdaptorForm from '../../../shared/components/AdaptorForm';
 import AdaptorInput from '../../../shared/components/AdaptorInput';
 
-import MetaSpecInputModel from '../../../../stores/adaptor/models/specInput/metaSpec/MetaSpecInputModel';
 import MenuApi from '../../../../utilities/MenuApi';
 import RulesEngineAction from '../../../../stores/rulesEngine/RulesEngineAction';
+import RulesInputSpecInput from '../../../../stores/rulesEngine/models/specInput/inputSpec/InputSpec';
 
 const Group = styled.div`
   display: flex;
@@ -33,7 +35,7 @@ const Flex = styled.div`
   display: 'flex';
 `;
 
-const InputSpecRules = ({ dispatch, metaSpec }) => {
+const InputSpecRules = ({ dispatch, inputSpec }) => {
   const Menu = useContext(MenuApi);
 
   return (
@@ -56,6 +58,9 @@ const InputSpecRules = ({ dispatch, metaSpec }) => {
                 },
               };
 
+              dispatch(
+                ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
+              );
               dispatch(RulesEngineAction.saveInputSpec(reqBody));
             }}>
             {() => (
@@ -66,16 +71,23 @@ const InputSpecRules = ({ dispatch, metaSpec }) => {
                     inputtype="select"
                     selectoptions={[{ key: 'RMQ', value: 'rmq' }]}
                     name="type"
+                    initialValue={inputSpec.type}
                     placeholder="type"
                   />
                 </Group>
                 <Group>
-                  <AdaptorInput inputlabel="URL" name="url" placeholder="URL" />
+                  <AdaptorInput
+                    initialValue={inputSpec.uri}
+                    inputlabel="URI"
+                    name="uri"
+                    placeholder="URI"
+                  />
                 </Group>
                 <Group>
                   <AdaptorInput
                     inputlabel="Queue Name"
                     name="queueName"
+                    initialValue={inputSpec.queueName}
                     placeholder="Queue Name"
                   />
                 </Group>
@@ -86,6 +98,9 @@ const InputSpecRules = ({ dispatch, metaSpec }) => {
                     optional
                     inputlabel="Type"
                     inputtype="select"
+                    initialValue={
+                      inputSpec.parseSpec ? inputSpec.parseSpec.type : ''
+                    }
                     selectoptions={[{ key: 'JSON', value: 'json' }]}
                     name="parseSpecType"
                     placeholder="type"
@@ -94,6 +109,11 @@ const InputSpecRules = ({ dispatch, metaSpec }) => {
                 <Group>
                   <AdaptorInput
                     optional
+                    initialValue={
+                      inputSpec.parseSpec
+                        ? inputSpec.parseSpec.messageContainer
+                        : ''
+                    }
                     inputlabel="Message Container"
                     name="parseSpecMessageContainer"
                     placeholder="Message Container"
@@ -102,6 +122,11 @@ const InputSpecRules = ({ dispatch, metaSpec }) => {
                 <Group>
                   <AdaptorInput
                     optional
+                    initialValue={
+                      inputSpec.parseSpec
+                        ? inputSpec.parseSpec.timestampPath
+                        : ''
+                    }
                     inputlabel="Timestamp Path"
                     name="parseSpecTimestampPath"
                     placeholder="Timestamp Path"
@@ -110,6 +135,9 @@ const InputSpecRules = ({ dispatch, metaSpec }) => {
                 <Group>
                   <AdaptorInput
                     optional
+                    initialValue={
+                      inputSpec.parseSpec ? inputSpec.parseSpec.staticKey : ''
+                    }
                     inputlabel="Static Key"
                     name="parseSpecStaticKey"
                     placeholder="Static Key"
@@ -129,11 +157,11 @@ const InputSpecRules = ({ dispatch, metaSpec }) => {
 
 InputSpecRules.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  metaSpec: PropTypes.instanceOf(MetaSpecInputModel).isRequired,
+  inputSpec: PropTypes.instanceOf(RulesInputSpecInput).isRequired,
 };
 
 const mapStateToProps = state => ({
-  metaSpec: new MetaSpecInputModel(state.adaptorReducer.metaSpecInput),
+  inputSpec: new RulesInputSpecInput(state.rulesEngine.inputSpecInput),
 });
 
 const mapDispatchToProps = dispatch => ({

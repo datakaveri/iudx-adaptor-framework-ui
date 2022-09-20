@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-no-constructed-context-values */
 /* eslint-disable react/require-default-props */
@@ -73,7 +74,7 @@ const Center = styled.div`
   margin: 3%;
 `;
 
-function OnboardingPage({ dispatch, adaptorReducer }) {
+function OnboardingPage({ dispatch, adaptorReducer, rulesEngine }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [loader, setLoader] = React.useState(false);
@@ -95,6 +96,16 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
     deduplicationSpec: adaptorReducer.deduplicationSpecInput,
     transformSpec: adaptorReducer.transformSpecInput,
     publishSpec: adaptorReducer.publishSpecInput,
+  };
+
+  const specFileRules = {
+    ...rulesEngine.metaSpecInput,
+    failureRecoverySpec:
+      rulesEngine.failureRecoverySpecInput !== {}
+        ? rulesEngine.failureRecoverySpecInput
+        : undefined,
+    inputSpec: rulesEngine.inputSpecInput,
+    publishSpec: rulesEngine.publishSpecInput,
   };
 
   const onboardingFunction = async () => {
@@ -210,7 +221,32 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
               />
             )
           ) : activeStep === rulesSteps.length ? (
-            <p>Completed Rules spec</p>
+            <>
+              <Title>Rules Spec Outline</Title>
+
+              <Editor
+                disabled
+                value={
+                  rulesEngine === ''
+                    ? ''
+                    : JSON.stringify(specFileRules, null, 4)
+                }
+                highlight={value => highlight(value, languages.jsx)}
+                padding={20}
+                style={EditorStyleLarge}
+              />
+              <Center>
+                <Button onClick={onboardingFunction}>
+                  Submit Spec Outline
+                </Button>
+              </Center>
+              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                <Box sx={{ flex: '1 1 auto' }} />
+                <Button variant="contained" onClick={handleReset}>
+                  Reset
+                </Button>
+              </Box>
+            </>
           ) : (
             <RulesBottomRow
               activeStep={activeStep}
@@ -227,12 +263,13 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
 
 OnboardingPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  adaptorReducer: PropTypes.any,
+  adaptorReducer: PropTypes.any.isRequired,
+  rulesEngine: PropTypes.any.isRequired,
 };
 
 const mapStateToProps = state => ({
   adaptorReducer: state.adaptorReducer,
+  rulesEngine: state.rulesEngine,
 });
 
 const mapDispatchToProps = dispatch => ({
