@@ -54,7 +54,7 @@ const Splitter = styled.div`
   width: 10px;
 `;
 
-function Adaptor({ name, type, last, status, id, dispatch, callbackMethod }) {
+function Adaptor({ name, adaptorType, last, status, id, dispatch, callbackMethod }) {
   const [loader, setLoader] = useState(false);
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
@@ -83,14 +83,14 @@ function Adaptor({ name, type, last, status, id, dispatch, callbackMethod }) {
   };
 
   const viewRules = async jobId => {
-    navigate();
+    navigate(`/adaptors/${jobId}/rules`);
   };
 
   return (
     <LabelsRow
-      type={type}
+      type={adaptorType}
       onClick={() => {
-        if (type === 'RULES') {
+        if (adaptorType === 'RULES') {
           viewRules(id);
         }
       }}>
@@ -100,7 +100,7 @@ function Adaptor({ name, type, last, status, id, dispatch, callbackMethod }) {
           <b>{name}</b>
         </Labels>
         <Labels>
-          <b>{type}</b>
+          <b>{adaptorType}</b>
         </Labels>
         <Labels>{moment(last).format('lll')}</Labels>
         <Labels>
@@ -196,7 +196,7 @@ function Adaptor({ name, type, last, status, id, dispatch, callbackMethod }) {
 
 Adaptor.propTypes = {
   name: PropTypes.string,
-  type: PropTypes.string,
+  adaptorType: PropTypes.string,
   last: PropTypes.string,
   status: PropTypes.string,
   id: PropTypes.string,
@@ -206,7 +206,7 @@ Adaptor.propTypes = {
 
 Adaptor.defaultProps = {
   name: PropTypes.string,
-  type: PropTypes.string,
+  adaptorType: PropTypes.string,
   last: PropTypes.string,
   status: PropTypes.string,
   id: PropTypes.string,

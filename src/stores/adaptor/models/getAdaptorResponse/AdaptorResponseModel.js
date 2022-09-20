@@ -5,7 +5,7 @@ export default class AdaptorResponseModel extends BaseModel {
 
   name = '';
 
-  type = 'RULES';
+  adaptorType = '';
 
   jarId = '';
 

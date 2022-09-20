@@ -13,7 +13,7 @@ import Rules from '../pages/Rules';
 
 const Router = () => {
   const { promiseInProgress } = usePromiseTracker();
-  const [loading, setLoading] = React.useState(false);
+  const [loading] = React.useState(false);
   const Auth = useContext(AuthApi);
 
   return (
@@ -42,7 +42,7 @@ const Router = () => {
               element={Auth.auth ? <Navigate to="/" /> : <Login />}
             />
 
-            <Route path="/rules" element={<Rules />} />
+            <Route path="/adaptors/:adaptorId/rules" element={<Rules />} />
           </Routes>
         )}
       </main>

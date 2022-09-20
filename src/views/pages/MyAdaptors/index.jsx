@@ -132,7 +132,7 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
           ? results.map(adaptor => (
               <Adaptor
                 name={adaptor.name}
-                type={adaptor.type}
+                adaptorType={adaptor.adaptorType}
                 last={adaptor.lastSeen}
                 status={adaptor.status}
                 id={adaptor.id}
@@ -142,7 +142,7 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
           : adaptors.map(adaptor => (
               <Adaptor
                 name={adaptor.name}
-                type={adaptor.type}
+                adaptorType={adaptor.adaptorType}
                 last={adaptor.lastSeen}
                 status={adaptor.status}
                 id={adaptor.id}
@@ -160,7 +160,7 @@ MyAdaptorsPage.propTypes = {
     PropTypes.shape({
       id: PropTypes.string,
       name: PropTypes.string,
-      type: PropTypes.string,
+      adaptorType: PropTypes.string,
       jarId: PropTypes.string,
       jobId: PropTypes.string,
       lastSeen: PropTypes.string,

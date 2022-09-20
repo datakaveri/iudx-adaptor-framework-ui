@@ -1,4 +1,5 @@
 import ActionUtility from '../../utilities/ActionUtility';
+import RulesEngineEffect from './RulesEngineEffect';
 
 export default class RulesEngineAction {
   static SAVE_META_SPEC = 'RulesEngineAction.SAVE_META_SPEC';
@@ -9,6 +10,21 @@ export default class RulesEngineAction {
     'RulesEngineAction.SAVE_FAILURE_RECOVERY_SPEC';
 
   static SAVE_PUBLISH_SPEC = 'RulesEngineAction.SAVE_PUBLISH_SPEC';
+
+  static REQUEST_GET_RULES = 'RulesEngineAction.REQUEST_GET_RULES';
+
+  static REQUEST_GET_RULES_FINISHED =
+    'RulesEngineAction.REQUEST_GET_RULES_FINISHED';
+
+  static REQUEST_SUBMIT_RULE = 'RulesEngineAction.REQUEST_SUBMIT_RULE';
+
+  static REQUEST_SUBMIT_RULE_FINISHED =
+    'RulesEngineAction.REQUEST_SUBMIT_RULE_FINISHED';
+
+  static REQUEST_DELETE_RULE = 'RulesEngineAction.REQUEST_DELETE_RULE';
+
+  static REQUEST_DELETE_RULE_FINISHED =
+    'RulesEngineAction.REQUEST_DELETE_RULE_FINISHED';
 
   static saveMetaSpec(data) {
     return ActionUtility.createAction(RulesEngineAction.SAVE_META_SPEC, data);
@@ -30,5 +46,39 @@ export default class RulesEngineAction {
       RulesEngineAction.SAVE_PUBLISH_SPEC,
       data,
     );
+  }
+
+  static getRules(adaptorId) {
+    return async dispatch => {
+      await ActionUtility.createThunkEffect(
+        dispatch,
+        RulesEngineAction.REQUEST_GET_RULES,
+        RulesEngineEffect.getRules,
+        adaptorId,
+      );
+    };
+  }
+
+  static submitRule(ruleConfig) {
+    return async dispatch => {
+      await ActionUtility.createThunkEffect(
+        dispatch,
+        RulesEngineAction.REQUEST_SUBMIT_RULE,
+        RulesEngineAction.submitRule,
+        ruleConfig,
+      );
+    };
+  }
+
+  static deleteRule(adaptorId, ruleId) {
+    return async dispatch => {
+      await ActionUtility.createThunkEffect(
+        dispatch,
+        RulesEngineAction.REQUEST_DELETE_RULE,
+        RulesEngineEffect.deleteRule,
+        adaptorId,
+        ruleId,
+      );
+    };
   }
 }
