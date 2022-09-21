@@ -42,13 +42,13 @@ const Splitter = styled.div`
 const TabsBar = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  width: 95%;
+  justify-content: start;
+  width: 100%;
 `;
 
 const Tab = styled.div`
   margin: 0px;
-  width: 25%;
+  width: 16.66%;
   font-weight: bold;
   text-align: start;
 `;
@@ -60,7 +60,7 @@ const Rules = ({ rules, dispatch }) => {
     if (params.adaptorId) {
       dispatch(RulesEngineAction.getRules(params.adaptorId));
     }
-  }, []);
+  }, [openDialog]);
 
   return (
     <div>

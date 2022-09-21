@@ -3,25 +3,30 @@ import {
   DialogContent,
   DialogTitle,
   Button,
-  InputLabel,
   DialogActions,
 } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
 
 import styled from 'styled-components';
 import { PropTypes } from 'prop-types';
+import { useParams } from 'react-router-dom';
 
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/components/prism-markup';
-import 'prismjs/themes/prism.css';
+// import 'prismjs/components/prism-clike';
+// import 'prismjs/components/prism-javascript';
+// import 'prismjs/components/prism-markup';
+// import 'prismjs/themes/prism.css';
 
-import Editor from 'react-simple-code-editor';
-import { highlight, languages } from 'prismjs/components/prism-core';
+// import Editor from 'react-simple-code-editor';
+// import { highlight, languages } from 'prismjs/components/prism-core';
 
 import AdaptorForm from '../../../shared/components/AdaptorForm';
 import AdaptorInput from '../../../shared/components/AdaptorInput';
-import EditorStyle from '../../../shared/constants/EditorStyle';
+// import EditorStyle from '../../../shared/constants/EditorStyle';
+import { Title } from '../../../shared/components/SpecComponents';
+import Loader from '../../../shared/components/Loader';
+import ToastsAction from '../../../../stores/toasts/ToastsAction';
+import RulesEngineAction from '../../../../stores/rulesEngine/RulesEngineAction';
 
 const Flex = styled.div`
   display: flex;
@@ -50,73 +55,105 @@ const Left = styled.div`
   height: 300px;
 `;
 
-const Right = styled.div`
-  width: 100%;
-  height: 300px;
-`;
+// const Right = styled.div`
+//   width: 100%;
+//   height: 300px;
+// `;
 
 const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-const AddRuleDialog = ({ openDialog, setOpenDialog }) => {
+const AddRuleDialog = ({ dispatch, openDialog, setOpenDialog }) => {
+  const [loader, setLoader] = useState(false);
+
   const handleCloseMenu = () => {
     setOpenDialog(false);
   };
 
+  const params = useParams();
+
   return (
-    <Dialog
-      PaperProps={{
-        sx: {
-          height: '570px',
-          width: '50%',
-        },
-      }}
-      open={openDialog}
-      onClose={(e, reason) => {
-        if (reason === 'backdropClick') {
-          return;
-        }
-        handleCloseMenu();
-      }}
-      maxWidth="lg">
-      <DialogTitle>Add Rule</DialogTitle>
-      <DialogContent>
-        <Flex>
-          <Left>
-            <AdaptorForm onSubmit={() => {}}>
-              {() => (
-                <FormWrapper>
-                  <Group>
-                    <AdaptorInput
-                      inputlabel="Rule Name"
-                      name="ruleName"
-                      placeholder="Rule Name"
-                    />
-                  </Group>
-                  <Group>
-                    <AdaptorInput
-                      inputlabel="SQL Query"
-                      name="sqlQuery"
-                      inputtype="text_container"
-                    />
-                  </Group>
-                  <Group>
-                    <AdaptorInput
-                      inputlabel="Window Minutes"
-                      name="windowMinutes"
-                      type="number"
-                    />
-                  </Group>
-                  <ButtonGroup>
-                    <Button type="submit">Run</Button>
-                  </ButtonGroup>
-                </FormWrapper>
-              )}
-            </AdaptorForm>
-          </Left>
-          <Right>
+    <>
+      <Loader open={loader} message="Creating new rule..." />
+      <Dialog
+        PaperProps={{
+          sx: {
+            height: '620px',
+            width: '25%',
+          },
+        }}
+        open={openDialog}
+        onClose={(e, reason) => {
+          if (reason === 'backdropClick') {
+            return;
+          }
+          handleCloseMenu();
+        }}
+        maxWidth="lg">
+        <DialogTitle>
+          <Title>Add Rule</Title>
+        </DialogTitle>
+        <DialogContent>
+          <Flex>
+            <Left>
+              <AdaptorForm
+                onSubmit={values => {
+                  const spec = {
+                    ...values,
+                    adaptorId: params.adaptorId,
+                    ruleType: 'RULE',
+                    windowMinutes: Number(values.windowMinutes),
+                  };
+                  console.log(spec);
+                  setLoader(true);
+                  dispatch(RulesEngineAction.submitRule(spec));
+                  setLoader(false);
+                  dispatch(
+                    ToastsAction.add(
+                      'Saved successfully!',
+                      'SUCCESS',
+                      'success',
+                    ),
+                  );
+
+                  handleCloseMenu();
+                }}>
+                {() => (
+                  <FormWrapper>
+                    <Group>
+                      <AdaptorInput
+                        inputlabel="Rule Name"
+                        name="ruleName"
+                        placeholder="Rule Name"
+                      />
+                    </Group>
+
+                    <Group>
+                      <AdaptorInput
+                        inputlabel="Window Minutes"
+                        name="windowMinutes"
+                        type="number"
+                      />
+                    </Group>
+                    <Group>
+                      <AdaptorInput
+                        inputlabel="SQL Query"
+                        name="sqlQuery"
+                        inputtype="text_container"
+                      />
+                    </Group>
+                    <ButtonGroup>
+                      <Button variant="contained" type="submit">
+                        Run
+                      </Button>
+                    </ButtonGroup>
+                  </FormWrapper>
+                )}
+              </AdaptorForm>
+            </Left>
+            {/* <Right>
             <Group>
               <InputLabel style={{ marginLeft: '10px', marginBottom: '10px' }}>
                 Output
@@ -128,20 +165,27 @@ const AddRuleDialog = ({ openDialog, setOpenDialog }) => {
                 style={EditorStyle}
               />
             </Group>
-          </Right>
-        </Flex>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleCloseMenu}>Cancel</Button>
-        <Button variant="contained">Submit</Button>
-      </DialogActions>
-    </Dialog>
+          </Right> */}
+          </Flex>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseMenu}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 
 AddRuleDialog.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   openDialog: PropTypes.bool.isRequired,
   setOpenDialog: PropTypes.func.isRequired,
 };
 
-export default AddRuleDialog;
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddRuleDialog);

@@ -8,6 +8,8 @@ export default class RulesInputSpecInput extends BaseModel {
 
   queueName = '';
 
+  sourceId = '';
+
   parseSpec = ParseSpec;
 
   constructor(data) {

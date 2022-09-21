@@ -18,15 +18,21 @@ const LabelsRow = styled.div`
 const LabelsContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: start;
   width: 100%;
 `;
 
 const Labels = styled.div`
   margin-top: 5px;
-  padding: 10px 0px 10px 0px;
-  width: 25%;
+  padding: 10px 30px 10px 0px;
+  width: 16.67%;
   text-align: start;
+`;
+
+const OverflowContainer = styled.div`
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 function Rule({
@@ -55,16 +61,22 @@ function Rule({
       <Loader open={loader} message={message} />
       <LabelsContainer>
         <Labels>
-          <b>{ruleName}</b>
+          <OverflowContainer>
+            <b>{ruleName}</b>
+          </OverflowContainer>
         </Labels>
         <Labels>
           <b>{sqlQuery}</b>
         </Labels>
         <Labels>
-          <b>{queueName}</b>
+          <OverflowContainer>
+            <b>{queueName}</b>
+          </OverflowContainer>
         </Labels>
         <Labels>
-          <b>{exchangeName}</b>
+          <OverflowContainer>
+            <b>{exchangeName}</b>
+          </OverflowContainer>
         </Labels>
         <Labels>{moment(createdAt).format('lll')}</Labels>
         <ImageButton

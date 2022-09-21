@@ -50,6 +50,7 @@ const InputSpecRules = ({ dispatch, inputSpec }) => {
                 type: values.type,
                 uri: values.uri,
                 queueName: values.queueName,
+                sourceId: values.sourceId,
                 parseSpec: {
                   type: values.parseSpecType,
                   messageContainer: values.parseSpecMessageContainer,
@@ -91,6 +92,16 @@ const InputSpecRules = ({ dispatch, inputSpec }) => {
                     placeholder="Queue Name"
                   />
                 </Group>
+
+                <Group>
+                  <AdaptorInput
+                    inputlabel="Source ID"
+                    name="sourceId"
+                    initialValue={inputSpec.sourceId}
+                    placeholder="Source ID"
+                  />
+                </Group>
+
                 <Title>Parse Spec</Title>
                 <hr />
                 <Group>

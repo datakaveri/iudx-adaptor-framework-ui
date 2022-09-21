@@ -64,7 +64,7 @@ export default class RulesEngineAction {
       await ActionUtility.createThunkEffect(
         dispatch,
         RulesEngineAction.REQUEST_SUBMIT_RULE,
-        RulesEngineAction.submitRule,
+        RulesEngineEffect.submitRule,
         ruleConfig,
       );
     };

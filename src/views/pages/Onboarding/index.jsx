@@ -100,10 +100,9 @@ function OnboardingPage({ dispatch, adaptorReducer, rulesEngine }) {
 
   const specFileRules = {
     ...rulesEngine.metaSpecInput,
-    failureRecoverySpec:
-      rulesEngine.failureRecoverySpecInput !== {}
-        ? rulesEngine.failureRecoverySpecInput
-        : undefined,
+    failureRecoverySpec: rulesEngine.failureRecoverySpecInput.type
+      ? rulesEngine.failureRecoverySpecInput
+      : undefined,
     inputSpec: rulesEngine.inputSpecInput,
     publishSpec: rulesEngine.publishSpecInput,
   };
@@ -116,6 +115,20 @@ function OnboardingPage({ dispatch, adaptorReducer, rulesEngine }) {
     setLoader(true);
     await dispatch(AdaptorAction.submitJob(specFile, headers));
     setLoader(false);
+    dispatch(
+      ToastsAction.add('Adaptor Created Successfully!', 'SUCCESS', 'success'),
+    );
+  };
+
+  const onboardingFunctionRules = async () => {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    setLoader(true);
+    await dispatch(AdaptorAction.submitJob(specFileRules, headers));
+    setLoader(false);
+
     dispatch(
       ToastsAction.add('Adaptor Created Successfully!', 'SUCCESS', 'success'),
     );
@@ -236,7 +249,7 @@ function OnboardingPage({ dispatch, adaptorReducer, rulesEngine }) {
                 style={EditorStyleLarge}
               />
               <Center>
-                <Button onClick={onboardingFunction}>
+                <Button onClick={onboardingFunctionRules}>
                   Submit Spec Outline
                 </Button>
               </Center>
