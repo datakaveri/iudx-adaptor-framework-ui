@@ -80,7 +80,6 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
 
   const handleChange = value => {
     setRequestType(value.target.value);
-    console.log(requestType);
   };
 
   return (
@@ -93,8 +92,6 @@ const InputSpec = ({ dispatch, inputSpec, inputSpecInput }) => {
           <AdaptorForm
             onSubmit={async values => {
               const header = {
-                username: 'user',
-                password: 'user-password',
                 'Content-Type': 'application/json',
               };
               const requestBody = {

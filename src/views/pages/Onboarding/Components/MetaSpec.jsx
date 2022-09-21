@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { Button, InputLabel } from '@mui/material';
 import PropTypes from 'prop-types';
@@ -11,6 +11,9 @@ import AdaptorInput from '../../../shared/components/AdaptorInput';
 import ToastsAction from '../../../../stores/toasts/ToastsAction';
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
 import MetaSpecInputModel from '../../../../stores/adaptor/models/specInput/metaSpec/MetaSpecInputModel';
+import RulesEngineAction from '../../../../stores/rulesEngine/RulesEngineAction';
+
+import MenuApi from '../../../../utilities/MenuApi';
 
 const Group = styled.div`
   display: flex;
@@ -33,8 +36,9 @@ const Flex = styled.div`
   display: 'flex';
 `;
 
-const MetaSpec2 = ({ dispatch, metaSpec }) => {
+const MetaSpec = ({ dispatch, metaSpec, metaSpecRules }) => {
   const [spaceError, setSpaceError] = useState(false);
+  const Menu = useContext(MenuApi);
 
   return (
     <div>
@@ -55,15 +59,23 @@ const MetaSpec2 = ({ dispatch, metaSpec }) => {
                 dispatch(
                   ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
                 );
-                const reqBody = {
-                  name: values.name,
-                  schedulePattern:
-                    values.schedulePattern !== ''
-                      ? values.schedulePattern
-                      : undefined,
-                };
-                dispatch(AdaptorAction.saveMetaSpec(reqBody));
-                console.log(values);
+
+                if (Menu.menuOption === 'etl') {
+                  const reqBody = {
+                    name: values.name,
+                    schedulePattern:
+                      values.schedulePattern !== ''
+                        ? values.schedulePattern
+                        : undefined,
+                  };
+                  dispatch(AdaptorAction.saveMetaSpec(reqBody));
+                } else if (Menu.menuOption === 'rules') {
+                  const reqBody = {
+                    name: values.name,
+                    adaptorType: 'RULES',
+                  };
+                  dispatch(RulesEngineAction.saveMetaSpec(reqBody));
+                }
               }
             }}>
             {() => (
@@ -72,7 +84,11 @@ const MetaSpec2 = ({ dispatch, metaSpec }) => {
                   <AdaptorInput
                     inputlabel="Name"
                     name="name"
-                    initialValue={metaSpec.name}
+                    initialValue={
+                      Menu.menuOption === 'etl'
+                        ? metaSpec.name
+                        : metaSpecRules.name
+                    }
                   />
                 </Group>
                 {spaceError ? (
@@ -89,15 +105,19 @@ const MetaSpec2 = ({ dispatch, metaSpec }) => {
                 ) : (
                   ''
                 )}
-                <Group>
-                  <AdaptorInput
-                    optional
-                    inputlabel="Schedule Pattern"
-                    name="schedulePattern"
-                    placeholder="CRON like schedule pattern"
-                    initialValue={metaSpec.schedulePattern}
-                  />
-                </Group>
+                {Menu.menuOption === 'etl' ? (
+                  <Group>
+                    <AdaptorInput
+                      optional
+                      inputlabel="Schedule Pattern"
+                      name="schedulePattern"
+                      placeholder="CRON like schedule pattern"
+                      initialValue={metaSpec.schedulePattern}
+                    />
+                  </Group>
+                ) : (
+                  ''
+                )}
                 <Group>
                   <Button type="submit">Save</Button>
                 </Group>
@@ -110,17 +130,19 @@ const MetaSpec2 = ({ dispatch, metaSpec }) => {
   );
 };
 
-MetaSpec2.propTypes = {
+MetaSpec.propTypes = {
   dispatch: PropTypes.func.isRequired,
   metaSpec: PropTypes.instanceOf(MetaSpecInputModel).isRequired,
+  metaSpecRules: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
   metaSpec: new MetaSpecInputModel(state.adaptorReducer.metaSpecInput),
+  metaSpecRules: state.rulesEngine.metaSpecInput,
 });
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MetaSpec2);
+export default connect(mapStateToProps, mapDispatchToProps)(MetaSpec);

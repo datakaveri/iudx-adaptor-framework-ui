@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 import ImageButton from '../../../shared/components/ImageButton';
 import environment from '../../../../environments';
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
@@ -21,6 +22,10 @@ const LabelsRow = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  cursor: ${props => (props.type === 'RULES' ? 'pointer' : 'default')};
+  :hover {
+    background-color: ${props => (props.type === 'RULES' ? '#e5e5e5' : 'none')};
+  }
 `;
 
 const LabelsContainer = styled.div`
@@ -49,9 +54,10 @@ const Splitter = styled.div`
   width: 10px;
 `;
 
-function Adaptor({ name, last, status, id, dispatch, callbackMethod }) {
+function Adaptor({ name, adaptorType, last, status, id, dispatch, callbackMethod }) {
   const [loader, setLoader] = useState(false);
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const stopAdaptor = async jobId => {
     setLoader(true);
@@ -76,12 +82,25 @@ function Adaptor({ name, last, status, id, dispatch, callbackMethod }) {
     callbackMethod();
   };
 
+  const viewRules = async jobId => {
+    navigate(`/adaptors/${jobId}/rules`);
+  };
+
   return (
-    <LabelsRow>
+    <LabelsRow
+      type={adaptorType}
+      onClick={() => {
+        if (adaptorType === 'RULES') {
+          viewRules(id);
+        }
+      }}>
       <Loader open={loader} message={message} />
       <LabelsContainer>
         <Labels>
           <b>{name}</b>
+        </Labels>
+        <Labels>
+          <b>{adaptorType}</b>
         </Labels>
         <Labels>{moment(last).format('lll')}</Labels>
         <Labels>
@@ -177,6 +196,7 @@ function Adaptor({ name, last, status, id, dispatch, callbackMethod }) {
 
 Adaptor.propTypes = {
   name: PropTypes.string,
+  adaptorType: PropTypes.string,
   last: PropTypes.string,
   status: PropTypes.string,
   id: PropTypes.string,
@@ -186,6 +206,7 @@ Adaptor.propTypes = {
 
 Adaptor.defaultProps = {
   name: PropTypes.string,
+  adaptorType: PropTypes.string,
   last: PropTypes.string,
   status: PropTypes.string,
   id: PropTypes.string,

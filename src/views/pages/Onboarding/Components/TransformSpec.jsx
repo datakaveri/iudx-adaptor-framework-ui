@@ -61,8 +61,6 @@ const TransformSpec = ({
   useEffect(() => {
     setTransformSpecData(transformSpec);
     let javascript = '';
-    console.log('TransformSpec Input');
-    console.log(transformSpecInput);
     if (transformSpecInput.type === 'jsPath')
       javascript = transformSpecInput.jsonPathSpec;
     else if (transformSpecInput.type === 'js')
@@ -99,8 +97,6 @@ const TransformSpec = ({
                 transformSpec: tfSpec,
               };
               const headers = {
-                username: 'user',
-                password: 'user-password',
                 'Content-Type': 'application/json',
               };
               dispatch(AdaptorAction.saveTransformSpec(tfSpec));

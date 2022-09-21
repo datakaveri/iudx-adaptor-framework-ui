@@ -41,6 +41,7 @@ const Tab = styled.div`
   margin: 0px;
   width: 25%;
   text-align: start;
+  font-weight: bold;
 `;
 
 const Splitter = styled.div`
@@ -114,21 +115,15 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
         </NavbarContent>
 
         <TabsBar>
-          <Tab>
-            <b>Name</b>
-          </Tab>
+          <Tab>Name</Tab>
 
-          <Tab>
-            <b>Last Used</b>
-          </Tab>
+          <Tab>Type</Tab>
 
-          <Tab>
-            <b>Logs</b>
-          </Tab>
+          <Tab>Last Used</Tab>
 
-          <Tab>
-            <b>Status</b>
-          </Tab>
+          <Tab>Logs</Tab>
+
+          <Tab>Status</Tab>
         </TabsBar>
         <div />
         <Line />
@@ -137,6 +132,7 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
           ? results.map(adaptor => (
               <Adaptor
                 name={adaptor.name}
+                adaptorType={adaptor.adaptorType}
                 last={adaptor.lastSeen}
                 status={adaptor.status}
                 id={adaptor.id}
@@ -146,6 +142,7 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
           : adaptors.map(adaptor => (
               <Adaptor
                 name={adaptor.name}
+                adaptorType={adaptor.adaptorType}
                 last={adaptor.lastSeen}
                 status={adaptor.status}
                 id={adaptor.id}
@@ -163,6 +160,7 @@ MyAdaptorsPage.propTypes = {
     PropTypes.shape({
       id: PropTypes.string,
       name: PropTypes.string,
+      adaptorType: PropTypes.string,
       jarId: PropTypes.string,
       jobId: PropTypes.string,
       lastSeen: PropTypes.string,

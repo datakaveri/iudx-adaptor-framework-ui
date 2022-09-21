@@ -5,6 +5,8 @@ export default class AdaptorResponseModel extends BaseModel {
 
   name = '';
 
+  adaptorType = '';
+
   jarId = '';
 
   jobId = '';

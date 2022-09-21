@@ -1,12 +1,10 @@
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable react/jsx-no-constructed-context-values */
 /* eslint-disable react/require-default-props */
 import * as React from 'react';
 
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import Button from '@mui/material/Button';
-import StepButton from '@mui/material/StepButton';
-import Typography from '@mui/material/Typography';
+import { Box, Button } from '@mui/material';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -15,18 +13,17 @@ import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
 
 import { Title } from '../../shared/components/SpecComponents';
-import PublishSpec from './Components/PublishSpec';
-import InputSpec from './Components/InputSpec';
-import ParseSpec from './Components/ParseSpec';
-import MetaSpec2 from './Components/MetaSpec';
-import DeduplicationSpec from './Components/DeduplicationSpec';
-import TransformSpec from './Components/TransformSpec';
-import FailureRecoverySpec from './Components/FailureRecoverySpec';
 import AdaptorAction from '../../../stores/adaptor/AdaptorAction';
 import EditorStyle from '../../shared/constants/EditorStyle';
 import EditorStyleLarge from '../../shared/constants/EditorStyleLarge';
 import ToastsAction from '../../../stores/toasts/ToastsAction';
 import Loader from '../../shared/components/Loader';
+import MenuApi from '../../../utilities/MenuApi';
+import MenuDialogBox from './Components/UI/MenuDialogBox';
+import StepperComponent from './Components/UI/StepperComponent';
+import StepperContentComponent from './Components/UI/StepperContentComponent';
+import ETLBottomRow from './Components/UI/ETLBottomRow';
+import RulesBottomRow from './Components/UI/RulesBottomRow';
 
 const steps = [
   'Meta Spec',
@@ -34,6 +31,13 @@ const steps = [
   'Parse Spec',
   'Deduplication Spec',
   'Transform Spec',
+  'Failure Recovery Spec',
+  'Publish Spec',
+];
+
+const rulesSteps = [
+  'Meta Spec',
+  'Input Spec',
   'Failure Recovery Spec',
   'Publish Spec',
 ];
@@ -70,68 +74,12 @@ const Center = styled.div`
   margin: 3%;
 `;
 
-function OnboardingPage({ dispatch, adaptorReducer }) {
+function OnboardingPage({ dispatch, adaptorReducer, rulesEngine }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [loader, setLoader] = React.useState(false);
-
-  const isStepOptional = step => step === 5;
-
-  const isStepSkipped = step => skipped.has(step);
-
-  const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
-
-    setActiveStep(prevActiveStep => prevActiveStep + 1);
-    setSkipped(newSkipped);
-  };
-
-  const handleBack = () => {
-    setActiveStep(prevActiveStep => prevActiveStep - 1);
-  };
-
-  const handleStep = step => () => {
-    if (step < activeStep) setActiveStep(step);
-  };
-
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep(prevActiveStep => prevActiveStep + 1);
-    setSkipped(prevSkipped => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
-
-  function getStepContent(step) {
-    switch (step) {
-      case 0:
-        return <MetaSpec2 />;
-      case 1:
-        return <InputSpec />;
-      case 2:
-        return <ParseSpec />;
-      case 3:
-        return <DeduplicationSpec />;
-      case 4:
-        return <TransformSpec />;
-      case 5:
-        return <FailureRecoverySpec />;
-      case 6:
-        return <PublishSpec />;
-
-      default:
-        return '';
-    }
-  }
+  const [openMenu, setOpenMenu] = React.useState(true);
+  const [menuOption, setMenuOption] = React.useState('');
 
   const handleReset = () => {
     setActiveStep(0);
@@ -150,10 +98,17 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
     publishSpec: adaptorReducer.publishSpecInput,
   };
 
+  const specFileRules = {
+    ...rulesEngine.metaSpecInput,
+    failureRecoverySpec: rulesEngine.failureRecoverySpecInput.type
+      ? rulesEngine.failureRecoverySpecInput
+      : undefined,
+    inputSpec: rulesEngine.inputSpecInput,
+    publishSpec: rulesEngine.publishSpecInput,
+  };
+
   const onboardingFunction = async () => {
     const headers = {
-      username: 'testuser',
-      password: 'testuserpassword',
       'Content-Type': 'application/json',
     };
 
@@ -165,123 +120,169 @@ function OnboardingPage({ dispatch, adaptorReducer }) {
     );
   };
 
+  const onboardingFunctionRules = async () => {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    setLoader(true);
+    await dispatch(AdaptorAction.submitJob(specFileRules, headers));
+    setLoader(false);
+
+    dispatch(
+      ToastsAction.add('Adaptor Created Successfully!', 'SUCCESS', 'success'),
+    );
+  };
+
   return (
     <Page>
       <Loader
         open={loader}
         message="Creating new adaptor. This might take a while..."
       />
-      <Header>
-        <Stepper activeStep={activeStep}>
-          {steps.map((label, index) => {
-            const stepProps = {};
-            const labelProps = {};
-            if (isStepOptional(index)) {
-              labelProps.optional = (
-                <Typography variant="caption">Optional</Typography>
-              );
-            }
-            if (isStepSkipped(index)) {
-              stepProps.completed = false;
-            }
-            return (
-              <Step key={label} {...stepProps}>
-                <StepButton {...labelProps} onClick={handleStep(index)}>
-                  {label}
-                </StepButton>
-              </Step>
-            );
-          })}
-        </Stepper>
 
-        <Typography>{getStepContent(activeStep)}</Typography>
+      <MenuDialogBox
+        openMenu={openMenu}
+        menuOption={menuOption}
+        setOpenMenu={setOpenMenu}
+        setMenuOption={setMenuOption}
+      />
 
-        {activeStep === steps.length ? (
-          <React.Fragment>
-            <Container>
-              <Column>
-                <Title>Spec Outline</Title>
-                <Editor
-                  disabled
-                  value={
-                    adaptorReducer.message === ''
-                      ? ''
-                      : JSON.stringify(specFile, null, 4)
-                  }
-                  highlight={value => highlight(value, languages.jsx)}
-                  padding={20}
-                  style={EditorStyleLarge}
-                />
-              </Column>
-              <Column>
-                <Title>Input Spec</Title>
-                <Editor
-                  disabled
-                  value={
-                    adaptorReducer.message === ''
-                      ? ''
-                      : JSON.stringify(adaptorReducer.inputSpecInput, null, 4)
-                  }
-                  highlight={value => highlight(value, languages.jsx)}
-                  padding={20}
-                  style={EditorStyle}
-                />
-                <Title>Transform Spec Output</Title>
-                <Editor
-                  disabled
-                  value={
-                    adaptorReducer.message === ''
-                      ? ''
-                      : JSON.stringify(adaptorReducer.transformSpec, null, 4)
-                  }
-                  highlight={value => highlight(value, languages.jsx)}
-                  padding={20}
-                  style={EditorStyle}
-                />
-              </Column>
-            </Container>
-            <Center>
-              <Button onClick={onboardingFunction}>Submit Spec Outline</Button>
-            </Center>
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleReset}>Reset</Button>
-            </Box>
-          </React.Fragment>
-        ) : (
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}>
-              Back
-            </Button>
-            <Box sx={{ flex: '1 1 auto' }} />
-            {isStepOptional(activeStep) && (
-              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                Skip
-              </Button>
-            )}
+      <MenuApi.Provider value={{ menuOption, setMenuOption }}>
+        <Header>
+          <StepperComponent
+            menuOption={menuOption}
+            skipped={skipped}
+            activeStep={activeStep}
+            setActiveStep={setActiveStep}
+          />
 
-            <Button onClick={handleNext}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-            </Button>
-          </Box>
-        )}
-      </Header>
+          <StepperContentComponent
+            menuOption={menuOption}
+            activeStep={activeStep}
+          />
+
+          {menuOption === 'etl' ? (
+            activeStep === steps.length ? (
+              <React.Fragment>
+                <Container>
+                  <Column>
+                    <Title>Spec Outline</Title>
+                    <Editor
+                      disabled
+                      value={
+                        adaptorReducer.message === ''
+                          ? ''
+                          : JSON.stringify(specFile, null, 4)
+                      }
+                      highlight={value => highlight(value, languages.jsx)}
+                      padding={20}
+                      style={EditorStyleLarge}
+                    />
+                  </Column>
+                  <Column>
+                    <Title>Input Spec</Title>
+                    <Editor
+                      disabled
+                      value={
+                        adaptorReducer.message === ''
+                          ? ''
+                          : JSON.stringify(
+                              adaptorReducer.inputSpecInput,
+                              null,
+                              4,
+                            )
+                      }
+                      highlight={value => highlight(value, languages.jsx)}
+                      padding={20}
+                      style={EditorStyle}
+                    />
+                    <Title>Transform Spec Output</Title>
+                    <Editor
+                      disabled
+                      value={
+                        adaptorReducer.message === ''
+                          ? ''
+                          : JSON.stringify(
+                              adaptorReducer.transformSpec,
+                              null,
+                              4,
+                            )
+                      }
+                      highlight={value => highlight(value, languages.jsx)}
+                      padding={20}
+                      style={EditorStyle}
+                    />
+                  </Column>
+                </Container>
+                <Center>
+                  <Button onClick={onboardingFunction}>
+                    Submit Spec Outline
+                  </Button>
+                </Center>
+                <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                  <Box sx={{ flex: '1 1 auto' }} />
+                  <Button onClick={handleReset}>Reset</Button>
+                </Box>
+              </React.Fragment>
+            ) : (
+              <ETLBottomRow
+                activeStep={activeStep}
+                setActiveStep={setActiveStep}
+                skipped={skipped}
+                setSkipped={setSkipped}
+              />
+            )
+          ) : activeStep === rulesSteps.length ? (
+            <>
+              <Title>Rules Spec Outline</Title>
+
+              <Editor
+                disabled
+                value={
+                  rulesEngine === ''
+                    ? ''
+                    : JSON.stringify(specFileRules, null, 4)
+                }
+                highlight={value => highlight(value, languages.jsx)}
+                padding={20}
+                style={EditorStyleLarge}
+              />
+              <Center>
+                <Button onClick={onboardingFunctionRules}>
+                  Submit Spec Outline
+                </Button>
+              </Center>
+              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                <Box sx={{ flex: '1 1 auto' }} />
+                <Button variant="contained" onClick={handleReset}>
+                  Reset
+                </Button>
+              </Box>
+            </>
+          ) : (
+            <RulesBottomRow
+              activeStep={activeStep}
+              setActiveStep={setActiveStep}
+              skipped={skipped}
+              setSkipped={setSkipped}
+            />
+          )}
+        </Header>
+      </MenuApi.Provider>
     </Page>
   );
 }
 
 OnboardingPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  adaptorReducer: PropTypes.any,
+  adaptorReducer: PropTypes.any.isRequired,
+  rulesEngine: PropTypes.any.isRequired,
 };
 
 const mapStateToProps = state => ({
   adaptorReducer: state.adaptorReducer,
+  rulesEngine: state.rulesEngine,
 });
 
 const mapDispatchToProps = dispatch => ({

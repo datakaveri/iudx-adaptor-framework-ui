@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
@@ -8,8 +8,11 @@ import AdaptorForm from '../../../shared/components/AdaptorForm';
 import AdaptorInput from '../../../shared/components/AdaptorInput';
 
 import AdaptorAction from '../../../../stores/adaptor/AdaptorAction';
+import RulesEngineAction from '../../../../stores/rulesEngine/RulesEngineAction';
 import ToastsAction from '../../../../stores/toasts/ToastsAction';
 import PublishSpecInputModel from '../../../../stores/adaptor/models/specInput/publishSpec/PublishSpecInputModel';
+import RulesPublishSpecInput from '../../../../stores/rulesEngine/models/specInput/publishSpec/PublishSpec';
+import MenuApi from '../../../../utilities/MenuApi';
 
 const Group = styled.div`
   display: flex;
@@ -32,75 +35,103 @@ const Flex = styled.div`
   display: flex;
 `;
 
-const PublishSpec = ({ dispatch, publishSpecInput }) => (
-  <div>
-    <Title>Publish Spec</Title>
-    <hr />
-    <LeftMargin>
-      <Flex>
-        <AdaptorForm
-          onSubmit={values => {
-            dispatch(
-              ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
-            );
-            dispatch(
-              AdaptorAction.savePublishSpec(new PublishSpecInputModel(values)),
-            );
-          }}
-        >
-          {() => (
-            <FormWrapper>
-              <Group>
-                <AdaptorInput
-                  inputlabel="Type"
-                  name="type"
-                  initialValue={publishSpecInput.type}
-                />
-              </Group>
+const PublishSpec = ({ dispatch, publishSpecInput, publishSpecInputRules }) => {
+  const Menu = useContext(MenuApi);
 
-              <Group>
-                <AdaptorInput
-                  inputlabel="URI"
-                  name="uri"
-                  initialValue={publishSpecInput.uri}
-                />
-              </Group>
+  return (
+    <div>
+      <Title>Publish Spec</Title>
+      <hr />
+      <LeftMargin>
+        <Flex>
+          <AdaptorForm
+            onSubmit={values => {
+              dispatch(
+                ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
+              );
 
-              <Group>
-                <AdaptorInput
-                  inputlabel="Sink Name"
-                  name="sinkName"
-                  initialValue={publishSpecInput.sinkName}
-                />
-              </Group>
+              if (Menu.menuOption === 'etl') {
+                dispatch(
+                  AdaptorAction.savePublishSpec(
+                    new PublishSpecInputModel(values),
+                  ),
+                );
+              } else if (Menu.menuOption === 'rules') {
+                dispatch(RulesEngineAction.savePublishSpec(values));
+              }
+            }}>
+            {() => (
+              <FormWrapper>
+                <Group>
+                  <AdaptorInput
+                    inputlabel="Type"
+                    name="type"
+                    initialValue={
+                      Menu.menuOption === 'etl'
+                        ? publishSpecInput.type
+                        : publishSpecInputRules.type
+                    }
+                  />
+                </Group>
 
-              <Group>
-                <AdaptorInput
-                  inputlabel="Tag Name"
-                  name="tagName"
-                  initialValue={publishSpecInput.tagName}
-                />
-              </Group>
+                <Group>
+                  <AdaptorInput
+                    inputlabel="URI"
+                    name="uri"
+                    initialValue={
+                      Menu.menuOption === 'etl'
+                        ? publishSpecInput.uri
+                        : publishSpecInputRules.uri
+                    }
+                  />
+                </Group>
 
-              <Group style={{ marginTop: '10px', marginBottom: '10px' }}>
-                <Button type="submit">Submit</Button>
-              </Group>
-            </FormWrapper>
-          )}
-        </AdaptorForm>
-      </Flex>
-    </LeftMargin>
-  </div>
-);
+                {Menu.menuOption === 'etl' ? (
+                  <>
+                    <Group>
+                      <AdaptorInput
+                        inputlabel="Sink Name"
+                        name="sinkName"
+                        initialValue={publishSpecInput.sinkName}
+                      />
+                    </Group>
+
+                    <Group>
+                      <AdaptorInput
+                        inputlabel="Tag Name"
+                        name="tagName"
+                        initialValue={publishSpecInput.tagName}
+                      />
+                    </Group>
+                  </>
+                ) : (
+                  ''
+                )}
+
+                <Group style={{ marginTop: '10px', marginBottom: '10px' }}>
+                  <Button type="submit">Submit</Button>
+                </Group>
+              </FormWrapper>
+            )}
+          </AdaptorForm>
+        </Flex>
+      </LeftMargin>
+    </div>
+  );
+};
 
 PublishSpec.propTypes = {
   dispatch: PropTypes.func.isRequired,
   publishSpecInput: PropTypes.instanceOf(PublishSpecInputModel).isRequired,
+  publishSpecInputRules: PropTypes.instanceOf(RulesPublishSpecInput).isRequired,
 };
 
 const mapStateToProps = state => ({
   publishSpecInput: new PublishSpecInputModel(
     state.adaptorReducer.publishSpecInput,
+  ),
+  publishSpecInputRules: new RulesPublishSpecInput(
+    state.rulesEngine.publishSpecInput,
   ),
 });
 

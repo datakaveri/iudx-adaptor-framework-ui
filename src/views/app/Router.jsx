@@ -9,10 +9,11 @@ import Navbar from '../shared/components/Navbar';
 import MyAdaptorsPage from '../pages/MyAdaptors';
 import AuthApi from '../../utilities/AuthApi';
 import Login from '../pages/Login/index';
+import Rules from '../pages/Rules';
 
 const Router = () => {
   const { promiseInProgress } = usePromiseTracker();
-  const [loading, setLoading] = React.useState(false);
+  const [loading] = React.useState(false);
   const Auth = useContext(AuthApi);
 
   return (
@@ -40,6 +41,8 @@ const Router = () => {
               path="/login"
               element={Auth.auth ? <Navigate to="/" /> : <Login />}
             />
+
+            <Route path="/adaptors/:adaptorId/rules" element={<Rules />} />
           </Routes>
         )}
       </main>

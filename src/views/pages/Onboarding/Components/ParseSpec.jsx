@@ -65,8 +65,6 @@ const ParseSpec = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
           <AdaptorForm
             onSubmit={async values => {
               const headers = {
-                username: 'user',
-                password: 'user-password',
                 'Content-Type': 'application/json',
               };
 
@@ -79,7 +77,6 @@ const ParseSpec = ({ dispatch, parseSpec, parseSpecInput, inputSpec }) => {
                 inputData: inputSpec,
                 parseSpec: spec,
               };
-              console.log(requestBody);
               dispatch(AdaptorAction.saveParseSpec(spec));
               setLoader(true);
               await dispatch(
