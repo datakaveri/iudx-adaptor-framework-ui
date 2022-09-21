@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 import Adaptor from './Components/Adaptor';
-import { Line, Title } from '../../shared/components/SpecComponents';
+import { Line } from '../../shared/components/SpecComponents';
 import ImageButton from '../../shared/components/ImageButton';
 import { selectAdaptors } from '../../../selectors/adaptor/AdaptorSelector';
 import AdaptorAction from '../../../stores/adaptor/AdaptorAction';
@@ -88,7 +88,7 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
       <Navbar>
         <NavbarContent>
           <Buttons>
-            <Title>My Adaptors</Title>
+            <h1>My Adaptors</h1>
             <Splitter />
             <ImageButton
               Solid="Solid"

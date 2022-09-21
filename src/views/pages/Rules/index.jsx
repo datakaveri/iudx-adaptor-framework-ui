@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -5,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import RulesEngineAction from '../../../stores/rulesEngine/RulesEngineAction';
 import ImageButton from '../../shared/components/ImageButton';
-import { Title, Line } from '../../shared/components/SpecComponents';
+import { Line } from '../../shared/components/SpecComponents';
 
 import AddRuleDialog from './Components/AddRuleDialog';
 import { selectRules } from '../../../selectors/rules/RulesSelector';
@@ -69,15 +70,15 @@ const Rules = ({ rules, dispatch }) => {
         <Navbar>
           <NavbarContent>
             <Buttons>
-              <Title>Rules</Title>
+              <h1>Rules</h1>
               <Splitter />
               <ImageButton
                 Solid="Solid"
                 Text="Add New"
                 color="#2D3648"
                 hoverColor="white"
-                icon="add.png"
-                hoverIcon="addGrey.png"
+                icon={require('./Components/add.png')}
+                hoverIcon={require('./Components/addGrey.png')}
                 hoverTextColor="#2D3648"
                 onClicked={() => setOpenDialog(true)}
               />

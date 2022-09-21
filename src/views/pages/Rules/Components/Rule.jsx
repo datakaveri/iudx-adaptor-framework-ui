@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 /* eslint-disable no-nested-ternary */
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -20,6 +21,10 @@ const LabelsContainer = styled.div`
   flex-direction: row;
   justify-content: start;
   width: 100%;
+  cursor: pointer;
+  &:hover {
+    background-color: #e5e5e5;
+  }
 `;
 
 const Labels = styled.div`
@@ -79,16 +84,18 @@ function Rule({
           </OverflowContainer>
         </Labels>
         <Labels>{moment(createdAt).format('lll')}</Labels>
-        <ImageButton
-          Solid="Solid"
-          Text="Delete"
-          color="#EA4335"
-          icon="delete.png"
-          hoverIcon="delete.png"
-          hoverColor="#9b241a"
-          hoverTextColor="white"
-          onClicked={deleteRule}
-        />
+        <Labels>
+          <ImageButton
+            Solid="Solid"
+            Text="Delete"
+            color="#EA4335"
+            icon={require('./delete.png')}
+            hoverIcon={require('./delete.png')}
+            hoverColor="#9b241a"
+            hoverTextColor="white"
+            onClicked={deleteRule}
+          />
+        </Labels>
       </LabelsContainer>
     </LabelsRow>
   );

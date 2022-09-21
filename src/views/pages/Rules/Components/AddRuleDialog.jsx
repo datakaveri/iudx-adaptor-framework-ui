@@ -12,18 +12,8 @@ import styled from 'styled-components';
 import { PropTypes } from 'prop-types';
 import { useParams } from 'react-router-dom';
 
-// import 'prismjs/components/prism-clike';
-// import 'prismjs/components/prism-javascript';
-// import 'prismjs/components/prism-markup';
-// import 'prismjs/themes/prism.css';
-
-// import Editor from 'react-simple-code-editor';
-// import { highlight, languages } from 'prismjs/components/prism-core';
-
 import AdaptorForm from '../../../shared/components/AdaptorForm';
 import AdaptorInput from '../../../shared/components/AdaptorInput';
-// import EditorStyle from '../../../shared/constants/EditorStyle';
-import { Title } from '../../../shared/components/SpecComponents';
 import Loader from '../../../shared/components/Loader';
 import ToastsAction from '../../../../stores/toasts/ToastsAction';
 import RulesEngineAction from '../../../../stores/rulesEngine/RulesEngineAction';
@@ -85,6 +75,7 @@ const AddRuleDialog = ({ dispatch, openDialog, setOpenDialog }) => {
           },
         }}
         open={openDialog}
+        disableEscapeKeyDown
         onClose={(e, reason) => {
           if (reason === 'backdropClick') {
             return;
@@ -93,7 +84,7 @@ const AddRuleDialog = ({ dispatch, openDialog, setOpenDialog }) => {
         }}
         maxWidth="lg">
         <DialogTitle>
-          <Title>Add Rule</Title>
+          <h3>Add Rule</h3>
         </DialogTitle>
         <DialogContent>
           <Flex>
@@ -149,7 +140,7 @@ const AddRuleDialog = ({ dispatch, openDialog, setOpenDialog }) => {
                     </Group>
                     <ButtonGroup>
                       <Button variant="contained" type="submit">
-                        Run
+                        Add Rule
                       </Button>
                     </ButtonGroup>
                   </FormWrapper>
@@ -185,7 +176,7 @@ AddRuleDialog.propTypes = {
   setOpenDialog: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({});
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = dispatch => ({
   dispatch,
