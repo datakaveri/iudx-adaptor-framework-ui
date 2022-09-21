@@ -108,7 +108,9 @@ const AddRuleDialog = ({ dispatch, openDialog, setOpenDialog }) => {
                   };
                   console.log(spec);
                   setLoader(true);
-                  dispatch(RulesEngineAction.submitRule(spec));
+                  dispatch(RulesEngineAction.submitRule(spec)).then(() => {
+                    dispatch(RulesEngineAction.getRules(params.adaptorId));
+                  });
                   setLoader(false);
                   dispatch(
                     ToastsAction.add(
@@ -117,6 +119,7 @@ const AddRuleDialog = ({ dispatch, openDialog, setOpenDialog }) => {
                       'success',
                     ),
                   );
+                  
 
                   handleCloseMenu();
                 }}>
