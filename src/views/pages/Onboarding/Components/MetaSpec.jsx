@@ -63,6 +63,7 @@ const MetaSpec = ({ dispatch, metaSpec, metaSpecRules }) => {
                 if (Menu.menuOption === 'etl') {
                   const reqBody = {
                     name: values.name,
+                    adaptorType: 'ETL',
                     schedulePattern:
                       values.schedulePattern !== ''
                         ? values.schedulePattern
