@@ -17,6 +17,7 @@
     "axios": "^0.27.2",
     "final-form": "^4.20.7",
     "js-cookie": "^3.0.1",
+    "jsonschema": "^1.4.1",
     "material-ui": "^1.0.0-beta.47",
     "moment": "^2.29.4",
     "prismjs": "^1.28.0",
@@ -37,6 +38,7 @@
     "reselect": "^4.1.5",
     "sjs-base-model": "^2.0.1",
     "styled-components": "^5.3.5",
+    "url": "^0.11.0",
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.4"
   },

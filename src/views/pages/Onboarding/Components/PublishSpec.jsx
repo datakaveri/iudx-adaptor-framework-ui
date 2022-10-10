@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Button } from '@mui/material';
+import { Validator } from 'jsonschema';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Title } from '../../../shared/components/SpecComponents';
@@ -35,8 +36,24 @@ const Flex = styled.div`
   display: flex;
 `;
 
+const publishSpecSchema = {
+  type: 'object',
+  required: ['type', 'uri'],
+  properties: {
+    type: {
+      title: 'Type',
+      type: 'string',
+    },
+    uri: {
+      title: 'Uri',
+      type: 'string',
+    },
+  },
+};
+
 const PublishSpec = ({ dispatch, publishSpecInput, publishSpecInputRules }) => {
   const Menu = useContext(MenuApi);
+  const v = new Validator();
 
   return (
     <div>
@@ -46,18 +63,24 @@ const PublishSpec = ({ dispatch, publishSpecInput, publishSpecInputRules }) => {
         <Flex>
           <AdaptorForm
             onSubmit={values => {
-              dispatch(
-                ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
-              );
-
-              if (Menu.menuOption === 'etl') {
+              if (v.validate(values, publishSpecSchema).valid) {
                 dispatch(
-                  AdaptorAction.savePublishSpec(
-                    new PublishSpecInputModel(values),
-                  ),
+                  ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
                 );
-              } else if (Menu.menuOption === 'rules') {
-                dispatch(RulesEngineAction.savePublishSpec(values));
+
+                if (Menu.menuOption === 'etl') {
+                  dispatch(
+                    AdaptorAction.savePublishSpec(
+                      new PublishSpecInputModel(values),
+                    ),
+                  );
+                } else if (Menu.menuOption === 'rules') {
+                  dispatch(RulesEngineAction.savePublishSpec(values));
+                }
+              } else {
+                dispatch(
+                  ToastsAction.add('Invalid Schema', 'SUCCESS', 'success'),
+                );
               }
             }}>
             {() => (

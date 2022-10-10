@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { Button, InputLabel } from '@mui/material';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Validator } from 'jsonschema';
+
 import { Title } from '../../../shared/components/SpecComponents';
 
 import AdaptorForm from '../../../shared/components/AdaptorForm';
@@ -36,9 +38,29 @@ const Flex = styled.div`
   display: 'flex';
 `;
 
+const metaSpecSchema = {
+  type: 'object',
+  required: ['adaptorType', 'name'],
+  properties: {
+    adaptorType: {
+      title: 'Adaptor Type',
+      type: 'string',
+    },
+    name: {
+      title: 'Name',
+      type: 'string',
+    },
+    schedulePattern: {
+      title: 'Schedule Pattern',
+      type: 'string',
+    },
+  },
+};
+
 const MetaSpec = ({ dispatch, metaSpec, metaSpecRules }) => {
-  const [spaceError, setSpaceError] = useState(false);
   const Menu = useContext(MenuApi);
+  const [spaceError, setSpaceError] = useState(false);
+  const v = new Validator();
 
   return (
     <div>
@@ -48,33 +70,40 @@ const MetaSpec = ({ dispatch, metaSpec, metaSpecRules }) => {
         <Flex>
           <AdaptorForm
             onSubmit={values => {
-              const pattern = /^[a-z ]+$/;
+              const pattern = /^[a-zA-Z0-9]+$/;
               if (values.name.indexOf(' ') >= 0) setSpaceError(true);
 
-              if (!pattern.test(values.name)) {
-                setSpaceError(true);
-              } else {
-                setSpaceError(false);
+              if (!pattern.test(values.name)) setSpaceError(true);
+              else setSpaceError(false);
 
-                dispatch(
-                  ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
-                );
+              if (Menu.menuOption === 'etl') {
+                const reqBody = {
+                  name: values.name,
+                  schedulePattern:
+                    values.schedulePattern !== ''
+                      ? values.schedulePattern
+                      : undefined,
+                };
+                dispatch(AdaptorAction.saveMetaSpec(reqBody));
+              } else if (Menu.menuOption === 'rules') {
+                const reqBody = {
+                  name: values.name,
+                  adaptorType: 'RULES',
+                };
 
-                if (Menu.menuOption === 'etl') {
-                  const reqBody = {
-                    name: values.name,
-                    schedulePattern:
-                      values.schedulePattern !== ''
-                        ? values.schedulePattern
-                        : undefined,
-                  };
-                  dispatch(AdaptorAction.saveMetaSpec(reqBody));
-                } else if (Menu.menuOption === 'rules') {
-                  const reqBody = {
-                    name: values.name,
-                    adaptorType: 'RULES',
-                  };
+                if (v.validate(reqBody, metaSpecSchema).valid) {
                   dispatch(RulesEngineAction.saveMetaSpec(reqBody));
+                  dispatch(
+                    ToastsAction.add(
+                      'Saved successfully!',
+                      'SUCCESS',
+                      'success',
+                    ),
+                  );
+                } else {
+                  dispatch(
+                    ToastsAction.add('Invalid Schema', 'SUCCESS', 'success'),
+                  );
                 }
               }
             }}>
@@ -99,8 +128,7 @@ const MetaSpec = ({ dispatch, metaSpec, metaSpecRules }) => {
                       color: 'red',
                     }}>
                     {' '}
-                    Please remove white spaces, uppercase, special characters or
-                    numbers
+                    Please remove white spaces
                   </InputLabel>
                 ) : (
                   ''

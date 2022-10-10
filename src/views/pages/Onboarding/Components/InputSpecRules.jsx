@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Validator } from 'jsonschema';
+
 import { Title } from '../../../shared/components/SpecComponents';
 
 import ToastsAction from '../../../../stores/toasts/ToastsAction';
@@ -35,8 +37,57 @@ const Flex = styled.div`
   display: 'flex';
 `;
 
+const inputSpecRulesSchema = {
+  type: 'object',
+  required: ['type', 'uri', 'queueName', 'sourceId', 'parseSpec'],
+  properties: {
+    type: {
+      title: 'Type',
+      type: 'string',
+      enum: ['rmq'],
+    },
+    uri: {
+      title: 'Uri',
+      type: 'string',
+    },
+    queueName: {
+      title: 'Queue Name',
+      type: 'string',
+    },
+    sourceId: {
+      title: 'Source ID',
+      type: 'string',
+    },
+    parseSpec: {
+      title: 'Parse Spec',
+      type: 'object',
+      required: ['type', 'messageContainer', 'timestampPath', 'staticKey'],
+      properties: {
+        type: {
+          title: 'Type',
+          type: 'string',
+          enum: ['json'],
+        },
+        messageContainer: {
+          title: 'Message Container',
+          type: 'string',
+        },
+        timestampPath: {
+          title: 'Timestamp Path',
+          type: 'string',
+        },
+        staticKey: {
+          title: 'Static Key',
+          type: 'string',
+        },
+      },
+    },
+  },
+};
+
 const InputSpecRules = ({ dispatch, inputSpec }) => {
   const Menu = useContext(MenuApi);
+  const v = new Validator();
 
   return (
     <div>
@@ -59,10 +110,16 @@ const InputSpecRules = ({ dispatch, inputSpec }) => {
                 },
               };
 
-              dispatch(
-                ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
-              );
-              dispatch(RulesEngineAction.saveInputSpec(reqBody));
+              if (v.validate(reqBody, inputSpecRulesSchema).valid) {
+                dispatch(RulesEngineAction.saveInputSpec(reqBody));
+                dispatch(
+                  ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
+                );
+              } else {
+                dispatch(
+                  ToastsAction.add('Invalid Schema', 'SUCCESS', 'success'),
+                );
+              }
             }}>
             {() => (
               <FormWrapper>

@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "required": ["adaptorType", "name"],
+  "properties": {
+    "adaptorType": {
+      "title": "Adaptor Type",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "schedulePattern": {
+      "title": "Schedule Pattern",
+      "type": "string"
+    }
+  }
+}

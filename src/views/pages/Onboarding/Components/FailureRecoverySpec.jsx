@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Validator } from 'jsonschema';
+
 import { Title } from '../../../shared/components/SpecComponents';
 import AdaptorForm from '../../../shared/components/AdaptorForm';
 import AdaptorInput from '../../../shared/components/AdaptorInput';
@@ -34,12 +36,46 @@ const Flex = styled.div`
   display: 'flex';
 `;
 
+const failureRecoverySpecSchema = {
+  type: 'object',
+
+  properties: {
+    type: {
+      title: 'Type',
+      type: 'string',
+      enum: ['exponential-delay', 'fixed-delay'],
+    },
+    'initial-backoff': {
+      title: 'Initial Backoff',
+      type: 'string',
+    },
+    'max-backoff': {
+      title: 'Max Backoff',
+      type: 'string',
+    },
+    'backoff-multiplier': {
+      title: 'Backoff Multiplier',
+      type: 'string',
+    },
+    'reset-backoff-threshold': {
+      title: 'Reset Backoff Threshold',
+      type: 'string',
+    },
+
+    'jitter-factor': {
+      title: 'Jitter Factor',
+      type: 'string',
+    },
+  },
+};
+
 const FailureRecoverySpec = ({
   dispatch,
   failureRecoverySpecInput,
   failureRecoverySpecInputRules,
 }) => {
   const Menu = useContext(MenuApi);
+  const v = new Validator();
 
   return (
     <div>
@@ -49,13 +85,24 @@ const FailureRecoverySpec = ({
         <Flex>
           <AdaptorForm
             onSubmit={values => {
-              dispatch(
-                ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
-              );
-              if (Menu.menuOption === 'etl')
-                dispatch(AdaptorAction.saveFailureRecoverySpec(values));
-              else if (Menu.menuOption === 'rules')
-                dispatch(RulesEngineAction.saveFailureRecoverySpec(values));
+              console.log(values);
+
+              console.log(v.validate(values, failureRecoverySpecSchema).valid);
+
+              if (v.validate(values, failureRecoverySpecSchema).valid) {
+                if (Menu.menuOption === 'etl')
+                  dispatch(AdaptorAction.saveFailureRecoverySpec(values));
+                else if (Menu.menuOption === 'rules')
+                  dispatch(RulesEngineAction.saveFailureRecoverySpec(values));
+
+                dispatch(
+                  ToastsAction.add('Saved successfully!', 'SUCCESS', 'success'),
+                );
+              } else {
+                dispatch(
+                  ToastsAction.add('Invalid Schema', 'SUCCESS', 'success'),
+                );
+              }
             }}>
             {() => (
               <FormWrapper>
