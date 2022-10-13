@@ -7,9 +7,18 @@ export class RulesSelector {
     }
     return [];
   }
+
+  static selectTestRuleResult(ruleTestResponse) {
+    return ruleTestResponse;
+  }
 }
 
 export const selectRules = createSelector(
   state => state.rulesEngine.rules,
   RulesSelector.selectRules,
+);
+
+export const selectTestRuleResult = createSelector(
+  state => state.rulesEngine.ruleTestResponse,
+  RulesSelector.selectTestRuleResult,
 );

@@ -26,6 +26,11 @@ export default class RulesEngineAction {
   static REQUEST_DELETE_RULE_FINISHED =
     'RulesEngineAction.REQUEST_DELETE_RULE_FINISHED';
 
+  static REQUEST_RULE_TEST = 'RulesEngineAction.REQUEST_RULE_TEST';
+
+  static REQUEST_RULE_TEST_FINISHED =
+    'RulesEngineAction.REQUEST_RULE_TEST_FINISHED';
+
   static saveMetaSpec(data) {
     return ActionUtility.createAction(RulesEngineAction.SAVE_META_SPEC, data);
   }
@@ -78,6 +83,18 @@ export default class RulesEngineAction {
         RulesEngineEffect.deleteRule,
         adaptorId,
         ruleId,
+      );
+    };
+  }
+
+  static testRule(query, inputData) {
+    return async dispatch => {
+      await ActionUtility.createThunkEffect(
+        dispatch,
+        RulesEngineAction.REQUEST_RULE_TEST,
+        RulesEngineEffect.testRule,
+        query,
+        inputData,
       );
     };
   }

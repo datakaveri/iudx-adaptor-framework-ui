@@ -43,4 +43,20 @@ export default class RulesEngineEffect {
 
     return response.data;
   }
+
+  static async testRule(query, inputData) {
+    const response = await HttpUtility.post(
+      `${environment.BACKEND_URL}/rules/test/query`,
+      {
+        query,
+        inputData,
+      },
+    );
+
+    if (response instanceof HttpErrorResponseModel) {
+      return response;
+    }
+
+    return response.data;
+  }
 }

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import ImageButton from '../../../shared/components/ImageButton';
 import environment from '../../../../environments';
@@ -22,17 +23,13 @@ const LabelsRow = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  cursor: ${props => (props.type === 'RULES' ? 'pointer' : 'default')};
-  :hover {
-    background-color: ${props => (props.type === 'RULES' ? '#e5e5e5' : 'none')};
-  }
 `;
 
 const LabelsContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 70%;
+  width: 80%;
 `;
 
 const Labels = styled.div`
@@ -54,7 +51,15 @@ const Splitter = styled.div`
   width: 10px;
 `;
 
-function Adaptor({ name, adaptorType, last, status, id, dispatch, callbackMethod }) {
+function Adaptor({
+  name,
+  adaptorType,
+  last,
+  status,
+  id,
+  dispatch,
+  callbackMethod,
+}) {
   const [loader, setLoader] = useState(false);
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
@@ -87,13 +92,7 @@ function Adaptor({ name, adaptorType, last, status, id, dispatch, callbackMethod
   };
 
   return (
-    <LabelsRow
-      type={adaptorType}
-      onClick={() => {
-        if (adaptorType === 'RULES') {
-          viewRules(id);
-        }
-      }}>
+    <LabelsRow>
       <Loader open={loader} message={message} />
       <LabelsContainer>
         <Labels>
@@ -105,7 +104,14 @@ function Adaptor({ name, adaptorType, last, status, id, dispatch, callbackMethod
         <Labels>{moment(last).format('lll')}</Labels>
         <Labels>
           <a
-            href={environment.GRAFANA_DASHBOARD_URL.replace('JOBNAME', name)}
+            href={
+              adaptorType === 'ETL'
+                ? environment.GRAFANA_ETL_DASHBOARD_URL.replace('JOBNAME', name)
+                : environment.GRAFANA_RULES_DASHBOARD_URL.replace(
+                    'JOBNAME',
+                    name,
+                  )
+            }
             target="_blank"
             rel="noreferrer">
             Open
@@ -114,6 +120,19 @@ function Adaptor({ name, adaptorType, last, status, id, dispatch, callbackMethod
         <GreenLabel>
           <b>{status}</b>
         </GreenLabel>
+        <Labels>
+          {adaptorType === 'RULES' && (
+            <Button
+              variant="contained"
+              onClick={() => {
+                if (adaptorType === 'RULES') {
+                  viewRules(id);
+                }
+              }}>
+              View Rules
+            </Button>
+          )}
+        </Labels>
       </LabelsContainer>
 
       {status === 'running' ? (

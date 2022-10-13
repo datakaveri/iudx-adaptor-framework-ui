@@ -52,7 +52,7 @@ const TabsBar = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 70%;
+  width: 80%;
 `;
 
 const MyAdaptorsPage = ({ dispatch, adaptors }) => {
@@ -124,6 +124,8 @@ const MyAdaptorsPage = ({ dispatch, adaptors }) => {
           <Tab>Logs</Tab>
 
           <Tab>Status</Tab>
+
+          <Tab />
         </TabsBar>
         <div />
         <Line />

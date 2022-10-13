@@ -7,6 +7,7 @@ export default class RulesEngineReducer extends BaseReducer {
     inputSpecInput: {},
     failureRecoverySpecInput: {},
     publishSpecInput: {},
+    ruleTestResponse: '',
     rules: [],
     error: false,
   };
@@ -43,6 +44,13 @@ export default class RulesEngineReducer extends BaseReducer {
     return {
       ...state,
       rules: action.payload,
+    };
+  }
+
+  [RulesEngineAction.REQUEST_RULE_TEST_FINISHED](state, action) {
+    return {
+      ...state,
+      ruleTestResponse: action.payload,
     };
   }
 }
