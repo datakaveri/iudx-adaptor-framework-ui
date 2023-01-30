@@ -51,6 +51,7 @@ const InputSpecRules = ({ dispatch, inputSpec }) => {
                 uri: values.uri,
                 queueName: values.queueName,
                 sourceId: values.sourceId,
+                expiry: values.expiry ? parseInt(values.expiry, 10) : values.expiry,
                 parseSpec: {
                   type: values.parseSpecType,
                   messageContainer: values.parseSpecMessageContainer,
@@ -99,6 +100,15 @@ const InputSpecRules = ({ dispatch, inputSpec }) => {
                     name="sourceId"
                     initialValue={inputSpec.sourceId}
                     placeholder="Source ID"
+                  />
+                </Group>
+
+                <Group>
+                  <AdaptorInput
+                    inputlabel="State Expiry"
+                    name="expiry"
+                    initialValue={inputSpec.expiry}
+                    placeholder="State Expiry"
                   />
                 </Group>
 

@@ -8,7 +8,6 @@ module.exports = {
       presets: ['@babel/preset-react'],
     },
   },
-  
 
   plugins: ['react'],
 
@@ -55,5 +54,6 @@ module.exports = {
     'object-curly-newline': 'off',
     'react-hooks/exhaustive-deps': 'off',
     'react/function-component-definition': 'off',
+    'react/destructuring-assignment': 'off',
   },
 };
